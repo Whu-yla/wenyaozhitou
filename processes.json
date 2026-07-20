@@ -1,0 +1,21 @@
+[
+  {
+    "session_id": "proc_3900bad7360c",
+    "command": "cd /root/.hermes/profiles/wenyaozhitou/scripts && exec /usr/local/lib/hermes-agent/venv/bin/python3 bookmark_server.py",
+    "pid": 2822804,
+    "pid_scope": "host",
+    "cwd": "/data/hermes/profiles/wenyaozhitou/scripts",
+    "started_at": 1784384181.5471184,
+    "task_id": "default",
+    "session_key": "agent:main:feishu:dm:oc_a6b397a97460ebd54ef650c483b07303",
+    "watcher_platform": "",
+    "watcher_chat_id": "",
+    "watcher_user_id": "",
+    "watcher_user_name": "",
+    "watcher_thread_id": "",
+    "watcher_message_id": "",
+    "watcher_interval": 0,
+    "notify_on_complete": false,
+    "watch_patterns": []
+  }
+]
