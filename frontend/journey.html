@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/bidding/favicon-32x32.png">
+<link rel="icon" type="image/x-icon" href="/bidding/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/bidding/apple-touch-icon.png">
+<meta property="og:title" content="文鳐智投 · 进化之路">
+<meta property="og:description" content="从 V0.1 到 V1.38 — 一台投标监控系统的诞生与进化">
+<meta property="og:image" content="https://www.yfzx.online/bidding/img_gen/og-share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www.yfzx.online/bidding/journey.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="文鳐智投">
+<title>文鳐智投 · 进化之路 — 从 V0.1 到 V1.38</title>
+<style>
+:root{
+  --bg:#f8fafc;--text:#1e293b;--card-bg:#fff;--card-border:#e2e8f0;
+  --card-text:#334155;--muted:#64748b;--footer-text:#94a3b8;
+  --footer-border:#e2e8f0;--accent:#3b82f6;--accent-light:#eff6ff;
+  --header-bg:linear-gradient(135deg,#0f172a,#1e293b);--header-text:#f8fafc;
+  --phase-bg:#f1f5f9;--phase-border:#e2e8f0;--phase-accent:#3b82f6;
+  --highlight-bg:#eff6ff;--highlight-border:#bfdbfe;--highlight-text:#1d4ed8;
+  --quote-bg:#fef3c7;--quote-border:#fcd34d;--quote-text:#92400e;
+  --crisis-bg:#fff1f2;--crisis-border:#fecdd3;--crisis-text:#be123c;
+  --lesson-num-bg:#3b82f6;--lesson-num-text:#fff;
+  --divider:#e2e8f0;
+}
+.dark{
+  --bg:#0f172a;--text:#e2e8f0;--card-bg:#1e293b;--card-border:#334155;
+  --card-text:#cbd5e1;--muted:#94a3b8;--footer-text:#475569;
+  --footer-border:#1e293b;--accent:#60a5fa;--accent-light:#1e3a5f;
+  --header-bg:linear-gradient(135deg,#0f172a,#1e293b);--header-text:#f8fafc;
+  --phase-bg:#1e293b;--phase-border:#334155;--phase-accent:#60a5fa;
+  --highlight-bg:#1e3a5f;--highlight-border:#3b82f6;--highlight-text:#93c5fd;
+  --quote-bg:#422006;--quote-border:#f59e0b;--quote-text:#fde68a;
+  --crisis-bg:#450a0a;--crisis-border:#ef4444;--crisis-text:#fca5a5;
+  --lesson-num-bg:#60a5fa;--lesson-num-text:#0f172a;
+  --divider:#334155;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{overflow-x:hidden}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;line-height:1.8;
+  overflow-x:hidden;transition:background .3s,color .3s;
+}
+/* ═══ Hero ═══ */
+.hero{
+  background:var(--header-bg);padding:80px 24px 64px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(circle at 30% 50%,rgba(59,130,246,.15) 0%,transparent 70%),
+              radial-gradient(circle at 70% 30%,rgba(16,185,129,.1) 0%,transparent 60%);
+  pointer-events:none;
+}
+.hero .ver-span{
+  display:inline-block;padding:4px 16px;border-radius:20px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.7);font-size:13px;font-weight:500;margin-bottom:24px;
+  letter-spacing:1px;
+}
+.hero h1{
+  font-size:clamp(28px,5vw,48px);font-weight:800;color:#f8fafc;
+  letter-spacing:-1px;line-height:1.2;margin-bottom:16px;
+}
+.hero h1 .accent{color:#60a5fa}
+.hero .subtitle{
+  font-size:16px;color:rgba(255,255,255,.6);max-width:600px;margin:0 auto;
+  line-height:1.7;
+}
+.hero .stats-bar{
+  display:flex;justify-content:center;gap:32px;margin-top:40px;
+  flex-wrap:wrap;
+}
+.hero .stat-item{text-align:center}
+.hero .stat-num{font-size:32px;font-weight:800;color:#f8fafc;line-height:1}
+.hero .stat-label{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+
+/* ═══ Main content ═══ */
+.container{max-width:800px;margin:0 auto;padding:48px 24px 24px}
+
+/* ═══ Section title ═══ */
+.section-title{
+  display:flex;align-items:center;gap:12px;margin:48px 0 24px;
+}
+.section-title .num{
+  width:36px;height:36px;border-radius:50%;background:var(--accent);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:16px;flex-shrink:0;
+}
+.section-title h2{font-size:22px;font-weight:700;letter-spacing:-.5px}
+.section-intro{color:var(--muted);font-size:15px;margin-bottom:28px;line-height:1.8}
+
+/* ═══ Phase block ═══ */
+.phase{
+  background:var(--phase-bg);border:1px solid var(--phase-border);
+  border-left:4px solid var(--phase-accent);border-radius:8px;
+  padding:20px 24px;margin-bottom:20px;transition:all .2s;
+}
+.phase:hover{border-left-color:var(--accent);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.phase-header{display:flex;align-items:baseline;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.phase-num{font-size:20px;font-weight:700;color:var(--accent)}
+.phase-date{font-size:12px;color:var(--muted)}
+.phase-title{font-size:14px;color:var(--muted);font-style:italic}
+.phase-body{font-size:14px;color:var(--card-text);line-height:1.8}
+.phase-body ul{list-style:none;padding:0;margin-top:8px}
+.phase-body li{padding:2px 0;display:flex;align-items:flex-start;gap:8px}
+.phase-body li::before{content:'▸';color:var(--accent);flex-shrink:0;margin-top:2px}
+
+/* ═══ Highlight box ═══ */
+.highlight{
+  background:var(--highlight-bg);border:1px solid var(--highlight-border);
+  border-radius:8px;padding:20px 24px;margin:24px 0;
+}
+.highlight h3{font-size:17px;color:var(--highlight-text);margin-bottom:8px}
+.highlight p{font-size:14px;color:var(--card-text);line-height:1.7}
+
+/* ═══ Crisis → Architecture table ═══ */
+.crisis-table{
+  width:100%;border-collapse:collapse;margin:24px 0;font-size:14px;
+}
+.crisis-table th{
+  text-align:left;padding:10px 14px;font-weight:600;font-size:12px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.5px;
+  border-bottom:1px solid var(--divider);
+}
+.crisis-table td{
+  padding:12px 14px;border-bottom:1px solid var(--divider);
+  color:var(--card-text);vertical-align:top;
+}
+.crisis-table td:first-child{
+  font-weight:600;color:var(--crisis-text);white-space:nowrap;
+}
+.crisis-table td:last-child{color:var(--highlight-text)}
+
+/* ═══ Lesson card ═══ */
+.lesson{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:12px;padding:24px;margin-bottom:24px;
+  position:relative;
+}
+.lesson-num{
+  position:absolute;top:-16px;left:-16px;width:36px;height:36px;
+  border-radius:50%;background:var(--lesson-num-bg);
+  color:var(--lesson-num-text);display:flex;align-items:center;
+  justify-content:center;font-weight:800;font-size:18px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
+.lesson h3{font-size:18px;font-weight:700;margin-bottom:8px;padding-left:8px}
+.lesson p{font-size:14px;color:var(--card-text);line-height:1.8}
+
+/* ═══ Quote ═══ */
+.quote{
+  background:var(--quote-bg);border:1px solid var(--quote-border);
+  border-radius:8px;padding:20px 24px;margin:32px 0;text-align:center;
+}
+.quote p{font-size:17px;font-weight:600;color:var(--quote-text);line-height:1.6}
+.quote .author{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* ═══ Dharma block ═══ */
+.dharma{
+  background:var(--card-bg);border:1px solid var(--card-border);
+  border-radius:12px;padding:32px;margin:32px 0;text-align:center;
+}
+.dharma .dharma-icon{font-size:48px;margin-bottom:16px}
+.dharma h2{font-size:22px;font-weight:700;margin-bottom:12px}
+.dharma p{font-size:15px;color:var(--card-text);line-height:1.8;max-width:600px;margin:0 auto}
+.dharma .dharma-line{
+  display:inline-block;background:var(--accent);color:#fff;
+  padding:8px 24px;border-radius:24px;font-size:16px;font-weight:700;
+  margin-top:20px;letter-spacing:1px;
+}
+
+/* ═══ Footer ═══ */
+footer{
+  text-align:center;padding:40px 24px;color:var(--footer-text);
+  font-size:11px;border-top:1px solid var(--footer-border);margin-top:60px;
+}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* ═══ Theme toggle ═══ */
+.theme-btn{
+  position:fixed;top:20px;right:20px;width:40px;height:40px;
+  border-radius:50%;border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.1);color:#fbbf24;cursor:pointer;
+  font-size:18px;display:flex;align-items:center;justify-content:center;
+  z-index:100;backdrop-filter:blur(8px);transition:all .2s;
+}
+.theme-btn:hover{background:rgba(255,255,255,.2)}
+
+@media(max-width:768px){
+  .hero{padding:60px 20px 48px}
+  .hero h1{font-size:26px}
+  .hero .stats-bar{gap:20px}
+  .hero .stat-num{font-size:24px}
+  .container{padding:32px 16px 20px}
+  .section-title{margin:36px 0 18px}
+  .section-title h2{font-size:19px}
+  .phase{padding:16px 18px}
+  /* Crisis table → stacked cards on mobile */
+  .crisis-table,.crisis-table tbody,.crisis-table tr,.crisis-table td{display:block;width:100%}
+  .crisis-table thead{display:none}
+  .crisis-table tr{
+    background:var(--phase-bg);border:1px solid var(--phase-border);
+    border-radius:12px;padding:16px;margin-bottom:16px;
+  }
+  .crisis-table td{padding:0;border:none}
+  .crisis-table td:first-child{
+    font-size:16px;font-weight:700;color:var(--crisis-text);margin-bottom:8px;
+  }
+  .crisis-table td:nth-child(2),.crisis-table td:nth-child(3){
+    display:inline-block;font-size:12px;color:var(--muted);margin-right:12px;
+    background:var(--card-bg);padding:2px 10px;border-radius:12px;
+    margin-bottom:8px;
+  }
+  .crisis-table td:last-child{
+    font-size:14px;color:var(--highlight-text);line-height:1.7;
+    padding-top:6px;border-top:1px solid var(--divider);margin-top:6px;
+  }
+  .dharma{padding:24px 20px}
+  .lesson{padding:20px;margin-bottom:20px}
+  .lesson-num{top:-12px;left:-12px;width:28px;height:28px;font-size:14px}
+}
+</style>
+</head>
+<body>
+
+<button class="theme-btn" onclick="toggleTheme()" title="切换主题">🌙</button>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
+  <div class="ver-span">文鳐智投 · 进化报告</div>
+  <h1>从 <span class="accent">V0.1</span> 到 <span class="accent">V1.38</span></h1>
+  <p class="subtitle">一台投标监控系统的诞生与进化——39个版本、7天、11路适配器、95条精准数据。</p>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">39</div>
+      <div class="stat-label">版本迭代</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">7</div>
+      <div class="stat-label">天</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">11</div>
+      <div class="stat-label">适配器</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">95</div>
+      <div class="stat-label">精准数据</div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+<!-- ═══════ 序 ═══════ -->
+<div class="section-title">
+  <div class="num">📖</div>
+  <h2>序</h2>
+</div>
+<p class="section-intro">
+  2026年6月19日，一个 Python 脚本、一张 SQLite 表、一份 344 站 Excel 清单。<br>
+  6月26日，一个拥有三层评分引擎、自愈守护、企微推送、AI 对话、手机端卡片化交互的智能投标监控系统。
+</p>
+<p class="section-intro">
+  这不是一份技术文档。这是一台系统学会「自愈」「精准」「诚实」的过程。每一个版本号背后，都是一次决策、一次失败、一次顿悟。
+</p>
+
+<!-- ═══════ 第一章：七个阶段 ═══════ -->
+<div class="section-title">
+  <div class="num">Ⅰ</div>
+  <h2>七个进化阶段</h2>
+</div>
+
+<!-- Phase 1 -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">阶段一</span>
+    <span class="phase-date">6/19–20 · V0.1–V0.2</span>
+    <span class="phase-title">地基</span>
+  </div>
+  <div class="phase-body">
+    爬虫引擎 <code>bidding_engine.py</code> 搭建。SQLite 建表。344 站全量入库。三级关键词评分引擎 v1 诞生。<br>
+    <b>第一条铁律</b>：「数智科技 ≠ EPC，只关注数字化/软件/AI 类招标」。<br>
+    这个决定定义了此后 38 个版本的边界——过滤掉的东西，决定了你是谁。
+  </div>
+</div>
+
+<!-- Phase 2 -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">阶段二</span>
+    <span class="phase-date">6/20–22 · V0.3–V0.6</span>
+    <span class="phase-title">交付</span>
+  </div>
+  <div class="phase-body">
+    HTML 交互报告。Nginx 上线。企微推送。通义万相 AI 封面生成。客户分类引擎。<br>
+    系统第一次从「脚本」变成「产品」——不是只在服务器里跑，而是推送到企业微信群、呈现在浏览器里、手机上能看。<br>
+    <b>一夕之间，从工具变成了信息中枢。</b>
+  </div>
+</div>
+
+<!-- Phase 3 -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">阶段三</span>
+    <span class="phase-date">6/22–23 · V0.7–V0.9</span>
+    <span class="phase-title">记忆与审美</span>
+  </div>
+  <div class="phase-body">
+    🌓 明暗主题一键切换。长记忆系统上线——通义千问 Text-Embedding-V3 向量化 + HOT/WARM/COLD 三层架构。<br>
+    SVG 趋势图。多选筛选器。客户/地域标签。<br>
+    系统开始「记住」——不只是数据，还有用户偏好、交互状态、每一次反馈。
+  </div>
+</div>
+
+<!-- Phase 4 -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">阶段四</span>
+    <span class="phase-date">6/23–24 · V1.0–V1.4</span>
+    <span class="phase-title">工业化</span>
+  </div>
+  <div class="phase-body">
+    勾选批量导出。收藏 Tab。浙能适配器 41 条入库。国家能源 Chromium 渲染。中广核 API 反发现（/portalApi/content/queryPage）。<br>
+    企微四连推：摘要 → 招标 TOP8 → 中标 TOP8 → 竞品分析。<br>
+    <b>从「我抓到了一些东西」到「我覆盖了六大发电集团」。</b>
+  </div>
+</div>
+
+<!-- Phase 5 -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">阶段五</span>
+    <span class="phase-date">6/24 · V1.5–V1.7</span>
+    <span class="phase-title">闭环</span>
+  </div>
+  <div class="phase-body">
+    反馈自动修复机制上线：用户点踩 → 自动诊断根因 → 修代码 → 回填数据 → 重生成日报 → 主动报告。<br>
+    AI 自然语言对话引擎。systemd 定时器迁移（Hermes Cron 3 分钟硬中断 → systemd 7200 秒超时）。<br>
+    <b>系统开始「自愈」——不是等有人来修，而是自己知道坏了、自己修、自己报。</b>
+  </div>
+</div>
+
+<!-- Phase 6 -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">阶段六</span>
+    <span class="phase-date">6/25 · V1.10–V1.19</span>
+    <span class="phase-title">精准化</span>
+  </div>
+  <div class="phase-body">
+    评分引擎 v10→v12：信息安全/等保入闸 +25 基础分。三层拦截架构：L1 判别器 → L2 通用评分 → L3 中标独立评分。<br>
+    NEW 标签语义三次迭代（fetch_date → publish_date → 归档差集）。dlzb Chromium 兜底 9 平台。<br>
+    <b>从「多抓」到「抓对」——宁可少十条，不混一条假的。</b>
+  </div>
+</div>
+
+<!-- Phase 7 -->
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">阶段七</span>
+    <span class="phase-date">6/25–26 · V1.20–V1.38</span>
+    <span class="phase-title">极致</span>
+  </div>
+  <div class="phase-body">
+    手机端 Twitter 风格卡片重做。Nginx 3 秒自愈守护 + 企微秒级告警。蒙西直连。三桶油诚实放弃。<br>
+    门户噪音防火墙。归档差集修复。搜索框无缝药丸。深圳能源修复——从 L1 全拒到鸿蒙智能楼宇 65 分入库。<br>
+    <b>系统的可信度，不是由它能做什么决定的，而是由它拒绝做什么决定的。</b>
+  </div>
+</div>
+
+<!-- ═══════ 第二章：危机即升级 ═══════ -->
+<div class="section-title">
+  <div class="num">Ⅱ</div>
+  <h2>每一次崩溃，都是一次架构升级</h2>
+</div>
+
+<table class="crisis-table">
+  <thead>
+    <tr><th>危机</th><th>版本</th><th>根因</th><th>不是修 bug，而是——</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cron API 断连</td>
+      <td>V1.3</td>
+      <td>DeepSeek Broken pipe，定时采集全挂</td>
+      <td>→ no_agent 纯 shell 管线，零 LLM 依赖，永不超时</td>
+    </tr>
+    <tr>
+      <td>全页白屏</td>
+      <td>V1.35</td>
+      <td>getElementById(null) → init 中断 → 0 条数据</td>
+      <td>→ 四文件同步修复 + 幂等注入守卫，一个 null 不再能瘫痪整站</td>
+    </tr>
+    <tr>
+      <td>mkdocs 抢端口</td>
+      <td>V1.37</td>
+      <td>80 端口被占，nginx 反复启动失败</td>
+      <td>→ Nginx 守护系统，每分钟检测 + 自动杀进程 + 重启，3 秒恢复 + 企微告警</td>
+    </tr>
+    <tr>
+      <td>全部标 NEW</td>
+      <td>V1.37</td>
+      <td>归档从未写入，差集始终为空</td>
+      <td>→ 归档自动写入 + 差集语义固化，今天 NEW = 昨天库里没有</td>
+    </tr>
+    <tr>
+      <td>门户噪音 70 分</td>
+      <td>V1.37</td>
+      <td>「欢迎来到 V1.0」含「招标」二字</td>
+      <td>→ 三层拦截 + 黑名单防火墙，导航页即使含关键词也直接拒绝</td>
+    </tr>
+    <tr>
+      <td>深圳能源全拒</td>
+      <td>V1.38</td>
+      <td>索引页被当详情，10/10 L1 假阳性</td>
+      <td>→ /index* 过滤 + .Content div 正文 + h1 标题清洁</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="highlight">
+  <h3>「修 bug」和「升级架构」的区别</h3>
+  <p>
+    修 bug：把 mkdocs 进程杀了。升级架构：部署一套守护系统，<b>让任何人、任何进程抢端口都不再是问题</b>。<br>
+    修 bug：把 is_new 字段改对。升级架构：把「新」的定义从日期字段改为归档差集，<b>让语义对齐用户心智而非技术便利</b>。<br><br>
+    前者解决眼前。后者杜绝同类。
+  </p>
+</div>
+
+<!-- ═══════ 第三章：三大产品原则 ═══════ -->
+<div class="section-title">
+  <div class="num">Ⅲ</div>
+  <h2>三大产品原则</h2>
+</div>
+
+<div class="lesson">
+  <div class="lesson-num">1</div>
+  <h3>起点可以很简陋，进化必须很快</h3>
+  <p>
+    V0.1 只有一个 <code>bidding_engine.py</code> 和一张 SQLite 表。没有 UI，没有定时，没有推送。<br>
+    7 天后，39 个版本：11 路适配器、三层评分、自愈守护、企微推送、AI 对话、手机端卡片。<br><br>
+    <b>不要等想清楚了再动手。V0.1 就上线，然后一天一个版本地迭代。</b><br>
+    完美的第一版不存在。但持续进化的系统，可以很接近完美。
+  </p>
+</div>
+
+<div class="lesson">
+  <div class="lesson-num">2</div>
+  <h3>诚实 > 聪明</h3>
+  <p>
+    V1.37 三桶油探测：中石油验证码弹窗、中石化 ECS 网络不可达、中海油 193 字节 JS 空壳、ctbpsp 滑块验证码、dlzb 无相关板块。<b>五条路径，全部确认不可达。</b><br>
+    结论不是「再试试」，而是写入探测矩阵文档，诚实告诉用户：当前环境不可达。<br><br>
+    V1.38 蒙西电网确诊：116 条 ID 全量扫描，0 件数字化项目。适配器代码没问题，但平台是纯电力设备采购。<br>
+    结论是「评分为 0 是正确的」，不调低阈值强行放行。<br><br>
+    <b>知道什么做不了，和知道怎么做到一样重要。</b><br>
+    宁可报告里少十个平台，不能有一条假数据混在里面。一条假阳性，比十条空缺更伤害信任。
+  </p>
+</div>
+
+<div class="lesson">
+  <div class="lesson-num">3</div>
+  <h3>语义对齐比技术实现难十倍</h3>
+  <p>
+    「今日新增」这个词，改了三次：<br>
+    · V1.16：从 <code>is_new</code> 静态字段改为 <code>fetch_date</code> 实时判断<br>
+    · V1.18：从 <code>fetch_date</code> 改为 <code>publish_date</code>（用户心智：今天发布 = 新）<br>
+    · V1.37：从日期字段判断改为<b>对比昨天归档做 ID 差集</b>（用户心智：昨天库里没有、今天出现 = 新）<br><br>
+    一个词的定义，三次迭代，才最终对齐用户心智。<br>
+    <b>技术实现只是 50%。另一半是把「用户觉得什么是合理的」变成系统行为。</b>
+  </p>
+</div>
+
+<!-- ═══════ 第四章：三条暗线 ═══════ -->
+<div class="section-title">
+  <div class="num">Ⅳ</div>
+  <h2>贯穿 39 个版本的三条暗线</h2>
+</div>
+
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">暗线一</span>
+    <span class="phase-title">自愈</span>
+  </div>
+  <div class="phase-body">
+    V1.2 Nginx 健康守护 → V1.3 no_agent 防 API 断连 → V1.7 systemd 防硬中断 → V1.37 3 秒自愈 + 企微告警。<br>
+    这条线贯穿始终：<b>系统必须比它的创建者更可靠。</b>不是「有人看着所以能跑」，而是「没人看着也不会坏」。
+  </div>
+</div>
+
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">暗线二</span>
+    <span class="phase-title">精准</span>
+  </div>
+  <div class="phase-body">
+    V0.2 评分引擎 v1 → V0.5 EPC 噪音清零 → V1.11 三层拦截 → V1.37 门户防火墙。<br>
+    <b>过滤比抓取更重要。</b>每一层拦截都是一个承诺：进来的数据，值得你看。
+  </div>
+</div>
+
+<div class="phase">
+  <div class="phase-header">
+    <span class="phase-num">暗线三</span>
+    <span class="phase-title">诚实</span>
+  </div>
+  <div class="phase-body">
+    V1.1 大唐/国网/华能确认不可达 → V1.37 三桶油五路全死 → V1.38 蒙西确诊。<br>
+    <b>不粉饰、不强求、不假装。</b>探测矩阵里的每一条「不可达」记录，和每一条入库数据一样有价值。
+  </div>
+</div>
+
+<!-- ═══════ Dharma ═══════ -->
+<div class="dharma">
+  <div class="dharma-icon">🏛️</div>
+  <h2>文鳐智投的产品哲学</h2>
+  <p>
+    从 V0.1 的第一行代码到 V1.38 的 Nginx 自愈守护，这台系统学会了一件事：<br>
+    <b>不是代码写得多好，而是你不在的时候，它依然能替你做正确的决定。</b>
+  </p>
+  <div class="dharma-line">自愈 · 精准 · 诚实</div>
+</div>
+
+<!-- ═══════ Quote ═══════ -->
+<div class="quote">
+  <p>「宁可少十个平台，不能有一条假数据。宁可报告说『不可达』，不能假装抓到了。」</p>
+  <div class="author">—— 文鳐智投，V1.38</div>
+</div>
+
+<!-- ═══════ 附录 ═══════ -->
+<div class="section-title">
+  <div class="num">📋</div>
+  <h2>版本年表</h2>
+</div>
+
+<div style="font-size:13px;color:var(--muted);line-height:2;margin-bottom:48px">
+  <b>6/19</b> · V0.1 项目启动<br>
+  <b>6/20</b> · V0.2 评分引擎 v1 + 344 站 · V0.3 交互报告 + 企微集成 · V0.4 Chromium + 详情提取<br>
+  <b>6/21</b> · V0.5 评分 v4–v6 + 企微自动推送 · V0.6 AI 封面 + 客户分类<br>
+  <b>6/22</b> · V0.7 主题 + 长记忆 · V0.8 收藏 + NEW 徽章 · V0.9 趋势图 + 多选<br>
+  <b>6/23</b> · V1.0 交互完整版 · V1.1 多平台适配器矩阵<br>
+  <b>6/24</b> · V1.2 Nginx 防护 + 87 站 · V1.3 no_agent 管线 · V1.4 四连推 · V1.5 日报 + 反馈闭环 · V1.6 AI 对话 · V1.7 systemd 定时 · V1.8 内存修复 · V1.9 看板重构<br>
+  <b>6/25</b> · V1.10 中标清洗 · V1.11 PM 全量优化 · V1.12 布局修复 · V1.13 交互激活 · V1.14 精简 · V1.15 启动态 · V1.16 NEW 图标 · V1.17 is_new 根治 · V1.18 NEW 语义 · V1.19 UI 精简<br>
+  <b>6/26</b> · V1.20 排序三角 · V1.21 金额列 · V1.22 筛选补全 · V1.23 时区修复 · V1.24 浙能修复 · V1.25 反馈系统 · V1.26 聊天合并 · V1.27 骨架屏 · V1.28 移动端卡片 · V1.29 H5 滑动 · V1.30 企微重启 · V1.31 统计卡片 · V1.32 Logo · V1.33 PM 交互 · V1.34 代码审计 · V1.35 白屏修复 · V1.36 手机重做 · V1.37 守护 + 蒙西 + 三桶油 · V1.38 深圳能源修复
+</div>
+
+</div>
+
+<footer>
+  © 中南电力设计院数智科技 · 文鳐智投 2026<br>
+  <a href="/bidding/">返回投标看板</a> · <a href="/bidding/changelog.html">更新日志</a>
+</footer>
+
+<script>
+function toggleTheme(){
+    document.body.classList.toggle('dark');
+    var isDark = document.body.classList.contains('dark');
+    localStorage.setItem('journey_theme', isDark ? 'dark' : 'light');
+    document.querySelector('.theme-btn').textContent = isDark ? '☀️' : '🌙';
+}
+(function(){
+    if(localStorage.getItem('journey_theme') === 'dark'){
+        document.body.classList.add('dark');
+        document.querySelector('.theme-btn').textContent = '☀️';
+    }
+})();
+</script>
+
+</body>
+</html>

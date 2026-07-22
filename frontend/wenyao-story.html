@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>文鳐智投 · 开发全纪实</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#0b1120;color:#e2e8f0;overflow:hidden;height:100vh;user-select:none}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:5vh 6vw;opacity:0;transform:scale(.96);transition:all .5s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.slide.active{opacity:1;transform:scale(1);pointer-events:all}
+.s1{font-size:clamp(48px,8vw,96px);font-weight:900;background:linear-gradient(135deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;line-height:1.1;margin-bottom:2vh}
+.s2{font-size:clamp(28px,4vw,52px);font-weight:700;color:#f1f5f9;text-align:center;margin-bottom:2vh;line-height:1.3}
+.s3{font-size:clamp(18px,2.4vw,28px);font-weight:600;color:#94a3b8;text-align:center;margin-bottom:3vh}
+.p{font-size:clamp(16px,2vw,24px);color:#cbd5e1;line-height:1.7;text-align:center;max-width:85vw;margin-bottom:1.5vh}
+.mega{font-size:clamp(80px,14vw,180px);font-weight:900;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.stat-row{display:flex;gap:clamp(20px,4vw,60px);justify-content:center;flex-wrap:wrap;margin:3vh 0}
+.stat-item{text-align:center}
+.stat-num{font-size:clamp(40px,8vw,96px);font-weight:900;line-height:1;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:clamp(14px,2vw,22px);color:#64748b;margin-top:1vh}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,28px);max-width:88vw;width:100%}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(10px,1.5vw,24px);max-width:92vw;width:100%}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:clamp(8px,1.2vw,16px);max-width:95vw;width:100%}
+.card{background:rgba(30,41,59,.9);border:2px solid #334155;border-radius:clamp(12px,2vw,24px);padding:clamp(16px,2.5vh,32px) clamp(14px,2vw,28px);text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.card .icon{font-size:clamp(32px,5vw,56px);margin-bottom:1vh}
+.card .ctitle{font-size:clamp(16px,2.2vw,26px);font-weight:700;color:#f1f5f9;margin-bottom:1vh}
+.card .cdesc{font-size:clamp(13px,1.6vw,18px);color:#94a3b8;line-height:1.6}
+.timeline{max-width:88vw;width:100%;display:flex;flex-direction:column;gap:clamp(10px,1.5vh,18px)}
+.tl-row{display:flex;gap:clamp(14px,2vw,24px);align-items:center}
+.tl-dot{width:clamp(10px,1.5vw,16px);height:clamp(10px,1.5vw,16px);border-radius:50%;background:#60a5fa;flex-shrink:0}
+.tl-ver{font-size:clamp(14px,1.8vw,20px);font-weight:700;color:#60a5fa;min-width:clamp(70px,10vw,100px);flex-shrink:0}
+.tl-date{font-size:clamp(12px,1.5vw,16px);color:#475569;min-width:clamp(60px,8vw,80px);flex-shrink:0}
+.tl-text{font-size:clamp(14px,1.8vw,20px);color:#cbd5e1;line-height:1.4;flex:1}
+.tag-sm{display:inline-block;padding:clamp(3px,0.5vh,6px) clamp(8px,1vw,14px);border-radius:20px;font-size:clamp(12px,1.5vw,16px);font-weight:600}
+.tag-blue{background:rgba(96,165,250,.2);color:#93c5fd;border:1px solid rgba(96,165,250,.3)}
+.tag-green{background:rgba(52,211,153,.2);color:#6ee7b7;border:1px solid rgba(52,211,153,.3)}
+.tag-purple{background:rgba(167,139,250,.2);color:#c4b5fd;border:1px solid rgba(167,139,250,.3)}
+.tag-amber{background:rgba(251,191,36,.2);color:#fcd34d;border:1px solid rgba(251,191,36,.3)}
+.tag-red{background:rgba(248,113,113,.2);color:#fca5a5;border:1px solid rgba(248,113,113,.3)}
+.arch{display:flex;gap:clamp(6px,1vw,14px);align-items:center;flex-wrap:wrap;justify-content:center;margin:2vh 0}
+.arch-box{padding:clamp(10px,1.5vh,18px) clamp(14px,2vw,28px);border-radius:clamp(8px,1.5vw,16px);font-size:clamp(13px,1.6vw,20px);font-weight:700;color:#e2e8f0;text-align:center}
+.arch-box.fill{background:rgba(30,41,59,.9);border:2px solid #334155}
+.arch-box.accent{border:2px solid #60a5fa;color:#60a5fa;background:rgba(59,130,246,.1)}
+.arch-arrow{color:#475569;font-size:clamp(18px,2.5vw,32px);font-weight:bold}
+.ver-big{font-size:clamp(60px,10vw,140px);font-weight:900;color:#60a5fa;line-height:1}
+.nav{position:fixed;bottom:clamp(10px,2vh,24px);left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center;z-index:100}
+.nav-btn{width:clamp(36px,5vw,50px);height:clamp(36px,5vw,50px);border-radius:50%;border:1px solid #475569;background:rgba(30,41,59,.95);color:#94a3b8;cursor:pointer;font-size:clamp(16px,2vw,22px);display:flex;align-items:center;justify-content:center}
+.nav-btn:hover{border-color:#60a5fa;color:#60a5fa}
+.page-dot{font-size:clamp(12px,1.5vw,15px);color:#475569;min-width:50px;text-align:center}
+.cite{position:fixed;bottom:clamp(50px,7vh,80px);left:50%;transform:translateX(-50%);font-size:clamp(11px,1.2vw,13px);color:#334155}
+ol.big-list{list-style:none;max-width:85vw;counter-reset:item}
+ol.big-list li{counter-increment:item;font-size:clamp(16px,2.2vw,26px);color:#cbd5e1;line-height:1.8;padding:1vh 0}
+ol.big-list li::before{content:counter(item);display:inline-block;width:clamp(30px,4vw,44px);height:clamp(30px,4vw,44px);line-height:clamp(30px,4vw,44px);border-radius:50%;background:rgba(96,165,250,.15);color:#60a5fa;text-align:center;font-weight:800;margin-right:clamp(12px,1.5vw,20px);font-size:clamp(14px,1.8vw,22px)}
+</style>
+</head>
+<body>
+
+<div id="slides">
+
+<!-- ═══ 0. 封面 ═══ -->
+<div class="slide active">
+  <img src="/bidding/img/logo.png" style="height:clamp(80px,14vw,160px);margin-bottom:2vh" alt="文鳐智投">
+  <div class="s1">文鳐智投</div>
+  <div class="s2">投标智能监控系统 · 开发全纪实</div>
+  <div style="margin-top:4vh;display:flex;gap:clamp(8px,1.5vw,16px);flex-wrap:wrap;justify-content:center">
+    <span class="tag-sm tag-blue">中南电力设计院数智科技</span>
+    <span class="tag-sm tag-purple">V0.1 → V1.41</span>
+    <span class="tag-sm tag-green">2026.06.19 — 06.30</span>
+  </div>
+</div>
+
+<!-- ═══ 1. 缘起 ═══ -->
+<div class="slide">
+  <div class="s2">🎯 缘起</div>
+  <div class="p" style="font-size:clamp(18px,2.4vw,30px);max-width:80vw;line-height:2">
+    中南电力设计院<strong style="color:#60a5fa">数智科技公司</strong>面向全国能源电力领域<br>
+    提供数字化平台、AI中台、智慧工地、智能巡检等软件服务
+  </div>
+  <div class="grid3" style="margin-top:4vh">
+    <div class="card" style="border-color:rgba(248,113,113,.4)"><div class="icon">🔍</div><div class="ctitle" style="color:#fca5a5">信息分散</div><div class="cdesc">300+ 招标平台互不相通<br>每天逐一查看不现实</div></div>
+    <div class="card" style="border-color:rgba(251,191,36,.4)"><div class="icon">⏰</div><div class="ctitle" style="color:#fcd34d">时效压力</div><div class="cdesc">公告有时效窗口<br>错过一天 = 错过机会</div></div>
+    <div class="card" style="border-color:rgba(96,165,250,.4)"><div class="icon">🧠</div><div class="ctitle" style="color:#93c5fd">噪音过滤</div><div class="cdesc">施工/监理/设备采购<br>需精准排除非数字化项目</div></div>
+  </div>
+</div>
+
+<!-- ═══ 2. 核心数据 ═══ -->
+<div class="slide">
+  <div class="s2">📊 核心数据</div>
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-num">344</div><div class="stat-label">监控站点</div></div>
+    <div class="stat-item"><div class="stat-num">87</div><div class="stat-label">可用平台</div></div>
+    <div class="stat-item"><div class="stat-num">119</div><div class="stat-label">有效项目</div></div>
+    <div class="stat-item"><div class="stat-num">67</div><div class="stat-label">日均新增</div></div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:clamp(6px,1vw,12px);justify-content:center;margin-top:3vh;max-width:80vw">
+    <span class="tag-sm tag-blue">南方电网</span><span class="tag-sm tag-blue">国家能源</span>
+    <span class="tag-sm tag-green">浙能集团</span><span class="tag-sm tag-green">华润守正</span>
+    <span class="tag-sm tag-purple">中广核</span><span class="tag-sm tag-purple">中国能建</span>
+    <span class="tag-sm tag-amber">中电投</span><span class="tag-sm tag-amber">深圳能源</span>
+    <span class="tag-sm tag-red">国电投 WAF</span><span class="tag-sm tag-red">三桶油</span>
+  </div>
+  <div class="p" style="margin-top:2vh;color:#475569">六大六小发电集团 + 国网南网 + 77 公共资源交易中心</div>
+</div>
+
+<!-- ═══ 3. V0.1-V0.2 基石 ═══ -->
+<div class="slide">
+  <div class="ver-big">V0.1 → V0.2</div>
+  <div class="s2">项目基石 · 爬虫 + 评分</div>
+  <div class="grid2" style="margin-top:3vh">
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#60a5fa">V0.1 · 06.19 启动</div><div class="cdesc" style="text-align:left;line-height:2">
+      🏗️ 爬虫引擎 bidding_engine.py<br>
+      🗄️ SQLite 建表（招标/中标分表）<br>
+      📋 解析《投标网站注册信息汇总表》344 站<br>
+      🎯 定位：数智科技≠EPC，只关注数字化/软件/AI<br>
+      🐟 命名「文鳐智投」
+    </div></div>
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#a78bfa">V0.2 · 06.20 评分</div><div class="cdesc" style="text-align:left;line-height:2">
+      🧠 评分引擎 v1：三级关键词 + 地理权重<br>
+      📊 344 站点导入 site_list 表<br>
+      📝 crawl_log 抓取日志<br>
+      🔀 管道：全品类抓取 → 评分 → 入库
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ 4. V0.3-V0.4 报告 ═══ -->
+<div class="slide">
+  <div class="ver-big">V0.3 → V0.4</div>
+  <div class="s2">交互报告 · 企微 · Chromium</div>
+  <div class="grid2" style="margin-top:3vh">
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#6ee7b7">V0.3 · 06.20</div><div class="cdesc" style="text-align:left;line-height:2">
+      🌐 HTML 交互报告：搜索/筛选/排序/分页<br>
+      🖥️ Nginx 静态服务上线<br>
+      📱 移动端响应式适配<br>
+      💬 企微 Webhook 集成
+    </div></div>
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#fcd34d">V0.4 · 06.21</div><div class="cdesc" style="text-align:left;line-height:2">
+      🤖 Chromium 无头渲染兜底<br>
+      📄 详情页结构化字段提取<br>
+      🔌 站点适配器框架建立<br>
+      ⏰ 定时任务 cron 9:00 / 18:00
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ 5. V0.5-V0.6 评分进化 ═══ -->
+<div class="slide">
+  <div class="ver-big">V0.5 → V0.6</div>
+  <div class="s2">评分进化 · AI 封面 · 企微卡片</div>
+  <div class="grid2" style="margin-top:3vh">
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#fca5a5">V0.5 · 06.21 评分 v4→v6</div><div class="cdesc" style="text-align:left;line-height:2">
+      📋 基于 48 个真实项目重写关键词权重<br>
+      🚫 EPC 施工噪音清零（v5）<br>
+      🎯 增强「数智」核心词 + 最低分阈值（v6）<br>
+      🤖 企微机器人每日推送
+    </div></div>
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#c4b5fd">V0.6 · 06.22 封面</div><div class="cdesc" style="text-align:left;line-height:2">
+      🎨 通义万相 AI 封面生成<br>
+      💬 企微推送 v3 精美卡片<br>
+      🏷️ 客户分类引擎（6 大类别）<br>
+      🗑️ 移除 Pillow 兜底，全 AI 封面
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ 6. V0.7-V1.0 交互 ═══ -->
+<div class="slide">
+  <div class="ver-big">V0.7 → V1.0</div>
+  <div class="s2">明暗主题 · 长记忆 · 完整交互</div>
+  <div class="grid3" style="margin-top:2vh">
+    <div class="card"><div class="ctitle" style="color:#60a5fa">V0.7 · 06.22</div><div class="cdesc">🌓 明暗主题切换<br>🧠 长记忆系统<br>通义千问嵌入<br>© 版权统一</div></div>
+    <div class="card"><div class="ctitle" style="color:#6ee7b7">V0.8 · 06.23</div><div class="cdesc">⭐ 星标收藏<br>🆕 NEW 徽章<br>⌨️ 键盘快捷键<br>💾 筛选记忆</div></div>
+    <div class="card"><div class="ctitle" style="color:#c4b5fd">V0.9→V1.0 · 06.23</div><div class="cdesc">📊 SVG 趋势图表<br>☑️ 全选/批量导出<br>🔍 多选筛选器<br>🎨 标签高亮反馈</div></div>
+  </div>
+</div>
+
+<!-- ═══ 7. V1.1 V1.10-V1.28 适配器 ═══ -->
+<div class="slide">
+  <div class="s2">🔌 平台攻坚 · V1.1 → V1.28</div>
+  <div class="s3">6.24 — 6.25 · 5 路专属适配器逐个攻克</div>
+  <div class="grid3" style="margin-top:2vh">
+    <div class="card" style="border-color:rgba(96,165,250,.5)"><div class="icon">🏭</div><div class="ctitle" style="color:#60a5fa">浙能集团</div><div class="cdesc">iframe 列表逆向<br>API 抓取 41 条入库<br>智巡万安/智能大坝 100 分</div></div>
+    <div class="card" style="border-color:rgba(251,191,36,.5)"><div class="icon">⚡</div><div class="ctitle" style="color:#fcd34d">国家能源</div><div class="cdesc">国能e招 Chromium<br>17 条入库<br>数智科技服务商 100 分</div></div>
+    <div class="card" style="border-color:rgba(52,211,153,.5)"><div class="icon">🔗</div><div class="ctitle" style="color:#6ee7b7">南方电网</div><div class="cdesc">bidding.csg.cn<br>直连适配器<br>8 条入库</div></div>
+    <div class="card" style="border-color:rgba(167,139,250,.5)"><div class="icon">📡</div><div class="ctitle" style="color:#c4b5fd">中广核</div><div class="cdesc">API 发现<br>/portalApi/content/queryPage<br>浏览器方案待攻克</div></div>
+    <div class="card" style="border-color:rgba(248,113,113,.5)"><div class="icon">🛡️</div><div class="ctitle" style="color:#fca5a5">华润守正</div><div class="cdesc">szecp.crc.com.cn<br>2 条入库<br>WAF 较低可直连</div></div>
+    <div class="card" style="border-color:rgba(100,116,139,.5)"><div class="icon">🚫</div><div class="ctitle" style="color:#94a3b8">锁死平台</div><div class="cdesc">国电投 雷池WAF<br>大唐 SSO<br>三桶油 验证码<br>国网 登录</div></div>
+  </div>
+</div>
+
+<!-- ═══ 8. V1.30-V1.39 质量 ═══ -->
+<div class="slide">
+  <div class="s2">🎯 评分校准 · V1.30 → V1.39</div>
+  <div class="s3">6.26 — 6.28 · 数据质量全面提升</div>
+  <div class="grid2" style="margin-top:3vh">
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#60a5fa">评分引擎 v10（V1.33）</div><div class="cdesc" style="text-align:left;line-height:2">
+      🔐 DIGITAL_GATE 新增：信息安全/等保/安全评估<br>
+      ⭐ STRONG_KEYWORDS 新增：数字化/智能化/AI<br>
+      🎯 入闸自动 +25 分基础分<br>
+      📈 修复后中广核 2 条、南网 8 条入库
+    </div></div>
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#a78bfa">API 噪声防火墙（V1.39）</div><div class="cdesc" style="text-align:left;line-height:2">
+      🛡️ 默认 min_score=1 排除 63 条噪音<br>
+      🔧 中标表查询崩溃修复<br>
+      📊 卡片与表格数据源统一<br>
+      🗑️ 浙能施工/监理/保险类清零
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ 9. 架构演进 ═══ -->
+<div class="slide">
+  <div class="s2">🔄 架构演进</div>
+  <div class="grid2" style="margin-top:2vh">
+    <div class="card" style="border-color:rgba(248,113,113,.6);text-align:left">
+      <div class="ctitle" style="color:#fca5a5;font-size:clamp(20px,3vw,36px)">❌ V0 全量 JSON</div>
+      <div class="cdesc" style="text-align:left;line-height:2.2;font-size:clamp(15px,2vw,22px)">
+        单文件 240KB data.json<br>
+        前端全量加载 157 条<br>
+        客户端排序过滤<br>
+        页面加载 5s+<br>
+        内存爆炸
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(52,211,153,.6);text-align:left">
+      <div class="ctitle" style="color:#6ee7b7;font-size:clamp(20px,3vw,36px)">✅ V2 SQLite + API</div>
+      <div class="cdesc" style="text-align:left;line-height:2.2;font-size:clamp(15px,2vw,22px)">
+        分表存储 招标/中标<br>
+        Python RESTful API<br>
+        分页 20/50/100 按需加载<br>
+        Nginx 反向代理<br>
+        Cache-Control 30s 缓存<br>
+        306KB → 24KB 极致优化
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 10. V1.40-V1.41 体验 ═══ -->
+<div class="slide">
+  <div class="ver-big">V1.40 → V1.41</div>
+  <div class="s2">体验极致优化 · 秒开</div>
+  <div class="grid2" style="margin-top:3vh">
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#60a5fa">V1.40 · 06.30 今日新增</div><div class="cdesc" style="text-align:left;line-height:2">
+      🐛 修复：badge 8 条，实际只显示 2 条<br>
+      🔍 根因：分页请求 + badge 不同源<br>
+      ⚡ 修复：服务端 is_new_today 过滤<br>
+      📉 306KB → 24KB（缩减 93%）<br>
+      🔀 Promise.all 并行加载
+    </div></div>
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#6ee7b7">V1.41 · 06.30 Tab 秒开</div><div class="cdesc" style="text-align:left;line-height:2">
+      🐌 问题：切 Tab 3-4 秒<br>
+      🔍 根因：公网 API 1.7s × 2<br>
+      💾 修复：Cache-Control max-age=30<br>
+      🔄 页面加载时预拉中标数据<br>
+      ⚡ 30s 内零网络请求，缓存即显
+    </div></div>
+  </div>
+</div>
+
+<!-- ═══ 11. 技术栈 ═══ -->
+<div class="slide">
+  <div class="s2">🛠️ 技术栈全景</div>
+  <div class="grid3" style="margin-top:2vh">
+    <div class="card"><div class="icon">🐍</div><div class="ctitle">Python 3.11</div><div class="cdesc">爬虫 · 评分 · API<br>报告生成 · 企微推送<br>cron 定时任务</div></div>
+    <div class="card"><div class="icon">🗄️</div><div class="ctitle">SQLite</div><div class="cdesc">招标/中标分表<br>全文检索<br>归档备份</div></div>
+    <div class="card"><div class="icon">🌐</div><div class="ctitle">Nginx</div><div class="cdesc">HTTPS 反向代理<br>静态文件服务<br>安全响应头</div></div>
+    <div class="card"><div class="icon">🎨</div><div class="ctitle">Vanilla JS</div><div class="cdesc">零依赖 响应式<br>明暗主题 分页<br>CSV 导出 收藏</div></div>
+    <div class="card"><div class="icon">🤖</div><div class="ctitle">通义千问</div><div class="cdesc">AI 封面生成<br>文本嵌入<br>语义检索</div></div>
+    <div class="card"><div class="icon">💬</div><div class="ctitle">企微</div><div class="cdesc">Webhook 推送<br>卡片消息<br>每日 8:30</div></div>
+  </div>
+</div>
+
+<!-- ═══ 12. 工程化 ═══ -->
+<div class="slide">
+  <div class="s2">⚙️ 工程化实践</div>
+  <div class="grid3" style="margin-top:2vh">
+    <div class="card"><div class="icon">🔄</div><div class="ctitle">测试→生产</div><div class="cdesc">bidding-test 验证<br>确认后推生产<br>绝不跳过</div></div>
+    <div class="card"><div class="icon">📝</div><div class="ctitle">版本管理</div><div class="cdesc">V0.1 → V1.41<br>41 次迭代<br>每次入日志</div></div>
+    <div class="card"><div class="icon">🛡️</div><div class="ctitle">自愈机制</div><div class="cdesc">凌晨 3:00 自检<br>API 自动拉起<br>Nginx 每分钟守护</div></div>
+    <div class="card"><div class="icon">🚀</div><div class="ctitle">AI 编程</div><div class="cdesc">OpenCode + DeepSeek<br>自动修复 Bug<br>重构代码</div></div>
+    <div class="card"><div class="icon">🎯</div><div class="ctitle">反馈闭环</div><div class="cdesc">点踩 → 诊断<br>修代码 → 回填<br>主动告知</div></div>
+    <div class="card"><div class="icon">⏰</div><div class="ctitle">定时管线</div><div class="cdesc">08:00 采集<br>08:30 推送<br>全自动运行</div></div>
+  </div>
+</div>
+
+<!-- ═══ 13. AI 编程 ═══ -->
+<div class="slide">
+  <div class="s2">🤖 AI 编程工具链 · 工程实践</div>
+  <div class="s3">Hermes · OpenCode · Codex · Claude Code</div>
+  <div class="grid3" style="margin-top:2vh">
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#60a5fa">Hermes Agent</div><div class="cdesc" style="text-align:left;line-height:2;font-size:clamp(13px,1.5vw,17px)">
+      🏠 文鳐智投的运行底座<br>
+      • Skills 机制沉淀领域知识<br>
+      • Cron 定时任务引擎<br>
+      • 长记忆系统(HOT/WARM/COLD)<br>
+      • Feishu 集成 + 浏览器工具<br>
+      <strong style="color:#93c5fd">心得：</strong>把每次解决问题的流程沉淀为 Skill，下次零成本复用
+    </div></div>
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#6ee7b7">OpenCode</div><div class="cdesc" style="text-align:left;line-height:2;font-size:clamp(13px,1.5vw,17px)">
+      🔧 主力编程 Agent<br>
+      • 自主循环：读代码→改→验证<br>
+      • 支持 DeepSeek / Claude 等多模型<br>
+      • 单次修复 2-3 个 Bug<br>
+      <strong style="color:#6ee7b7">心得：</strong>描述 Bug 现象 + 预期行为，让它自主修复，不要微操
+    </div></div>
+    <div class="card" style="text-align:left"><div class="ctitle" style="color:#c4b5fd">Claude Code</div><div class="cdesc" style="text-align:left;line-height:2;font-size:clamp(13px,1.5vw,17px)">
+      🧠 复杂推理首选<br>
+      • 大项目重构和架构设计<br>
+      • 深度代码审查<br>
+      • Anthropic API 专用<br>
+      <strong style="color:#c4b5fd">心得：</strong>适合"想清楚再动手"的场景，重构前先让它出方案
+    </div></div>
+  </div>
+  <div style="margin-top:3vh;max-width:85vw">
+    <div class="card" style="text-align:left">
+      <div class="ctitle" style="color:#fcd34d;font-size:clamp(18px,2.5vw,28px)">📋 实战心得 · 用好 AI 编程的三条铁律</div>
+      <div class="cdesc" style="text-align:left;line-height:2.2;font-size:clamp(14px,1.8vw,20px)">
+        <strong style="color:#fcd34d">① 上下文要给足</strong> — 不是"修复这个 Bug"，而是"这个 Bug 的根因是 A 和 B 数据源不一致，需要把 A 改为从 B 获取，参考 C 函数的写法"<br>
+        <strong style="color:#fcd34d">② 拆分任务，不要一次给太多</strong> — 一次只让 AI 做一件事。改 API + 改前端 + 改样式分三轮，比一轮全扔进去效果好 10 倍<br>
+        <strong style="color:#fcd34d">③ 验证不能省</strong> — AI 改完的代码必须跑一遍。浏览器实测、API curl、数据核对，三步缺一不可。AI 会"自信地犯错"
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 14. 封底 ═══ -->
+<div class="slide">
+  <img src="/bidding/img/logo.png" style="height:clamp(80px,14vw,160px);margin-bottom:3vh" alt="文鳐智投">
+  <div class="s1" style="font-size:clamp(36px,6vw,72px)">文鳐智投 · 让投标更智能</div>
+  <div style="margin-top:6vh;display:flex;gap:clamp(8px,1.5vw,16px);flex-wrap:wrap;justify-content:center">
+    <span class="tag-sm tag-blue">yfzx.online/bidding</span>
+    <span class="tag-sm tag-green">V1.41 · 2026.06.30</span>
+  </div>
+  <div class="p" style="margin-top:6vh;color:#475569">© 中南电力设计院数智科技 · 文鳐智投 2026</div>
+</div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn" onclick="prev()">◀</button>
+  <span class="page-dot" id="pager">1/14</span>
+  <button class="nav-btn" onclick="next()">▶</button>
+</div>
+<div class="cite">← → 翻页 · F 全屏</div>
+
+<script>
+let cur=0; const slides=[...document.querySelectorAll('.slide')], total=slides.length;
+function show(n){slides[cur].classList.remove('active');cur=(n+total)%total;slides[cur].classList.add('active');document.getElementById('pager').textContent=(cur+1)+'/'+total}
+function next(){show(cur+1)}; function prev(){show(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')next();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prev();
+  if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}
+  if(e.key==='Escape'&&document.fullscreenElement)document.exitFullscreen()
+});
+let tx=0;document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX});document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)dx>0?prev():next()});
+</script>
+</body>
+</html>

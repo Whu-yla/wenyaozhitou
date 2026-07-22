@@ -1,0 +1,12 @@
+[Unit]
+Description=文鳐智投 凌晨自检修复
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/.hermes/profiles/wenyaozhitou
+ExecStart=/usr/local/lib/hermes-agent/venv/bin/python3 /root/.hermes/profiles/wenyaozhitou/scripts/selfheal_3am.py
+StandardOutput=journal
+StandardError=journal
+TimeoutStopSec=600
+User=root

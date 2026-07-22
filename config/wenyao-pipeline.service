@@ -1,0 +1,17 @@
+[Unit]
+Description=文鳐智投 全流程采集管线
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/.hermes/profiles/wenyaozhitou
+ExecStart=/bin/bash /root/.hermes/profiles/wenyaozhitou/scripts/pipeline_master.sh
+StandardOutput=journal
+StandardError=journal
+TimeoutStopSec=7200
+User=root
+
+Restart=on-failure
+RestartSec=60
+RestartMax=1

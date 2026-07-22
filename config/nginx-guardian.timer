@@ -1,0 +1,11 @@
+[Unit]
+Description=Nginx Guardian Timer - 每分钟检测
+Requires=nginx-guardian.service
+
+[Timer]
+OnCalendar=*:*:00
+AccuracySec=5s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

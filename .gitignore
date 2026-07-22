@@ -1,0 +1,41 @@
+# 敏感文件
+cache/documents/*.xlsx
+cache/documents/*.xls
+cache/documents/*.csv
+/tmp/qwen_key.txt
+*.key
+*.pem
+*.crt
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+
+# 运行时数据（体积大，不纳入版本控制）
+frontend/data_full.json
+frontend/data_bid_p*.json
+frontend/data_win_p*.json
+frontend/report-*.html
+frontend/2026-*/
+
+# 日志
+*.log
+api_server.log
+
+# 备份
+*.bak
+*.orig
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

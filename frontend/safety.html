@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工地安全检测标注工具</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --border: #334155;
+    --text: #f1f5f9;
+    --text-dim: #94a3b8;
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #3b82f6;
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .header h1 {
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .header .badge {
+    background: var(--blue);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* Main Layout */
+  .container {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 24px;
+    padding: 24px 32px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; }
+  }
+
+  /* Panel */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Upload Area */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 32px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .upload-zone:hover { border-color: var(--blue); background: rgba(59,130,246,0.05); }
+  .upload-zone.dragover { border-color: var(--blue); background: rgba(59,130,246,0.1); }
+  .upload-zone.has-image { border-color: var(--green); }
+  .upload-zone .icon { font-size: 36px; margin-bottom: 8px; }
+  .upload-zone .text { color: var(--text-dim); font-size: 14px; }
+  .upload-zone .hint { color: var(--text-dim); font-size: 12px; margin-top: 4px; }
+  .upload-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer;
+  }
+  .upload-zone .file-info {
+    display: none;
+    font-size: 13px;
+    color: var(--green);
+    margin-top: 8px;
+  }
+  .upload-zone.has-image .file-info { display: block; }
+  .upload-zone.has-image .icon,
+  .upload-zone.has-image .text,
+  .upload-zone.has-image .hint { display: none; }
+
+  /* JSON Input */
+  .json-input {
+    width: 100%;
+    min-height: 280px;
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 12px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .json-input:focus { border-color: var(--blue); }
+
+  /* Buttons */
+  .btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .btn {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary {
+    background: var(--blue);
+    color: white;
+  }
+  .btn-primary:hover { background: #2563eb; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-success {
+    background: var(--green);
+    color: white;
+  }
+  .btn-success:hover { background: #16a34a; }
+  .btn-success:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.05); }
+
+  /* Result Area */
+  .result-area {
+    position: relative;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .result-placeholder {
+    color: var(--text-dim);
+    text-align: center;
+    padding: 40px;
+  }
+  .result-placeholder .icon { font-size: 48px; margin-bottom: 12px; }
+  .result-placeholder .text { font-size: 15px; }
+  .result-image-container {
+    display: none;
+    width: 100%;
+    position: relative;
+  }
+  .result-image-container.show { display: block; }
+  .result-image-container canvas {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  /* Summary Bar */
+  .summary-bar {
+    display: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .summary-bar.show { display: flex; }
+  .summary-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .summary-item .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .dot-green { background: var(--green); }
+  .dot-red { background: var(--red); }
+
+  /* Spinner */
+  .spinner {
+    display: none;
+    width: 20px; height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn.loading .spinner { display: inline-block; }
+  .btn.loading .btn-text { display: none; }
+
+  /* JSON Validation */
+  .json-error {
+    display: none;
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #fca5a5;
+    margin-top: 8px;
+  }
+  .json-error.show { display: block; }
+
+  /* Settings */
+  .settings-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .settings-row label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+  .settings-row input[type="checkbox"] {
+    accent-color: var(--blue);
+    width: 16px; height: 16px;
+  }
+  .settings-row input[type="number"] {
+    width: 60px;
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    padding: 2px 6px;
+    font-size: 13px;
+  }
+
+  /* Example data button */
+  .load-example {
+    color: var(--blue);
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .load-example:hover { opacity: 1; }
+
+  /* API Auto Section */
+  .api-section {
+    margin: 16px 0;
+    padding: 14px;
+    background: rgba(59,130,246,0.06);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 8px;
+  }
+  .api-section .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .api-token-input {
+    width: 100%;
+    padding: 8px 12px;
+    background: #0f172a;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: monospace;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 10px;
+  }
+  .api-token-input:focus { border-color: var(--blue); }
+  .api-section .hint-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .btn-auto {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    width: 100%;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-auto:hover { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); }
+  .btn-auto:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-auto.loading .spinner { display: inline-block; }
+  .btn-auto.loading .btn-text { display: none; }
+
+  /* Manual section divider */
+  .manual-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 14px 0;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+  .manual-divider::before,
+  .manual-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏗️ 工地安全检测标注工具</h1>
+  <span class="badge">v1.0</span>
+</div>
+
+<div class="container">
+  <!-- Left Panel -->
+  <div class="panel">
+    <div class="panel-title">📋 输入</div>
+
+    <!-- Image Upload -->
+    <div class="upload-zone" id="uploadZone">
+      <input type="file" accept="image/*" id="imageInput">
+      <div class="icon">🖼️</div>
+      <div class="text">点击上传原始图片</div>
+      <div class="hint">支持 JPG / PNG / WebP</div>
+      <div class="file-info" id="fileInfo">✅ 已加载: <span id="fileName"></span></div>
+    </div>
+
+    <!-- API Auto Recognition -->
+    <div class="api-section" id="apiSection">
+      <div class="section-label">⚡ AI 自动识别</div>
+      <div class="hint-text">调用远程 API 自动识别图片，无需手动粘贴 JSON</div>
+      <input type="password" class="api-token-input" id="apiToken" placeholder="输入 Bearer Token（从 Apifox 获取）" spellcheck="false">
+      <button class="btn-auto" id="btnAutoDetect" disabled>
+        <span class="spinner"></span>
+        <span class="btn-text">🚀 一键识别 + 标注</span>
+      </button>
+      <div class="json-error" id="apiError"></div>
+    </div>
+
+    <!-- Manual JSON Section -->
+    <div class="manual-divider">或 手动粘贴 JSON</div>
+
+    <!-- JSON Input -->
+    <label style="font-size:13px;color:var(--text-dim);margin-bottom:6px;display:block;">
+      粘贴检测 JSON 结果
+      <span class="load-example" id="loadExample">加载示例数据</span>
+    </label>
+    <textarea class="json-input" id="jsonInput" placeholder='{"code":200,"msg":"success","data":{"识别结果":[...]}}'></textarea>
+    <div class="json-error" id="jsonError"></div>
+
+    <!-- Settings -->
+    <div class="settings-row">
+      <label><input type="checkbox" id="showBbox" checked> 显示检测框</label>
+      <label><input type="checkbox" id="showLabels" checked> 显示标签</label>
+      <label><input type="checkbox" id="showHeader" checked> 显示顶部信息栏</label>
+      <label>框粗细 <input type="number" id="lineWidth" value="4" min="1" max="12"></label>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-group">
+      <button class="btn btn-primary" id="btnGenerate">🎯 生成标注图</button>
+      <button class="btn btn-success" id="btnDownload" disabled>💾 下载</button>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="panel" style="overflow:hidden;">
+    <div class="panel-title">🎨 标注结果</div>
+
+    <div class="summary-bar" id="summaryBar"></div>
+
+    <div class="result-area">
+      <div class="result-placeholder" id="placeholder">
+        <div class="icon">🖼️</div>
+        <div class="text">上传图片 + 粘贴检测结果，然后点击「生成标注图」</div>
+      </div>
+      <div class="result-image-container" id="resultContainer">
+        <canvas id="resultCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==================== State ====================
+let originalImage = null;   // HTMLImageElement
+let imageFileName = '';
+let currentDetectionData = null; // parsed JSON
+let lastAnnotatedDataURL = null; // for download
+
+// ==================== DOM refs ====================
+const uploadZone = document.getElementById('uploadZone');
+const imageInput = document.getElementById('imageInput');
+const fileInfo = document.getElementById('fileInfo');
+const fileName = document.getElementById('fileName');
+const jsonInput = document.getElementById('jsonInput');
+const jsonError = document.getElementById('jsonError');
+const btnGenerate = document.getElementById('btnGenerate');
+const btnDownload = document.getElementById('btnDownload');
+const placeholder = document.getElementById('placeholder');
+const resultContainer = document.getElementById('resultContainer');
+const canvas = document.getElementById('resultCanvas');
+const summaryBar = document.getElementById('summaryBar');
+const showBbox = document.getElementById('showBbox');
+const showLabels = document.getElementById('showLabels');
+const showHeader = document.getElementById('showHeader');
+const lineWidthInput = document.getElementById('lineWidth');
+const loadExample = document.getElementById('loadExample');
+const apiToken = document.getElementById('apiToken');
+const btnAutoDetect = document.getElementById('btnAutoDetect');
+const apiError = document.getElementById('apiError');
+let currentFile = null; // for API upload
+
+// ==================== Example data ====================
+const EXAMPLE_JSON = JSON.stringify({
+  "code": 200,
+  "msg": "success",
+  "data": {
+    "识别结果": [
+      {
+        "entity": "人员",
+        "bbox": [1230.72, 408.24, 1315.2, 635.04],
+        "risk_result": []
+      },
+      {
+        "entity": "人员",
+        "bbox": [360.96, 294.84, 391.68, 375.84],
+        "risk_result": [
+          {
+            "sub_entity": "安全帽",
+            "desc": "未佩戴",
+            "is_risk": "是",
+            "confidence": 0.96,
+            "regulation_text": [
+              "16 号令依据：第三条\n《安全生产法》第 44 条",
+              "JGJ 80-2016 第 3.0.5 条"
+            ],
+            "rectification": "立即佩戴合格安全帽并系紧下颌带。"
+          },
+          {
+            "sub_entity": "防护服",
+            "desc": "未穿着",
+            "is_risk": "是",
+            "confidence": 0.94,
+            "regulation_text": [
+              "GB 11651-2008《劳动防护用品选用规则》"
+            ],
+            "rectification": "立即佩戴合格防护服并系紧扣带。"
+          }
+        ]
+      },
+      {
+        "entity": "人员",
+        "bbox": [255.36, 288.36, 276.48, 335.88],
+        "risk_result": []
+      }
+    ],
+    "识别用时": "6.07s",
+    "检索用时": "0.37s",
+    "w": 1920,
+    "h": 1080
+  }
+}, null, 2);
+
+loadExample.addEventListener('click', () => {
+  jsonInput.value = EXAMPLE_JSON;
+  jsonError.classList.remove('show');
+});
+
+// ==================== Image Upload ====================
+imageInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  currentFile = file;
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      originalImage = img;
+      imageFileName = file.name;
+      fileName.textContent = `${file.name} (${img.width}×${img.height})`;
+      uploadZone.classList.add('has-image');
+      updateAutoBtn();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+// Drag & drop on upload zone
+uploadZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  uploadZone.classList.add('dragover');
+});
+uploadZone.addEventListener('dragleave', () => {
+  uploadZone.classList.remove('dragover');
+});
+uploadZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    currentFile = file;
+    imageInput.files = e.dataTransfer.files;
+    imageInput.dispatchEvent(new Event('change'));
+  }
+});
+
+// ==================== Auto Detect (API) ====================
+function updateAutoBtn() {
+  btnAutoDetect.disabled = !(currentFile && originalImage && apiToken.value.trim());
+}
+
+apiToken.addEventListener('input', updateAutoBtn);
+
+btnAutoDetect.addEventListener('click', async () => {
+  const token = apiToken.value.trim();
+  if (!token) {
+    apiError.textContent = '⚠️ 请先输入 Bearer Token';
+    apiError.classList.add('show');
+    return;
+  }
+  if (!currentFile || !originalImage) {
+    apiError.textContent = '⚠️ 请先上传图片';
+    apiError.classList.add('show');
+    return;
+  }
+
+  apiError.classList.remove('show');
+  btnAutoDetect.classList.add('loading');
+  btnAutoDetect.disabled = true;
+
+  try {
+    const formData = new FormData();
+    formData.append('upload_file', currentFile);
+
+    const resp = await fetch('/api/ai-proxy/AiServer/ai/vl/safe_risk_flow_2603', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      },
+      body: formData
+    });
+
+    if (!resp.ok) {
+      let errMsg = `HTTP ${resp.status}`;
+      try {
+        const errJson = await resp.json();
+        errMsg += ': ' + JSON.stringify(errJson);
+      } catch (_) {
+        errMsg += ' ' + (await resp.text()).slice(0, 200);
+      }
+      throw new Error(errMsg);
+    }
+
+    const result = await resp.json();
+
+    // Validate the response
+    let results = result.data && result.data['识别结果'] ? result.data['识别结果'] : null;
+    if (!results) results = result['识别结果'] || null;
+    if (!results || !Array.isArray(results) || results.length === 0) {
+      throw new Error('API 返回数据中未找到有效的"识别结果"');
+    }
+
+    // Success — set data and draw
+    currentDetectionData = result;
+    jsonInput.value = JSON.stringify(result, null, 2);
+    jsonError.classList.remove('show');
+    placeholder.style.display = 'none';
+    resultContainer.classList.add('show');
+    drawAnnotation();
+
+  } catch (err) {
+    apiError.textContent = '⚠️ ' + err.message;
+    apiError.classList.add('show');
+  } finally {
+    btnAutoDetect.classList.remove('loading');
+    updateAutoBtn();
+  }
+});
+
+// ==================== Drawing Engine ====================
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function drawAnnotation() {
+  if (!originalImage || !currentDetectionData) return;
+
+  const data = currentDetectionData;
+  let results = data.data && data.data['识别结果'] ? data.data['识别结果'] : null;
+  if (!results) results = data['识别结果'] || [];
+
+  // Image dimensions
+  const imgW = data.data && data.data.w ? data.data.w : originalImage.width;
+  const imgH = data.data && data.data.h ? data.data.h : originalImage.height;
+
+  // Scale to canvas
+  const containerWidth = resultContainer.clientWidth - 2;
+  const scale = containerWidth / imgW;
+  const canvasW = containerWidth;
+  const canvasH = imgH * scale;
+
+  canvas.width = canvasW * 2; // 2x for retina
+  canvas.height = canvasH * 2;
+  canvas.style.width = canvasW + 'px';
+  canvas.style.height = canvasH + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(2, 2);
+
+  // Draw background image
+  ctx.drawImage(originalImage, 0, 0, canvasW, canvasH);
+
+  const lw = parseInt(lineWidthInput.value) || 4;
+
+  // Count risks
+  let totalPeople = results.length;
+  let riskPeople = 0;
+  let riskDetails = [];
+
+  // Sort: draw safe boxes first, then risk boxes on top
+  const safeItems = [];
+  const riskItems = [];
+
+  results.forEach((item, idx) => {
+    if (item.entity !== '人员') return;
+    const bbox = item.bbox;
+    if (!bbox || bbox.length < 4) return;
+
+    const hasRisk = item.risk_result && item.risk_result.length > 0 &&
+                    item.risk_result.some(r => r.is_risk === '是');
+    const risks = item.risk_result || [];
+
+    if (hasRisk) {
+      riskPeople++;
+      risks.forEach(r => {
+        if (r.is_risk === '是') {
+          riskDetails.push(r);
+        }
+      });
+      riskItems.push({ item, bbox, idx, risks });
+    } else {
+      safeItems.push({ item, bbox, idx });
+    }
+  });
+
+  // Shared label positioning: returns {x, y} closest to box without overlap
+  const labelRects = [];
+  function getLabelPos(x1, y1, x2, y2, lblW, lblH) {
+    const HEADER_H = 44;
+    const candidates = [];
+
+    // 1) 上方（贴近人头）—— 最优先
+    const topY = y1 - lblH - 4;
+    if (topY >= HEADER_H) candidates.push({ y: topY, priority: 1 });
+
+    // 2) 下方（贴近脚底）
+    const bottomY = y2 + 4;
+    if (bottomY + lblH <= canvasH) candidates.push({ y: bottomY, priority: 2 });
+
+    // 3) 框内
+    const innerY = y1 + 4;
+    if (innerY + lblH <= y2 - 4) candidates.push({ y: innerY, priority: 3 });
+
+    // 4) 保底：下方（不超出底部）
+    const forceBelow = Math.min(y2 + 20, canvasH - lblH - 4);
+    if (forceBelow >= HEADER_H) candidates.push({ y: forceBelow, priority: 4 });
+
+    // 5) 最后保底：紧贴 header 下方
+    candidates.push({ y: HEADER_H + 2, priority: 5 });
+
+    let best = null;
+    let bestDist = Infinity;
+
+    for (const c of candidates) {
+      const py = c.y;
+      let px = Math.max(2, Math.min(x1, canvasW - lblW - 2));
+      if (px < 2) px = 2;
+
+      // 检查是否和已有标签重叠
+      const overlap = labelRects.some(r =>
+        !(px + lblW < r.x || px > r.x + r.w || py + lblH < r.y || py > r.y + r.h)
+      );
+
+      // 距离：标签中心到人物框最近边
+      const cy = py + lblH / 2;
+      let dist;
+      if (cy < y1) dist = y1 - cy;
+      else if (cy > y2) dist = cy - y2;
+      else dist = 0;
+
+      if (!overlap && dist < bestDist) {
+        best = { x: px, y: py };
+        bestDist = dist;
+      }
+      // 全部重叠时，选最近的位置（也不跳到 header 里）
+      if (overlap && !best) {
+        best = { x: px, y: py };
+        bestDist = dist;
+      }
+    }
+
+    return best || { x: Math.max(2, x1), y: HEADER_H + 2 };
+  }
+
+  // Draw safe boxes (bottom layer)
+  safeItems.forEach(({ bbox, idx }) => {
+    if (!showBbox.checked) return;
+    const [x1, y1, x2, y2] = bbox.map(v => v * scale);
+    const bw = x2 - x1;
+    const bh = y2 - y1;
+    // Only draw if box is reasonably sized (> 5px visible)
+    if (bw < 2 || bh < 2) return;
+
+    ctx.strokeStyle = '#22c55e';
+    ctx.lineWidth = lw;
+    ctx.strokeRect(x1, y1, bw, bh);
+
+    if (showLabels.checked) {
+      // Label background
+      const lblW = 80;
+      const lblH = 26;
+      const pos = getLabelPos(x1, y1, x2, y2, lblW, lblH);
+      ctx.fillStyle = '#22c55e';
+      roundRect(ctx, pos.x, pos.y, lblW, lblH, 4);
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText('✅ 安全', pos.x + 8, pos.y + 6 + 12);
+      labelRects.push({ x: pos.x, y: pos.y, w: lblW, h: lblH });
+    }
+  });
+
+  // Draw risk boxes (top layer)
+  riskItems.forEach(({ bbox, risks }) => {
+    if (!showBbox.checked && !showLabels.checked) return;
+    const [x1, y1, x2, y2] = bbox.map(v => v * scale);
+    const bw = x2 - x1;
+    const bh = y2 - y1;
+    if (bw < 2 || bh < 2) return;
+
+    if (showBbox.checked) {
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = lw + 1;
+      ctx.setLineDash([6, 4]);
+      ctx.strokeRect(x1, y1, bw, bh);
+      ctx.setLineDash([]);
+    }
+
+    if (showLabels.checked) {
+      // Build risk label lines
+      const riskLines = risks
+        .filter(r => r.is_risk === '是')
+        .map(r => `⚠️ ${r.desc}${r.sub_entity} (${Math.round(r.confidence * 100)}%)`);
+
+      const lineH = 22;
+      const padding = 8;
+      const lblW = 260;
+      const lblH = riskLines.length * lineH + padding * 2;
+      const pos = getLabelPos(x1, y1, x2, y2, lblW, lblH);
+
+      // Label background with glow
+      ctx.shadowColor = 'rgba(239,68,68,0.4)';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = 'rgba(239,68,68,0.92)';
+      roundRect(ctx, pos.x, pos.y, lblW, lblH, 6);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Text
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 13px sans-serif';
+      riskLines.forEach((line, i) => {
+        ctx.fillText(line, pos.x + padding, pos.y + padding + lineH * (i + 0.7));
+      });
+      labelRects.push({ x: pos.x, y: pos.y, w: lblW, h: lblH });
+
+      // Also show rectification text below the box if space
+      const rectification = risks
+        .filter(r => r.is_risk === '是' && r.rectification)
+        .map(r => r.rectification);
+      if (rectification.length > 0) {
+        const rectY = Math.max(46, y2 + 6);
+        if (rectY + 30 < canvasH) {
+          ctx.fillStyle = 'rgba(239,68,68,0.85)';
+          roundRect(ctx, x1, rectY, Math.min(lblW, canvasW - x1 - 4), 26, 4);
+          ctx.fill();
+          ctx.fillStyle = '#ffffff';
+          ctx.font = '11px sans-serif';
+          ctx.fillText('💡 ' + rectification[0].slice(0, 30) + (rectification[0].length > 30 ? '…' : ''), x1 + 6, rectY + 17);
+        }
+      }
+    }
+  });
+
+  // Header bar
+  if (showHeader.checked) {
+    const h = 42;
+    ctx.fillStyle = 'rgba(15,23,42,0.88)';
+    ctx.fillRect(0, 0, canvasW, h);
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 15px sans-serif';
+    const info = `🏗️ 工地安全 AI 检测  |  共 ${totalPeople} 人  ·  ${riskPeople} 人违规  |  ${imageFileName || '原始图片'}`;
+    // Truncate if too long
+    const displayInfo = ctx.measureText(info).width > canvasW - 24
+      ? `🏗️ 工地安全检测  |  ${totalPeople} 人  ·  ${riskPeople} 人违规`
+      : info;
+    ctx.fillText(displayInfo, 14, 27);
+  }
+
+  // Update summary bar
+  updateSummary(totalPeople, riskPeople, riskDetails);
+
+  // Update download button
+  lastAnnotatedDataURL = canvas.toDataURL('image/png');
+  btnDownload.disabled = false;
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function updateSummary(total, riskCount, details) {
+  const safeCount = total - riskCount;
+  summaryBar.innerHTML = '';
+  summaryBar.classList.add('show');
+
+  const addItem = (html) => {
+    const div = document.createElement('div');
+    div.className = 'summary-item';
+    div.innerHTML = html;
+    summaryBar.appendChild(div);
+  };
+
+  addItem(`👷 共 <strong>${total}</strong> 人`);
+  addItem(`<span class="dot dot-green"></span> 安全 <strong>${safeCount}</strong> 人`);
+  addItem(`<span class="dot dot-red"></span> 违规 <strong>${riskCount}</strong> 人`);
+
+  // Group risk types by full description (desc + sub_entity)
+  const typeMap = {};
+  details.forEach(d => {
+    const key = `${d.desc || ''}${d.sub_entity || '未知'}`;
+    if (!typeMap[key]) typeMap[key] = 0;
+    typeMap[key]++;
+  });
+  Object.entries(typeMap).forEach(([type, count]) => {
+    addItem(`⚠️ ${type} ×${count}`);
+  });
+
+  // Add legend for colors
+  addItem(``);
+  addItem(`<span style="color:var(--text-dim);font-size:12px;">🟢 安全  🔴 违规  ⚠️ 风险项</span>`);
+}
+
+// ==================== JSON Parsing ====================
+function parseDetectionJson(text) {
+  const obj = JSON.parse(text);
+  if (obj.code !== undefined && obj.code !== 200) {
+    throw new Error(`API 返回错误码: ${obj.code}`);
+  }
+  // Find results - could be at data.识别结果 or directly 识别结果
+  const results = obj.data && obj.data['识别结果'] ? obj.data['识别结果'] :
+                  obj['识别结果'] ? obj['识别结果'] : null;
+  if (!results || !Array.isArray(results)) {
+    throw new Error('JSON 中未找到 "识别结果" 数组');
+  }
+  return obj;
+}
+
+// ==================== Generate ====================
+btnGenerate.addEventListener('click', () => {
+  // Reset errors
+  jsonError.classList.remove('show');
+
+  // Validate image
+  if (!originalImage) {
+    jsonError.textContent = '⚠️ 请先上传原始图片';
+    jsonError.classList.add('show');
+    return;
+  }
+
+  // Parse JSON
+  const rawText = jsonInput.value.trim();
+  if (!rawText) {
+    jsonError.textContent = '⚠️ 请粘贴检测结果的 JSON 数据';
+    jsonError.classList.add('show');
+    return;
+  }
+
+  btnGenerate.classList.add('loading');
+
+  // Small delay to show loading state
+  setTimeout(() => {
+    try {
+      currentDetectionData = parseDetectionJson(rawText);
+      placeholder.style.display = 'none';
+      resultContainer.classList.add('show');
+      drawAnnotation();
+    } catch (err) {
+      jsonError.textContent = `⚠️ JSON 解析失败: ${err.message}`;
+      jsonError.classList.add('show');
+    } finally {
+      btnGenerate.classList.remove('loading');
+    }
+  }, 100);
+});
+
+// ==================== Download ====================
+btnDownload.addEventListener('click', () => {
+  if (!lastAnnotatedDataURL) return;
+  const link = document.createElement('a');
+  link.download = `safety_annotated_${Date.now()}.png`;
+  link.href = lastAnnotatedDataURL;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
+// ==================== Re-draw on settings change ====================
+[showBbox, showLabels, showHeader, lineWidthInput].forEach(el => {
+  el.addEventListener('change', () => {
+    if (currentDetectionData && originalImage) {
+      drawAnnotation();
+    }
+  });
+});
+
+// ==================== Window resize ====================
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (currentDetectionData && originalImage) {
+      drawAnnotation();
+    }
+  }, 200);
+});
+
+console.log('🏗️ 工地安全检测标注工具已加载');
+</script>
+</body>
+</html>

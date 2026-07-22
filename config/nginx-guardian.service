@@ -1,0 +1,10 @@
+[Unit]
+Description=Nginx Port Guardian - 端口守护+邮件告警+自愈
+After=network.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/root/.hermes/profiles/wenyaozhitou/.env
+ExecStart=/usr/local/lib/hermes-agent/venv/bin/python3 /root/.hermes/profiles/wenyaozhitou/scripts/nginx_guardian.py
+StandardOutput=journal
+StandardError=journal

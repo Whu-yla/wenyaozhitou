@@ -1,0 +1,12 @@
+[Unit]
+Description=文鳐智投 每日记忆维护
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/.hermes/profiles/wenyaozhitou/scripts
+ExecStart=/usr/local/lib/hermes-agent/venv/bin/python3 /root/.hermes/profiles/wenyaozhitou/scripts/memory_maintainer.py
+StandardOutput=journal
+StandardError=journal
+TimeoutStopSec=300
+User=root

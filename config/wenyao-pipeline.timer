@@ -1,0 +1,10 @@
+[Unit]
+Description=文鳐智投 定时采集（每天8:00）
+
+[Timer]
+OnCalendar=*-*-* 08:00:00
+Persistent=true
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target
