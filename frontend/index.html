@@ -332,7 +332,7 @@ body.light .filter-row select,body.light .filter-row input[type=date],body.light
     <span class="dot"></span> <span id="lastUpdate">数据更新: —</span>
     
     
-    <button class="btn ghost" onclick="toggleTheme()" title="切换主题" style="font-size:18px;padding:4px 8px">🌓</button>
+    <button class="btn ghost" onclick="toggleTheme()" title="切换主题" style="font-size:18px;padding:4px 8px"><span id="themeIcon">🌙</span></button>
   </div>
 </header>
 
@@ -360,11 +360,11 @@ body.light .filter-row select,body.light .filter-row input[type=date],body.light
 <div class="filter-bar">
   <div class="search-row">
     <div class="search-box">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon">⌕</span>
       <input id="search" placeholder="搜索标题、招标单位、省份...">
       <button class="search-btn" id="searchBtn" type="button">搜索</button>
     </div>
-    <button class="filter-toggle-btn" id="filterToggleBtn" type="button" aria-label="筛选条件">☰ 筛选</button>
+    <button class="filter-toggle-btn" id="filterToggleBtn" type="button" aria-label="筛选条件">≡ 筛选</button>
   </div>
   <div class="filter-scroll-wrapper" id="filterScrollWrapper">
   <div class="filter-row">
@@ -457,8 +457,8 @@ body.light .filter-row select,body.light .filter-row input[type=date],body.light
 <script src="app.js?v=127"></script>
 <script src="/bidding/chat-widget.js?v=5"></script>
 <script>
-function toggleTheme(){document.body.classList.toggle('light');var l=document.body.classList.contains('light');localStorage.setItem('theme',l?'light':'dark');}
-(function(){if(localStorage.getItem('theme')==='dark'){document.body.classList.remove('light');}})();
+function toggleTheme(){document.body.classList.toggle('light');var l=document.body.classList.contains('light');localStorage.setItem('theme',l?'light':'dark');var icon=document.getElementById('themeIcon');if(icon){icon.textContent=l?'🌙':'☀️';}}
+(function(){if(localStorage.getItem('theme')==='dark'){document.body.classList.remove('light');var icon=document.getElementById('themeIcon');if(icon){icon.textContent='☀️';}}})();
 
 document.addEventListener('DOMContentLoaded', function(){ init().catch(function(e){ console.error('init failed:', e); }); });
 </script>
