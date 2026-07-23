@@ -1,0 +1,53 @@
+agent:
+  api_max_retries: 3
+  clarify_timeout: 600
+  disabled_toolsets: []
+  environment_hint: ''
+  environment_probe: true
+  gateway_auto_continue_freshness: 3600
+  gateway_notify_interval: 180
+  gateway_timeout: 1800
+  gateway_timeout_warning: 900
+  image_input_mode: auto
+  max_turns: 150
+  reasoning_effort: medium
+  restart_drain_timeout: 180
+  service_tier: ''
+  task_completion_guidance: true
+  tool_use_enforcement: auto
+  use_gateway: false
+  verbose: false
+approvals:
+  mode: false
+  destructive_slash_confirm: false
+compression:
+  enabled: true
+  target_ratio: 0.2
+  threshold: 0.5
+credential_pool_strategies: {}
+fallback_providers: []
+kanban:
+  dispatch_in_gateway: true
+memory:
+  memory_char_limit: 2200
+  memory_enabled: true
+  user_profile_enabled: true
+model:
+  api_key: YOUR_API_KEY_HERE
+  api_mode: codex_responses
+  base_url: https://ark.cn-beijing.volces.com/api/coding/v3
+  default: glm-5-2-260617
+  provider: custom
+onboarding:
+  seen:
+    busy_input_prompt: true
+platform_toolsets:
+  feishu:
+    - hermes-feishu
+platforms:
+  feishu:
+    streaming: true
+providers: {}
+timezone: Asia/Shanghai
+toolsets:
+  - hermes-cli

@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-WEBHOOK = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_WEBHOOK_KEY"
+WEBHOOK = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0256f02d-7368-4214-9c99-9c53ce449e92"
 KILL_SWITCH = False  # ✅ 已开启
 DB = "/root/.hermes/profiles/wenyaozhitou/data/bidding.db"
 REPORT_URL = "https://www.yfzx.online/bidding/"

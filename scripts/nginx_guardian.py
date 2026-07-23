@@ -10,7 +10,7 @@ import subprocess, socket, os, json, time, urllib.request
 from datetime import datetime
 
 # ── 配置 ──
-WECOM_WEBHOOK = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_WEBHOOK_KEY"
+WECOM_WEBHOOK = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=0256f02d-7368-4214-9c99-9c53ce449e92"
 CHECK_URL = "https://yfzx.online/bidding/"
 STATE_FILE = "/tmp/nginx_guardian_state.json"
 COOLDOWN_MINUTES = 30  # 同一故障 30 分钟内不重复告警

@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>文鳐智投 · 06月26日 日报</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+/* 默认明亮 */
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh;line-height:1.6;transition:background .3s,color .3s}
+body.dark{background:#0f172a;color:#e2e8f0}
+header{background:linear-gradient(135deg,#eff6ff,#dbeafe);border-bottom:2px solid #3b82f6;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+body.dark header{background:linear-gradient(135deg,#1e293b,#0f172a)}
+.header-left{display:flex;align-items:center;gap:10px}
+header h1{font-size:20px;color:#1d4ed8}
+body.dark header h1{color:#60a5fa}
+header .sub{font-size:12px;color:#64748b}
+body.dark header .sub{color:#94a3b8}
+.summary-bar{display:flex;gap:16px;padding:12px 24px;background:#fff;border-bottom:1px solid #e2e8f0;flex-wrap:wrap;justify-content:center;font-size:13px;border-radius:0}
+body.dark .summary-bar{background:#1e293b;border-color:#334155}
+.summary-bar span{padding:4px 12px;border-radius:12px;background:#f1f5f9;border:1px solid #e2e8f0;color:#334155}
+body.dark .summary-bar span{background:#0f172a;border-color:#334155;color:#cbd5e1}
+.summary-bar .hi{color:#10b981;font-weight:600}
+.summary-bar .star{color:#f59e0b}
+
+/* Tab切换 */
+.tab-bar{display:flex;gap:4px;padding:12px 24px;justify-content:center}
+.tab-btn{padding:10px 32px;border-radius:20px;border:1px solid #cbd5e1;background:#fff;color:#64748b;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s}
+body.dark .tab-btn{border-color:#334155;background:#1e293b;color:#94a3b8}
+.tab-btn.active{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.tab-btn:hover:not(.active){border-color:#3b82f6;color:#1e293b}
+body.dark .tab-btn:hover:not(.active){border-color:#60a5fa;color:#e2e8f0}
+
+.container{max-width:900px;margin:0 auto;padding:0 20px 40px}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* 卡片 */
+.card{background:#fff;border-radius:12px;padding:20px;margin:12px 0;border:1px solid #e2e8f0;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+body.dark .card{background:#1e293b;border-color:#334155;box-shadow:none}
+.card:hover{border-color:#3b82f6;box-shadow:0 2px 8px rgba(59,130,246,.1)}
+body.dark .card:hover{border-color:#475569;box-shadow:none}
+.card.starred{border-color:#f59e0b;box-shadow:0 0 12px rgba(245,158,11,0.15)}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+.card-title{font-size:15px;font-weight:600;flex:1;min-width:200px}
+.card-title a{color:#1e293b;text-decoration:none}
+.card-title a:hover{color:#3b82f6}
+body.dark .card-title a{color:#e2e8f0}
+body.dark .card-title a:hover{color:#60a5fa}
+.card-badge{display:flex;gap:6px;flex-shrink:0}
+.badge{padding:2px 10px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-star{background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44}
+.badge-hi{background:#10b98122;color:#10b981;border:1px solid #10b98144}
+.badge-mid{background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44}
+.badge-lo{background:#6b728022;color:#9ca3af;border:1px solid #6b728044}
+.badge-zn{background:#3b82f622;color:#60a5fa;border:1px solid #3b82f644}
+.card-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:#64748b;margin-bottom:10px}
+body.dark .card-meta{color:#94a3b8}
+.card-meta span{display:flex;align-items:center;gap:4px}
+.card-body{font-size:13px;color:#475569;line-height:1.7;padding:10px 0;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;margin:10px 0}
+body.dark .card-body{color:#cbd5e1;border-color:#334155}
+.card-advice{font-size:13px;padding:6px 0}
+.card-actions{display:flex;gap:10px;margin-top:12px;align-items:center}
+.btn-like,.btn-dislike{padding:6px 16px;border-radius:16px;border:1px solid #334155;background:transparent;color:#94a3b8;cursor:pointer;font-size:12px;transition:all .2s;display:flex;align-items:center;gap:4px}
+.btn-like:hover{background:#10b98122;border-color:#10b981;color:#10b981}
+.btn-dislike:hover{background:#ef444422;border-color:#ef4444;color:#ef4444}
+.btn-like.active{background:#10b98144;border-color:#10b981;color:#10b981}
+.btn-dislike.active{background:#ef444444;border-color:#ef4444;color:#ef4444}
+.btn-like:disabled,.btn-dislike:disabled{opacity:.5;cursor:not-allowed}
+.feedback-msg{font-size:11px;color:#10b981;margin-left:8px}
+
+/* 点踩弹框 */
+.overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:100;justify-content:center;align-items:center}
+.overlay.show{display:flex}
+.dialog{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;max-width:420px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.15)}
+body.dark .dialog{background:#1e293b;border-color:#334155;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.dialog h3{color:#1e293b;margin-bottom:12px;font-size:15px}
+body.dark .dialog h3{color:#e2e8f0}
+.dialog textarea{width:100%;height:100px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;color:#1e293b;padding:10px;font-size:13px;resize:vertical;font-family:inherit}
+body.dark .dialog textarea{background:#0f172a;border-color:#334155;color:#e2e8f0}
+.dialog-btns button{padding:8px 20px;border-radius:8px;border:1px solid #cbd5e1;cursor:pointer;font-size:13px}
+body.dark .dialog-btns button{border-color:#334155}
+.dialog .btn-submit{background:#ef4444;border-color:#ef4444;color:#fff}
+.dialog .btn-cancel{background:transparent;color:#64748b}
+body.dark .dialog .btn-cancel{color:#94a3b8}
+.dialog .error{color:#ef4444;font-size:11px;margin-top:6px;display:none}
+
+.empty{text-align:center;padding:60px 20px;color:#64748b;font-size:15px}
+
+footer{text-align:center;padding:20px;color:#94a3b8;font-size:11px;border-top:1px solid #e2e8f0;margin-top:40px}
+body.dark footer{color:#475569;border-color:#1e293b}
+footer a{color:#94a3b8}
+body.dark footer a{color:#475569}
+
+/* 主题切换按钮 */
+.theme-btn{width:36px;height:36px;border-radius:50%;border:1px solid #cbd5e1;background:#fff;color:#f59e0b;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+body.dark .theme-btn{border-color:#334155;background:#1e293b;color:#fbbf24}
+.theme-btn:hover{border-color:#3b82f6}
+
+@media(max-width:600px){
+  .card-header{flex-direction:column}
+  .card-meta{gap:8px}
+}
+</style>
+<link rel="stylesheet" href="/bidding/chat-widget.css?v=4">
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>📊 文鳐智投 · 日报</h1>
+    <div class="sub">06月26日 · 生成于 2026-06-26 20:00 · 中南电力·数智科技</div>
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()" title="切换主题">☀️</button>
+</header>
+
+<div class="summary-bar">
+  <span>📋 招标 <b>26</b> 条</span>
+  <span>🏆 中标 <b>3</b> 条</span>
+  <span class="hi">⭐ 收藏招标 <b>0</b> 条</span>
+  <span class="star">⭐ 收藏中标 <b>0</b> 条</span>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('bidding')" id="tabBidding">📋 招标情况报告</button>
+  <button class="tab-btn" onclick="switchTab('winning')" id="tabWinning">🏆 中标情况报告</button>
+</div>
+
+<div class="container">
+  <div class="tab-panel active" id="panelBidding">
+    <div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.bidding.csg.cn/zbgg/1200434149.jhtml" target="_blank">2026年网络安全技术防护及技术服务、2026年网络安全实训基地建设运营、2026年数字技术平台适应性改造等项目招标公告 2026年网络安全技术防护及技术服务、2026年网络安全实训基地建设运营、20</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">100.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：广东电网有限责任公司广州供电局</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 南方电网供应链统一平台</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_588" onclick="submitLike('588','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_588" onclick="openDislike('588','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_588"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.bidding.csg.cn/zbgg/1200434109.jhtml" target="_blank">2026年南方电网人工智能科技有限公司调度业务第四批服务类专项采购项目招标公告 2026年南方电网人工智能科技有限公司调度业务第四批服务类专项采购项目招标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">83.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：南方电网人工智能科技有限公司</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-25</span>
+    <span>📡 南方电网供应链统一平台</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_534" onclick="submitLike('534','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_534" onclick="openDislike('534','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_534"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.bidding.csg.cn/fzbgg/1200434088.jhtml" target="_blank">南方电网绿能科技（广东）有限公司2026-2027年安全工器具全生命周期平台建设技术服务专项采购项目采购公告 南方电网绿能科技（广东）有限公司2026-2027年安全工器具全生命周期平台建设技术服务专</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">78.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟠 国网/南网</span>
+    <span>📍 广东</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 南方电网供应链统一平台</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_593" onclick="submitLike('593','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_593" onclick="openDislike('593','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_593"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.chnenergybidding.com.cn/bidweb/001/001004/001004002/20260612/47ccfb56-0072-4725-95d9-8859dfa7b80f.html" target="_blank">包神铁路神朔公司燕家塔等5站信号联锁设备改造工程公开招标项目变更公告[变更公告]</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">75.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：中国神华能源股份有限公司神朔铁路分公司招标人联系人:雎磊招标</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-09</span>
+    <span>📡 国家能源集团国能e招</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_573" onclick="submitLike('573','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_573" onclick="openDislike('573','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_573"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.bidding.csg.cn/zbgg/1200434108.jhtml" target="_blank">2026年南方电网人工智能科技有限公司智慧能碳有源配电网电能质量协同优化关键技术研究服务采购项目招标公告 2026年南方电网人工智能科技有限公司智慧能碳有源配电网电能质量协同优化关键技术研究服务采购项</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">74.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：南方电网人工智能科技有限公司</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-25</span>
+    <span>📡 南方电网供应链统一平台</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_535" onclick="submitLike('535','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_535" onclick="openDislike('535','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_535"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://zsrm.zjenergy.com.cn/zjnycms//category/otherBulletinList.html?dates=300&amp;amp;categoryId=17&amp;amp;tabName=3&amp;amp;page=1" target="_blank">浙江能源集团智慧供应链一体化平台V1.0 欢迎来到浙江能源集团智慧供应链一体化平台V1.0 异议投诉 帮助中心 办理CA 搜索 首 页 招标项目信息 采购项目信息 煤炭采购信息 再生资源竞价信息 竞价</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">70.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟡 地方能源集团</span>
+    <span>📍 浙江</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 浙能集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_602" onclick="submitLike('602','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_602" onclick="openDislike('602','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_602"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://zsrm.zjenergy.com.cn/zjnycms/category/otherBulletinList.html?dates=300&amp;amp;categoryId=37&amp;amp;tabName=供应商黑名单&amp;amp;page=1" target="_blank">浙江能源集团智慧供应链一体化平台V1.0 欢迎来到浙江能源集团智慧供应链一体化平台V1.0 异议投诉 帮助中心 办理CA 搜索 首 页 招标项目信息 采购项目信息 煤炭采购信息 再生资源竞价信息 竞价</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">70.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟡 地方能源集团</span>
+    <span>📍 浙江</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 浙能集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_601" onclick="submitLike('601','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_601" onclick="openDislike('601','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_601"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://zsrm.zjenergy.com.cn/zjnycms/category/otherBulletinList.html?dates=300&amp;amp;categoryId=19&amp;amp;tabName=合格供应商&amp;amp;page=1" target="_blank">浙江能源集团智慧供应链一体化平台V1.0 欢迎来到浙江能源集团智慧供应链一体化平台V1.0 异议投诉 帮助中心 办理CA 搜索 首 页 招标项目信息 采购项目信息 煤炭采购信息 再生资源竞价信息 竞价</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">70.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟡 地方能源集团</span>
+    <span>📍 浙江</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 浙能集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_600" onclick="submitLike('600','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_600" onclick="openDislike('600','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_600"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://zsrm.zjenergy.com.cn/zjnycms/category/otherBulletinList.html?dates=300&amp;amp;categoryId=24&amp;amp;tabName=竞价结果&amp;amp;page=1" target="_blank">浙江能源集团智慧供应链一体化平台V1.0 欢迎来到浙江能源集团智慧供应链一体化平台V1.0 异议投诉 帮助中心 办理CA 搜索 首 页 招标项目信息 采购项目信息 煤炭采购信息 再生资源竞价信息 竞价</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">70.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟡 地方能源集团</span>
+    <span>📍 浙江</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 浙能集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_599" onclick="submitLike('599','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_599" onclick="openDislike('599','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_599"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://zsrm.zjenergy.com.cn/zjnycms/category/otherBulletinList.html?dates=300&amp;amp;categoryId=23&amp;amp;tabName=竞价公告&amp;amp;page=1" target="_blank">浙江能源集团智慧供应链一体化平台V1.0 欢迎来到浙江能源集团智慧供应链一体化平台V1.0 异议投诉 帮助中心 办理CA 搜索 首 页 招标项目信息 采购项目信息 煤炭采购信息 再生资源竞价信息 竞价</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">70.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟡 地方能源集团</span>
+    <span>📍 浙江</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 浙能集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_598" onclick="submitLike('598','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_598" onclick="openDislike('598','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_598"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://zsrm.zjenergy.com.cn/zjnycms//category/otherBulletinList.html?word=" target="_blank">浙江能源集团智慧供应链一体化平台V1.0 欢迎来到浙江能源集团智慧供应链一体化平台V1.0 异议投诉 帮助中心 办理CA 搜索 首 页 招标项目信息 采购项目信息 煤炭采购信息 再生资源竞价信息 竞价</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">70.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟡 地方能源集团</span>
+    <span>📍 浙江</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 浙能集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_597" onclick="submitLike('597','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_597" onclick="openDislike('597','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_597"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.chnenergybidding.com.cn/bidweb/001/001004/001004001/20260611/75050d9a-c8e8-4ca2-bf1e-468f3ec25458.html" target="_blank">包头化工不间断电源采购公开招标项目变更公告[变更公告]</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">70.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：国能包头煤化工有限责任公司招标人联系人:宋烨招标人电子邮箱:</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-11</span>
+    <span>📡 国家能源集团国能e招</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_568" onclick="submitLike('568','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_568" onclick="openDislike('568','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_568"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.dlzb.com/d-zb-67110265.html" target="_blank">大唐国际大唐保定供热有限责任公司平台加共享模式下智慧用工服务数智化技术在供热企业的应用研究招标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">63.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：大唐集团</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 大唐集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_575" onclick="submitLike('575','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_575" onclick="openDislike('575','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_575"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.chnenergybidding.com.cn/bidweb/001/001002/001002003/20260626/164ca884-f61e-4070-8921-95994ccf0f47.html" target="_blank">新能源院基于AI的汽轮发电机组故障预警系统平台开发公开招标项目招标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">63.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：国家能源集团新能源技术研究院有限公司</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 国家能源集团国能e招</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_567" onclick="submitLike('567','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_567" onclick="openDislike('567','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_567"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.chnenergybidding.com.cn/bidweb/001/001002/001002003/20260626/ef894ddc-3e76-41e2-af0a-063c954b30c3.html" target="_blank">科环集团国能智深2026-2027年辅网控制系统现场技术服务框架(中南区域)公开招标项目招标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">62.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：国能智深控制技术有限公司</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 国家能源集团国能e招</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_583" onclick="submitLike('583','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_583" onclick="openDislike('583','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_583"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.dlzb.com/d-zb-67217310.html" target="_blank">华电新能源集团股份有限公司黑龙江分公司风电叶片声发射在线监测系统及性能退化预测技术的研发科技项目招标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">60.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：华电集团</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 华电集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_576" onclick="submitLike('576','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_576" onclick="openDislike('576','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_576"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.dlzb.com/d-zb-67215454.html" target="_blank">武汉数智能源投资有限公司分布式光伏发电项目监理服务招标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">58.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：国投电力</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 国投电力</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_577" onclick="submitLike('577','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_577" onclick="openDislike('577','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_577"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.bidding.csg.cn/zbhxrgs/1200434122.jhtml" target="_blank">广西电网公司2026年省级物资集中采购营销类框架公开招标项目[CG0400022002325035]--变更文件--招标1 广西电网公司2026年省级物资集中采购营销类框架公开招标项目[CG04000</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">58.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🔵 电力/央企/工业</span>
+    <span>📍 广西</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 南方电网供应链统一平台</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_540" onclick="submitLike('540','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_540" onclick="openDislike('540','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_540"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.bidding.csg.cn/fzbgg/1200434093.jhtml" target="_blank">南网用户生态运营公司2026年内控合规检查评价服务项目采购公告 南网用户生态运营公司2026年内控合规检查评价服务项目采购公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">57.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟠 国网/南网</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 南方电网供应链统一平台</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_592" onclick="submitLike('592','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_592" onclick="openDislike('592','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_592"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.dlzb.com/d-zb-67197473.html" target="_blank">华能信息技术有限公司品牌管理平台建设项目设备招标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">57.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：华能集团</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 华能集团</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_578" onclick="submitLike('578','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_578" onclick="openDislike('578','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_578"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.bidding.csg.cn/xtgg/1200314289.jhtml" target="_blank">系统公告-中国南方电网-供应链统一服务平台 您现在正在浏览：首页 &gt; 系统公告 &gt; 【注意】系统维护公告 【注意】系统维护公告 发布时间： 2022-07-23 10:50:58 来源： 本站原创 供</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">53.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟠 国网/南网</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 南方电网招标公告</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_611" onclick="submitLike('611','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_611" onclick="openDislike('611','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_611"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.ctba.org.cn/" target="_blank">中国招标投标协会 2026年中国招标投标协会年会在深圳召开 年会报道 |《招标采购管理》杂志编委座谈会在深圳召开 中国招标投标协会与招商局集团招投标中心联合开展主题党日活动 年会报道 | 中国招标投标</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">53.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：⚪ 其他</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 重庆市公共资源交易网</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_607" onclick="submitLike('607','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_607" onclick="openDislike('607','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_607"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.ebidding.com.cn/" target="_blank">易招标-首页 产品与服务 产品与服务 企业采购 咨询规划 产品实施 运维服务 第三方交易平台 咨询服务 交易平台 运营服务 成功案例 成功案例 客户案例 能源 金融 现代服务 交通运输 制造业 其他 </a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">53.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：⚪ 其他</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 </span>
+    <span>📡 三峡集团电子采购平台</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_596" onclick="submitLike('596','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_596" onclick="openDislike('596','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_596"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://www.bidding.csg.cn/fzbgg/1200434173.jhtml" target="_blank">南方电网通用航空服务有限公司2026年安风体系建设咨询及服务项目采购公告 南方电网通用航空服务有限公司2026年安风体系建设咨询及服务项目采购公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">52.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：🟠 国网/南网</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 南方电网供应链统一平台</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_591" onclick="submitLike('591','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_591" onclick="openDislike('591','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_591"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="http://wzglb.impc.com.cn:82/html/project/014001001/999500000529462378.html" target="_blank">内蒙古电力数字研究公司2025年信息化及信息技改单源直采云平台四期建设工程部分设备单源直接采购】采购公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">52.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：内蒙电力 代理机构：</span>
+    <span>📍 未知</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2025-11-26</span>
+    <span>📡 蒙西电网</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_574" onclick="submitLike('574','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_574" onclick="openDislike('574','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_574"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🟢 <a href="https://www.chnenergybidding.com.cn/bidweb/001/001004/001004002/20260601/08181741-e62c-4b7d-8d33-8b73e1215a98.html" target="_blank">广西公司永福公司大利山风电场、贵港能投公司白花山二期风电场220kV升压站预制舱式智能升压站电气设备采购及安装调试工程公开招标项目变更公告[变更公告]</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge score-hi">50.0分 · 高相关</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 招标单位：国家能源集团广西电力有限公司招标人联系人:蒋礼鸿、王霞招标人</span>
+    <span>📍 广西</span>
+    <span>💰 预算：未公示</span>
+    <span>📅 2026-06-26</span>
+    <span>📡 国家能源集团国能e招</span>
+  </div>
+  <div class="card-body">
+    <b>📝 分析</b>：高匹配度，涉及核心数字化/智慧工地/AI平台业务，应优先组织投标。
+  </div>
+  <div class="card-advice">🔴 <b>重点关注 · 建议投标</b></div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_569" onclick="submitLike('569','bidding')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_569" onclick="openDislike('569','bidding')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_569"></span>
+  </div>
+</div>
+  </div>
+  <div class="tab-panel" id="panelWinning">
+    <div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🏆 <a href="http://www.bidding.csg.cn/zbhxrgs/1200434125.jhtml" target="_blank">深圳供电局有限公司2026年生产监控指挥系统气象灾害预警中心模块加装配网功能等3项技术服务专项公开招标中标公告 深圳供电局有限公司2026年生产监控指挥系统气象灾害预警中心模块加装配网功能等3项技术服</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge badge-mid">65.0分</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 中标单位：南网数字运营软件科技（广东）有限公司</span>
+    <span>📋 招标单位：⚪ 其他</span>
+    <span>💰 金额：未公示</span>
+    <span>📅 2026-06-26</span>
+  </div>
+  <div class="card-body">
+    <b>🔍 竞品分析</b>：中标单位：南网数字运营软件科技（广东）有限公司（非直接竞品）<br>
+    📊 非中南院中标 · 南网数字运营软件科技（广东）有限公司。分析市场格局，评估我方差距。
+  </div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_71" onclick="submitLike('71','winning')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_71" onclick="openDislike('71','winning')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_71"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🏆 <a href="http://www.bidding.csg.cn/zbhxrgs/1200434163.jhtml" target="_blank">深圳供电局有限公司2026年调度项目第一批次服务专项公开招标中标公告 深圳供电局有限公司2026年调度项目第一批次服务专项公开招标中标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge badge-mid">57.0分</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 中标单位：广州中软信息技术有限公司</span>
+    <span>📋 招标单位：⚪ 其他</span>
+    <span>💰 金额：未公示</span>
+    <span>📅 2026-06-26</span>
+  </div>
+  <div class="card-body">
+    <b>🔍 竞品分析</b>：竞品：广州中软信息技术有限公司，同类竞品：中软<br>
+    ⚠️ <b>竞品中标 · 中软</b>。应分析该竞品优势，优化我方方案。
+  </div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_72" onclick="submitLike('72','winning')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_72" onclick="openDislike('72','winning')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_72"></span>
+  </div>
+</div>
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      🏆 <a href="http://www.bidding.csg.cn/zbhxrgs/1200434069.jhtml" target="_blank">海南电网产业投资有限责任公司2026年代管的职工文体馆维修专项公开询比采购项目(二次采购)中标公告 海南电网产业投资有限责任公司2026年代管的职工文体馆维修专项公开询比采购项目(二次采购)中标公告</a>
+    </div>
+    <div class="card-badge">
+      <span class="badge badge-mid">52.0分</span>
+    </div>
+  </div>
+  <div class="card-meta">
+    <span>🏢 中标单位：深圳市德勤建工集团有限公司</span>
+    <span>📋 招标单位：🔵 电力/央企/工业</span>
+    <span>💰 金额：未公示</span>
+    <span>📅 2026-06-25</span>
+  </div>
+  <div class="card-body">
+    <b>🔍 竞品分析</b>：中标单位：深圳市德勤建工集团有限公司（非直接竞品）<br>
+    📊 非中南院中标 · 深圳市德勤建工集团有限公司。分析市场格局，评估我方差距。
+  </div>
+  <div class="card-actions">
+    <button class="btn-like" id="btnLike_70" onclick="submitLike('70','winning')">👍 赞同</button>
+    <button class="btn-dislike" id="btnDislike_70" onclick="openDislike('70','winning')">👎 不认同</button>
+    <span class="feedback-msg" id="msg_70"></span>
+  </div>
+</div>
+  </div>
+</div>
+
+<!-- 点踩弹框 -->
+<div class="overlay" id="dislikeOverlay">
+  <div class="dialog">
+    <h3>👎 请告诉我们原因</h3>
+    <textarea id="dislikeReason" placeholder="例如：这个项目与数智科技业务不匹配、评分不准确、建议应该关注XX方向..."></textarea>
+    <div class="error" id="dislikeError">请填写点踩理由</div>
+    <div class="dialog-btns">
+      <button class="btn-cancel" onclick="closeDislike()">取消</button>
+      <button class="btn-submit" onclick="submitDislike()">提交反馈</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 中南电力设计院数智科技 · 文鳐智投 2026 · <a href="/bidding/">返回监控</a> · <a href="/bidding/changelog.html">更新日志</a>
+</footer>
+
+<script>
+const REPORT_DATE = "2026-06-26";
+const API = "/bidding/api/feedback";
+let currentDislikeId = null;
+let currentDislikeSection = null;
+const submitted = JSON.parse(localStorage.getItem("daily_feedback") || "{}");
+
+// 主题切换
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('daily_theme', isDark ? 'dark' : 'light');
+  document.querySelector('.theme-btn').textContent = isDark ? '🌙' : '☀️';
+}
+(function() {
+  const saved = localStorage.getItem('daily_theme');
+  if (saved === 'dark') {
+    document.body.classList.add('dark');
+    document.querySelector('.theme-btn').textContent = '🌙';
+  }
+})();
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+  document.getElementById('panel' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+}
+
+function submitLike(itemId, section) {
+  const btn = document.getElementById('btnLike_' + itemId);
+  const disBtn = document.getElementById('btnDislike_' + itemId);
+  if (btn.disabled || (submitted[itemId] && submitted[itemId].type === 'like')) return;
+  btn.disabled = true;
+  if (disBtn) disBtn.disabled = true;
+  btn.classList.add('active');
+  fetch(API, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({item_id:itemId, type:'like', reason:'', report_date:REPORT_DATE, section:section})
+  }).then(r => r.json()).then(d => {
+    if (d.ok) {
+      submitted[itemId] = {type:'like', time:new Date().toISOString()};
+      localStorage.setItem("daily_feedback", JSON.stringify(submitted));
+      btn.innerHTML = '👍 已点赞';
+      const msg = document.getElementById('msg_' + itemId);
+      if (msg) msg.textContent = '✓ 感谢反馈';
+    }
+  }).catch(e => console.warn(e));
+}
+
+function openDislike(itemId, section) {
+  currentDislikeId = itemId;
+  currentDislikeSection = section;
+  document.getElementById('dislikeReason').value = '';
+  document.getElementById('dislikeError').style.display = 'none';
+  document.getElementById('dislikeOverlay').classList.add('show');
+}
+
+function closeDislike() {
+  document.getElementById('dislikeOverlay').classList.remove('show');
+  currentDislikeId = null;
+}
+
+function submitDislike() {
+  const reason = document.getElementById('dislikeReason').value.trim();
+  if (!reason) {
+    document.getElementById('dislikeError').style.display = 'block';
+    return;
+  }
+  document.getElementById('dislikeError').style.display = 'none';
+  const btn = document.getElementById('btnDislike_' + currentDislikeId);
+  const likeBtn = document.getElementById('btnLike_' + currentDislikeId);
+  if (btn) { btn.disabled = true; btn.classList.add('active'); }
+  if (likeBtn) likeBtn.disabled = true;
+  fetch(API, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({item_id:currentDislikeId, type:'dislike', reason:reason, report_date:REPORT_DATE, section:currentDislikeSection})
+  }).then(r => r.json()).then(d => {
+    if (d.ok) {
+      submitted[currentDislikeId] = {type:'dislike', time:new Date().toISOString(), reason:reason};
+      localStorage.setItem("daily_feedback", JSON.stringify(submitted));
+      if (btn) btn.textContent = '👎 已反馈';
+      const msg = document.getElementById('msg_' + currentDislikeId);
+      if (msg) msg.textContent = '✓ 已记录，感谢反馈';
+    }
+  }).catch(e => console.warn(e));
+  closeDislike();
+}
+
+// 加载已提交的反馈状态
+(function() {
+  Object.keys(submitted).forEach(id => {
+    const fb = submitted[id];
+    if (fb.type === 'like') {
+      const btn = document.getElementById('btnLike_' + id);
+      if (btn) { btn.disabled = true; btn.classList.add('active'); btn.innerHTML = '👍 已点赞'; }
+    } else if (fb.type === 'dislike') {
+      const btn = document.getElementById('btnDislike_' + id);
+      if (btn) { btn.disabled = true; btn.classList.add('active'); btn.textContent = '👎 已反馈'; }
+    }
+  });
+})();
+</script>
+<script src="/bidding/chat-widget.js?v=4"></script>
+</body>
+</html>

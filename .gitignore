@@ -17,13 +17,6 @@ build/
 venv/
 .venv/
 
-# 运行时数据（体积大，不纳入版本控制）
-frontend/data_full.json
-frontend/data_bid_p*.json
-frontend/data_win_p*.json
-frontend/report-*.html
-frontend/2026-*/
-
 # 日志
 *.log
 api_server.log
