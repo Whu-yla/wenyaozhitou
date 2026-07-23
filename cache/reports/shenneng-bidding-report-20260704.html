@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深能环保「数字化三维智能管理系统」投标分析报告</title>
+<style>
+:root{--bg:#f5f5f7;--surface:#fff;--text:#1d1d1f;--muted:#86868b;--dim:#8e8e93;--accent:#2563eb;--green:#059669;--amber:#d97706;--red:#dc2626;--border:#e5e7eb}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;background:var(--bg);color:var(--text);line-height:1.7;padding-bottom:80px}
+.container{max-width:960px;margin:0 auto;padding:40px 24px}
+header{text-align:center;padding:48px 0 32px;border-bottom:1px solid var(--border);margin-bottom:40px}
+header h1{font-size:28px;font-weight:700;margin-bottom:8px}
+header .sub{font-size:14px;color:var(--muted)}
+.badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:600;margin:0 4px}
+.badge-blue{background:#dbeafe;color:#1e40af}
+.badge-green{background:#d1fae5;color:#065f46}
+.badge-amber{background:#fef3c7;color:#92400e}
+.badge-red{background:#fee2e2;color:#991b1b}
+.section{margin:32px 0}
+.section h2{font-size:20px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--accent);display:flex;align-items:center;gap:10px}
+.section h2 .icon{font-size:22px}
+.section h3{font-size:16px;font-weight:600;margin:20px 0 10px;color:var(--accent)}
+.card{background:var(--surface);border-radius:14px;padding:24px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid var(--border)}
+.card-title{font-size:15px;font-weight:700;margin-bottom:12px;color:var(--text)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th{background:#f9fafb;text-align:left;padding:10px 12px;font-weight:600;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.metric-row{display:flex;gap:16px;flex-wrap:wrap;margin:16px 0}
+.metric-card{flex:1;min-width:180px;background:var(--surface);border-radius:12px;padding:20px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid var(--border)}
+.metric-card .val{font-size:28px;font-weight:700;color:var(--text)}
+.metric-card .label{font-size:12px;color:var(--muted);margin-top:4px}
+.match-bar{height:8px;border-radius:4px;background:#e5e7eb;margin:8px 0;overflow:hidden}
+.match-fill{height:100%;border-radius:4px}
+.match-90{width:90%;background:var(--green)}
+.match-80{width:80%;background:var(--green)}
+.match-70{width:70%;background:var(--amber)}
+.match-50{width:50%;background:var(--amber)}
+.match-30{width:30%;background:var(--red)}
+.risk-tag{padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.risk-high{background:#fee2e2;color:#991b1b}
+.risk-mid{background:#fef3c7;color:#92400e}
+.risk-low{background:#d1fae5;color:#065f46}
+.star{color:var(--accent);font-weight:700}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+ul{padding-left:20px;margin:8px 0}
+li{margin:4px 0;font-size:14px}
+.highlight{background:#fef9c3;padding:2px 6px;border-radius:4px;font-weight:600}
+.cta-box{background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;border-radius:14px;padding:28px;margin:32px 0;text-align:center}
+.cta-box h3{font-size:18px;margin-bottom:8px;color:#fff}
+.cta-box p{font-size:14px;opacity:.9}
+footer{text-align:center;color:var(--dim);font-size:12px;padding-top:40px;border-top:1px solid var(--border);margin-top:40px}
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.swot-cell{padding:16px;border-radius:10px}
+.swot-s{background:#d1fae5}
+.swot-w{background:#fee2e2}
+.swot-o{background:#dbeafe}
+.swot-t{background:#fef3c7}
+.swot-cell h4{font-size:14px;font-weight:700;margin-bottom:8px}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.tag{padding:4px 10px;border-radius:6px;font-size:12px;font-weight:500;background:#f3f4f6;color:var(--muted)}
+@media(max-width:768px){
+  .grid-2,.grid-3,.swot-grid{grid-template-columns:1fr}
+  .metric-row{flex-direction:column}
+  .container{padding:20px 16px}
+  header h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+<h1>深能环保「数字化三维智能管理系统」</h1>
+<div class="sub">投标机会深度分析报告 · 2026年7月4日</div>
+<div style="margin-top:12px">
+<span class="badge badge-blue">📋 技术规范书68页</span>
+<span class="badge badge-green">⚡ 垃圾发电行业</span>
+<span class="badge badge-amber">⭐ 高度匹配数智科技</span>
+</div>
+</header>
+
+<!-- 项目速览 -->
+<div class="metric-row">
+<div class="metric-card">
+<div class="val">深圳能源环保</div>
+<div class="label">招标方</div>
+</div>
+<div class="metric-card">
+<div class="val">7大子系统</div>
+<div class="label">功能模块</div>
+</div>
+<div class="metric-card">
+<div class="val">6个月</div>
+<div class="label">系统开发周期</div>
+</div>
+<div class="metric-card">
+<div class="val">≥100万</div>
+<div class="label">业绩门槛</div>
+</div>
+<div class="metric-card">
+<div class="val">2年质保</div>
+<div class="label">质保期</div>
+</div>
+</div>
+
+<!-- 一、项目总览 -->
+<div class="section">
+<h2><span class="icon">📋</span>一、项目总览</h2>
+
+<div class="card">
+<div class="card-title">项目基本信息</div>
+<table>
+<tr><td width="120">项目名称</td><td>数字化三维智能管理系统开发服务项目</td></tr>
+<tr><td>招标方</td><td>深圳能源环保股份有限公司（深能环保）</td></tr>
+<tr><td>项目类型</td><td>软件开发 + 现场技术服务</td></tr>
+<tr><td>行业场景</td><td>垃圾焚烧发电厂（含餐厨/生物质/环卫一体化）</td></tr>
+<tr><td>编制日期</td><td>2025年12月（最后修订 2026-06-27）</td></tr>
+<tr><td>整体目标</td><td>构建覆盖设计—施工—试运行—运维的<span class="highlight">可信数据底座与复用型应用体系</span></td></tr>
+<tr><td>开发平台</td><td><span class="highlight">网易低代码平台</span>（招标方统一提供环境）</td></tr>
+<tr><td>信创要求</td><td>适配国产芯片、操作系统（华为欧拉/银河麒麟）、数据库（达梦/高斯/万里/海量）</td></tr>
+<tr><td>知识产权</td><td><span class="highlight">全部归招标方所有</span>（含源代码、技术文档、设计方案）</td></tr>
+</table>
+</div>
+
+<div class="card">
+<div class="card-title">项目范围全景</div>
+<div class="grid-2">
+<div>
+<h3>系统开发（7大功能模块）</h3>
+<ul>
+<li><strong>平台用户管理</strong> — 组织/RBAC/SSO/MFA/审计</li>
+<li><strong>BIM模型管理</strong> — 多格式(RVT/DGN/IFC等)导入/版本/可视化/轻量化</li>
+<li><strong>BIM模型审查</strong> — 碰撞检测(硬/软/规则)/在线协同/问题追踪</li>
+<li><strong>工程量提取</strong> — 规则配置/自动提取/清单关联/版本对比</li>
+<li><strong>4D工程进度管理</strong> — WBS/关键路径/挣值分析/偏差预警</li>
+<li><strong>施工BIM展示与查询</strong> — 在线浏览/模型操作/场景管理/特效</li>
+<li><strong>数字化移交</strong> — 标准管理/KKS编码/资料接收/校核/流程/台账/看板</li>
+<li><strong>智能P&ID管理</strong> — 在线浏览/标注/查询/定位/连通性校核</li>
+<li><strong>数据采集应用</strong> — 12个业务专题(质量/安全/设备/合同等)</li>
+</ul>
+</div>
+<div>
+<h3>现场技术服务</h3>
+<ul>
+<li>★ 模型深化（含施工方案模拟动画）</li>
+<li>数字化移交咨询（标准+资料+分阶段移交）</li>
+<li>数据治理（标准/清洗/映射/质量检测）</li>
+<li>模型分类与编码（KKS到零部件级）</li>
+<li>★ 工程进度管理（4D数据处理）</li>
+<li>智能P&ID创建（图纸数字化转换）</li>
+<li>★ 数字驾驶舱搭建（总舱+子舱）</li>
+</ul>
+<h3 style="margin-top:16px">系统集成</h3>
+<ul>
+<li>集成基础能力平台（IoT/流媒体/数据引擎/渲染引擎）</li>
+<li>对接工程管理系统（15个子系统/285个功能）</li>
+<li>对接生产管理WIS系统</li>
+<li>为智能电厂各子系统提供BIM基础能力接口</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 二、技术指标 -->
+<div class="section">
+<h2><span class="icon">⚙️</span>二、核心技术指标</h2>
+<div class="grid-3">
+<div class="card" style="margin:0">
+<div class="card-title">性能要求</div>
+<div style="font-size:13px">
+<p>≥500并发用户 | ≥200次/秒API<br>
+简单事务≤3s | 复杂事务≤10s<br>
+报表生成≤30s | 查询≤3-5s<br>
+可用性≥99.9% | 7×24h运行<br>
+支持100个项目数字化移交</p>
+</div>
+</div>
+<div class="card" style="margin:0">
+<div class="card-title">BIM性能</div>
+<div style="font-size:13px">
+<p>单文件500MB转换≤10min<br>
+2K分辨率帧率≥45fps<br>
+20GB模型加载≤30s<br>
+支持RVT/DGN/CATPart/OBJ/IFC/NWD/NWC<br>
+LOD300模型精度</p>
+</div>
+</div>
+<div class="card" style="margin:0">
+<div class="card-title">安全要求</div>
+<div style="font-size:13px">
+<p>国家等保2.0二级<br>
+密钥密文存储 | 操作留痕审计<br>
+日志保留≥1年 | 延迟≤5s<br>
+密码≥12位(大小写/数字/特殊字符)<br>
+90天有效期 | 5次锁定</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 三、进度与交付 -->
+<div class="section">
+<h2><span class="icon">📅</span>三、进度与交付要求</h2>
+<div class="card">
+<table>
+<tr><th>里程碑</th><th>时间节点</th><th>说明</th></tr>
+<tr><td>工作大纲及详细计划</td><td><span class="highlight">合同签后3周</span></td><td>需招标方审核</td></tr>
+<tr><td>系统开发需求调研</td><td>合同签后1个月</td><td></td></tr>
+<tr><td>★ 系统开发及上线</td><td><span class="highlight">合同签后6个月</span></td><td>7大子系统全部上线</td></tr>
+<tr><td>系统对接(WIS等)</td><td>系统开发完成后3个月</td><td>与生产管理系统对接</td></tr>
+<tr><td>模型深化服务</td><td>合同签后10个月</td><td>含施工模拟动画</td></tr>
+<tr><td>数字化移交实施</td><td>示范项目竣工后2个月</td><td></td></tr>
+<tr><td>BIM更新维护</td><td>项目启动→移交完成</td><td>持续进行</td></tr>
+<tr><td>试运行期</td><td>初验后90天</td><td>无重大故障方可通过</td></tr>
+<tr><td>质保期</td><td><span class="highlight">终验后2年</span></td><td>无偿修复</td></tr>
+</table>
+</div>
+<div class="card" style="margin-top:12px">
+<div class="card-title">知识产权交付要求</div>
+<ul>
+<li>软件著作权 ≥4项（受理）</li>
+<li>实用新型专利 ≥1项（受理）</li>
+<li>全部系统源代码</li>
+<li>《数字化交付统一技术规范》1项</li>
+<li>完整文档（需求/设计/测试/运维/用户手册）</li>
+</ul>
+</div>
+</div>
+
+<!-- 四、人员要求 -->
+<div class="section">
+<h2><span class="icon">👥</span>四、团队资质要求</h2>
+<div class="card">
+<table>
+<tr><th>角色</th><th>核心要求</th><th>关键技能</th></tr>
+<tr><td>项目经理</td><td>5年+能源电力经验 | PMP或软考高级<span class="risk-tag risk-high">硬门槛</span></td><td>全流程管控/多方协调/风险识别</td></tr>
+<tr><td>技术专家</td><td>高级工程师(信息技术) + BIM专家证书<span class="risk-tag risk-high">双证硬门槛</span></td><td>架构设计/微服务/国产化/性能优化/BIM引擎</td></tr>
+<tr><td>业务专家</td><td>3年+工程管理 | 中级工程师+ | 数字孪生/BIM标准参编经验<span class="risk-tag risk-high">硬门槛</span></td><td>数字化移交标准/KKS编码/移交流程</td></tr>
+<tr><td>产品经理</td><td>软考软件设计师证书<span class="risk-tag risk-high">硬门槛</span></td><td>PRD/原型/需求管理</td></tr>
+<tr><td>前端工程师</td><td>3年+ | Web前端开发工程师证书<span class="risk-tag risk-mid">1人持证即可</span></td><td>BIM浏览/进度可视化/大屏/移动端</td></tr>
+<tr><td>测试工程师</td><td>软件评测师证书<span class="risk-tag risk-mid">1人持证即可</span></td><td>功能/性能/安全测试</td></tr>
+<tr><td>BIM团队</td><td>≥2人BIM证书 | ≥1人电厂BIM经验<span class="risk-tag risk-high">硬门槛</span></td><td>Revit/Bentley/模型深化/碰撞/整合</td></tr>
+</table>
+</div>
+</div>
+
+<!-- 五、竞争分析 -->
+<div class="section">
+<h2><span class="icon">🏆</span>五、竞争格局分析</h2>
+
+<div class="card">
+<div class="card-title">数据库内相似中标记录</div>
+<table>
+<tr><th>项目</th><th>中标方</th><th>金额</th><th>日期</th></tr>
+<tr><td>贵州电网数字化管理系统升级改造</td><td>南网数字运营软件科技</td><td>—</td><td>2026-06-23</td></tr>
+<tr><td>国能灵武数智赋能设备智慧协同</td><td>北京电力自动化设备</td><td>—</td><td>2026-06-24</td></tr>
+<tr><td>广州供电局数字运营适应性改造</td><td>南网数字运营软件科技</td><td>—</td><td>2026-06-23</td></tr>
+<tr><td>新能源院AI汽轮发电机组故障预警系统</td><td>（招标中 63分）</td><td>—</td><td>2026-06-26</td></tr>
+</table>
+<p style="font-size:12px;color:var(--muted);margin-top:8px">注：数据库内无垃圾发电厂BIM+数字化移交细分领域直接中标记录，此为电力行业数字化系统类参考</p>
+</div>
+
+<div class="card">
+<div class="card-title">深圳能源/深能相关中标（近一个月）</div>
+<table>
+<tr><th>项目</th><th>中标方</th><th>金额</th><th>日期</th></tr>
+<tr><td><span class="highlight">深圳能源IT统一桌面支持</span></td><td><span class="highlight">新华三技术有限公司</span></td><td>1,222万元</td><td>2026-06-25</td></tr>
+<tr><td>基于大模型的设备诊断评估系统</td><td>山东鲁软数字科技有限公司</td><td>145万元</td><td>2026-06-25</td></tr>
+</table>
+<p style="font-size:12px;color:var(--muted);margin-top:8px">⚠️ 深能母公司刚给新华三签了1222万大单，存在供应商复用惯性</p>
+</div>
+
+<div class="card">
+<div class="card-title">预计竞争对手画像</div>
+<table>
+<tr><th>类型</th><th>代表企业</th><th>优势</th><th>弱点</th></tr>
+<tr><td>BIM/数字孪生厂商</td><td>广联达、品茗科技、译筑科技</td><td>BIM轻量化+工程管理成熟产品</td><td>缺少垃圾发电行业经验</td></tr>
+<tr><td>电力数字化服务商</td><td>南网数字运营、朗新科技</td><td>电网know-how+已有产品矩阵</td><td>偏电网侧，环保行业弱</td></tr>
+<tr><td>电厂EPC系</td><td>中能建/中电建设计院</td><td>设计+施工一体化</td><td>软件产品化能力弱</td></tr>
+<tr><td>IT巨头</td><td>新华三、华为</td><td>基础设施+信创适配+深能关系</td><td>行业软件非核心能力</td></tr>
+</table>
+</div>
+</div>
+
+<!-- 六、数智科技匹配度 -->
+<div class="section">
+<h2><span class="icon">🎯</span>六、数智科技匹配度分析</h2>
+
+<div class="card">
+<div class="card-title">核心能力对标</div>
+<table>
+<tr><th width="160">项目需求</th><th width="200">数智科技能力</th><th>匹配</th></tr>
+<tr>
+<td>BIM模型管理/审查/轻量化</td>
+<td>智孪万维（数字孪生平台）— 三维数字化设计核心</td>
+<td><span class="match-bar"><span class="match-fill match-90"></span></span>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>三维可视化展示/漫游/大屏</td>
+<td>三维数字化设计 + 数字驾驶舱能力</td>
+<td><span class="match-bar"><span class="match-fill match-90"></span></span>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>国产化适配(芯片/OS/DB)</td>
+<td>信创（30+发明专利90+软著）</td>
+<td><span class="match-bar"><span class="match-fill match-90"></span></span>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>4D进度管理/工程量提取</td>
+<td>智慧工地 + 数字孪生 可扩展</td>
+<td><span class="match-bar"><span class="match-fill match-80"></span></span>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>IoT物联/数据引擎集成</td>
+<td>AI中台 + 物联网平台</td>
+<td><span class="match-bar"><span class="match-fill match-80"></span></span>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td>微服务/低代码开发</td>
+<td>玄武系列(SSK/SRK/SPK/SIK) — 可适配</td>
+<td><span class="match-bar"><span class="match-fill match-70"></span></span>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>KKS编码到零部件级</td>
+<td>电力设计院背景 — 需垃圾发电场景适配</td>
+<td><span class="match-bar"><span class="match-fill match-70"></span></span>⭐⭐⭐</td>
+</tr>
+<tr>
+<td>垃圾发电行业know-how</td>
+<td>中南电力 — 需补充垃圾发电专属经验</td>
+<td><span class="match-bar"><span class="match-fill match-50"></span></span>⭐⭐</td>
+</tr>
+</table>
+</div>
+
+<div class="swot-grid" style="margin-top:16px">
+<div class="swot-cell swot-s">
+<h4>💪 优势 (Strengths)</h4>
+<ul>
+<li>中南电力设计院背书 — 电力行业权威</li>
+<li>智孪万维数字孪生平台已有成熟产品</li>
+<li>30+发明专利/90+软著 — 技术壁垒</li>
+<li>信创适配经验丰富</li>
+<li>三维设计+BIM+AI全链路能力</li>
+</ul>
+</div>
+<div class="swot-cell swot-w">
+<h4>⚠️ 弱点 (Weaknesses)</h4>
+<ul>
+<li>垃圾发电行业经验少</li>
+<li>KKS编码垃圾发电专属导则需从头学</li>
+<li>网易低代码平台非自有技术栈</li>
+<li>深圳无实体（硬伤！）</li>
+<li>WIS系统对接经验空白</li>
+</ul>
+</div>
+<div class="swot-cell swot-o">
+<h4>🚀 机会 (Opportunities)</h4>
+<ul>
+<li>项目还在招标，竞争窗口存在</li>
+<li>深能环保是垃圾发电龙头 — 标杆效应</li>
+<li>数字化移交是行业趋势 — 可复制推广</li>
+<li>能与深圳本地公司联合体投标</li>
+<li>可借此打入深圳能源生态圈</li>
+</ul>
+</div>
+<div class="swot-cell swot-t">
+<h4>🔴 威胁 (Threats)</h4>
+<ul>
+<li>新华三/H3C在深能有供应商惯性</li>
+<li>深圳地域门槛可能直接淘汰</li>
+<li>网易低代码平台依赖 — 可控性差</li>
+<li>人员证书门槛高（PMP+软考高级+BIM专家）</li>
+<li>6个月开发周期紧张</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- 七、风险与应对 -->
+<div class="section">
+<h2><span class="icon">⚠️</span>七、关键风险与应对策略</h2>
+<div class="card">
+<table>
+<tr><th width="40">#</th><th>风险</th><th width="60">等级</th><th>应对策略</th></tr>
+<tr>
+<td>1</td>
+<td><strong>深圳地域门槛</strong> — 附件2要求"深圳本地实体名称（含分支机构）"</td>
+<td><span class="risk-tag risk-high">致命</span></td>
+<td>① 确认武汉总院是否有深圳分院/办事处<br>② 立即在深圳注册分支机构（周期约2-4周）<br>③ 寻找深圳本地联合体合作伙伴</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>人员证书硬门槛</strong> — 项目经理需PMP+能源电力5年、技术专家需高级工程师(IT)+BIM专家双证</td>
+<td><span class="risk-tag risk-high">高</span></td>
+<td>① 盘点现有团队证书储备<br>② 缺证人员立即启动外聘/借调<br>③ BIM团队需≥2人BIM证书+≥1人电厂BIM经验</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>网易低代码平台依赖</strong> — 非自有技术栈，需在招标方环境中开发</td>
+<td><span class="risk-tag risk-mid">中</span></td>
+<td>① 立即安排团队学习网易低代码平台<br>② 明确"非网易平台开发需招标方允许"条款<br>③ 准备自有技术方案的替代路径</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>垃圾发电KKS编码壁垒</strong> — 深能环保专属《垃圾发电厂设备标识系统KKS编码导则》</td>
+<td><span class="risk-tag risk-mid">中</span></td>
+<td>① 利用中南电力编码经验做迁移学习<br>② 提前研究GB/T 50549-2020标准<br>③ 在技术方案中突出编码体系方法论</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>新华三供应商惯性</strong> — 深能母公司刚签1222万，可能优先考虑</td>
+<td><span class="risk-tag risk-mid">中</span></td>
+<td>① 新华三强在IT基础设施，弱在BIM/行业软件<br>② 突出中南电力设计院的行业专业度<br>③ 可考虑与新华三互补合作</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>6个月开发周期</strong> — 7子系统+移动端+WIS对接，工期紧张</td>
+<td><span class="risk-tag risk-mid">中</span></td>
+<td>① 智孪万维等已有产品直接复用<br>② 低代码平台加速交付<br>③ 分阶段交付降低风险</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>知识产权全归招标方</strong> — 含源代码和设计方案</td>
+<td><span class="risk-tag risk-low">低</span></td>
+<td>① 属行业惯例，接受<br>② 积累的可复用方法论/模块不在此限<br>③ 合同明确"本项目产出"范围边界</td>
+</tr>
+</table>
+</div>
+</div>
+
+<!-- 八、投标建议 -->
+<div class="section">
+<h2><span class="icon">💡</span>八、投标策略建议</h2>
+
+<div class="card">
+<div class="card-title">确定第一步：解决深圳地域问题</div>
+<p>这是此次投标的<span class="highlight">第一道生死门槛</span>。必须在下决心投标前确认：</p>
+<ul>
+<li><strong>方案A</strong>：中南电力设计院是否在深圳有分支机构？如有，直接使用。</li>
+<li><strong>方案B</strong>：通过数智科技的母公司/关联企业在深圳设办事处（注册周期约2-4周）。</li>
+<li><strong>方案C</strong>：寻找深圳本地联合体合作伙伴（如深圳的BIM公司/软件公司）。</li>
+</ul>
+<p style="margin-top:8px;font-size:13px;color:var(--muted)">⚠️ 若以上三方案均不可行，不建议继续投入投标资源。</p>
+</div>
+
+<div class="card">
+<div class="card-title">技术方案差异化亮点</div>
+<ol>
+<li><strong>中南电力设计院品牌</strong> — "中国电力设计国家队"背书，远强于纯软件公司</li>
+<li><strong>智孪万维产品移植</strong> — 将已有数字孪生平台能力直接下沉到垃圾发电场景</li>
+<li><strong>信创全栈经验</strong> — 30+专利+90+软著，展示国产化交付能力</li>
+<li><strong>从设计到运维的全生命周期视角</strong> — 设计院基因天然理解KKS编码和数字化移交</li>
+<li><strong>AI加持</strong> — 智巡万安等AI产品展示智能化溢价能力</li>
+</ol>
+</div>
+
+<div class="card">
+<div class="card-title">报价策略参考</div>
+<table>
+<tr><th>参考项目</th><th>中标方</th><th>金额</th><th>分析</th></tr>
+<tr><td>深能IT桌面支持</td><td>新华三</td><td>1,222万</td><td>IT基础设施类，非软件系统</td></tr>
+<tr><td>设备诊断评估系统</td><td>山东鲁软</td><td>145万</td><td>单一AI应用，非平台级</td></tr>
+<tr><td>本项目建设范围</td><td>—</td><td><span class="highlight">预估800-1500万</span></td><td>7子系统+现场服务+2年质保</td></tr>
+</table>
+<p style="font-size:12px;color:var(--muted);margin-top:8px">建议分两档报价：软件开发包干价 + 现场服务人天单价</p>
+</div>
+</div>
+
+<!-- 九、行动清单 -->
+<div class="section">
+<h2><span class="icon">✅</span>九、投标前置行动清单</h2>
+<div class="card">
+<table>
+<tr><th width="30">#</th><th>行动项</th><th width="60">优先级</th><th width="60">时限</th></tr>
+<tr><td>1</td><td>确认深圳是否有分支机构/办事处</td><td><span class="risk-tag risk-high">P0</span></td><td>立即</td></tr>
+<tr><td>2</td><td>盘点团队证书（PMP/软考/高工/BIM专家）</td><td><span class="risk-tag risk-high">P0</span></td><td>3天内</td></tr>
+<tr><td>3</td><td>搜索深能环保正式招标公告（确认是否已发标）</td><td><span class="risk-tag risk-high">P0</span></td><td>立即</td></tr>
+<tr><td>4</td><td>安排团队学习网易低代码平台</td><td><span class="risk-tag risk-mid">P1</span></td><td>1周内</td></tr>
+<tr><td>5</td><td>研究垃圾发电KKS编码标准（GB/T 50549-2020）</td><td><span class="risk-tag risk-mid">P1</span></td><td>1周内</td></tr>
+<tr><td>6</td><td>调研深能环保已建系统情况（WIS/工程管理系统）</td><td><span class="risk-tag risk-mid">P1</span></td><td>2周内</td></tr>
+<tr><td>7</td><td>寻找深圳本地合作伙伴（备选方案C）</td><td><span class="risk-tag risk-mid">P2</span></td><td>2周内</td></tr>
+<tr><td>8</td><td>准备类似项目业绩材料（≥100万）</td><td><span class="risk-tag risk-mid">P1</span></td><td>发标前</td></tr>
+<tr><td>9</td><td>编制初步技术方案框架</td><td><span class="risk-tag risk-mid">P2</span></td><td>发标后1周</td></tr>
+</table>
+</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-box">
+<h3>📊 结论：高匹配度+高风险，建议快速验证前置条件后决定</h3>
+<p>数智科技的技术能力与此项目匹配度达<span style="font-weight:700;font-size:20px">85%+</span>，核心风险在于<span style="font-weight:700">深圳地域门槛</span>和<span style="font-weight:700">人员证书壁垒</span>。建议在3天内完成P0前置验证。</p>
+</div>
+
+<footer>
+© 中南电力设计院数智科技 · 文鳐智投 2026 · 基于技术规范书V5.13深度分析
+</footer>
+
+</div>
+</body>
+</html>

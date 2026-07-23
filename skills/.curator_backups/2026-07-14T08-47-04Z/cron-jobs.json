@@ -1,0 +1,48 @@
+{
+  "jobs": [
+    {
+      "id": "f5a928bf619e",
+      "name": "Nginx\u5b88\u62a4",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "nginx_guard.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 1,
+        "display": "every 1m"
+      },
+      "schedule_display": "every 1m",
+      "repeat": {
+        "times": null,
+        "completed": 14487
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-24T07:31:19.868895+08:00",
+      "next_run_at": "2026-07-14T16:48:04.371159+08:00",
+      "last_run_at": "2026-07-14T16:47:04.371159+08:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "feishu",
+        "chat_id": "oc_a6b397a97460ebd54ef650c483b07303",
+        "chat_name": "oc_a6b397a97460ebd54ef650c483b07303",
+        "thread_id": null
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "profile": null
+    }
+  ],
+  "updated_at": "2026-07-14T16:47:04.371229+08:00"
+}

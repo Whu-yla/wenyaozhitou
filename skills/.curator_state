@@ -1,0 +1,9 @@
+{
+  "last_report_path": "/data/hermes/profiles/wenyaozhitou/logs/curator/20260721-085744",
+  "last_run_at": "2026-07-21T08:57:44.069960+00:00",
+  "last_run_duration_seconds": 238.20569,
+  "last_run_summary": "auto: no changes; llm: API call failed after 3 retries: HTTP 504 — 504 Gateway Time-out",
+  "last_run_summary_shown_at": null,
+  "paused": false,
+  "run_count": 4
+}
