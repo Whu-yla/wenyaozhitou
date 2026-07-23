@@ -98,12 +98,14 @@ def generate():
             print(f"⚠️ polish_report 失败: {r.stderr.strip()}")
     except Exception as e:
         print(f"❌ polish_report 异常: {e}")
-    try:
-        r = subprocess.run([sys.executable,str(Path(__file__).parent/"wecom_push.py")],timeout=15,capture_output=True, text=True)
-        if r.returncode != 0:
-            print(f"⚠️ wecom_push 失败: {r.stderr.strip()}")
-    except Exception as e:
-        print(f"❌ wecom_push 异常: {e}")
+    # 企微推送已禁用（按用户要求）
+    # try:
+    #     r = subprocess.run([sys.executable,str(Path(__file__).parent/"wecom_push.py")],timeout=15,capture_output=True, text=True)
+    #     if r.returncode == 0: print("✅ wecom_push 完成")
+    #     else: print(f"⚠️ wecom_push 失败: {r.stderr.strip()}")
+    # except Exception as e:
+    #     print(f"❌ wecom_push 异常: {e}")
+    print("⏸ 企微推送已禁用，跳过")
 
 def _html(brief, lc):
     scan_time = s(lc.get('crawl_time',''))[:19] if lc else ''

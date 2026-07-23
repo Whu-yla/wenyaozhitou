@@ -52,7 +52,9 @@ chmod -R 755 /var/www/html/bidding/img_gen 2>/dev/null  # 封面图目录必须n
 
 # 阶段5: 企微推送
 log "阶段5/6: 企微推送"
-$PY scripts/wecom_push.py 2>&1 | tee -a "$LOG" || log "  ⚠️ 推送出错"
+# 企微推送已禁用（按用户要求）
+# $PY scripts/wecom_push.py 2>&1 | tee -a "$LOG" || log "  ⚠️ 推送出错"
+log "  ⏸ 企微推送已禁用"
 
 # 阶段6: DB维护
 log "阶段6/6: 数据库维护"
