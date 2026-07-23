@@ -1,0 +1,83 @@
+[
+  {
+    "item_id": "8",
+    "type": "dislike",
+    "reason": "中标单位明显写了，是“德鑫莱集团有限公司”，但是你没有抓出来",
+    "report_date": "2026-06-24",
+    "section": "winning",
+    "ip": "127.0.0.1",
+    "time": "2026-06-24T14:34:15.660937"
+  },
+  {
+    "item_id": "273",
+    "type": "dislike",
+    "reason": "最高限价明确写了169.7909万元，你没有抓出来。",
+    "report_date": "2026-06-24",
+    "section": "bidding",
+    "ip": "127.0.0.1",
+    "time": "2026-06-24T14:34:59.567116"
+  },
+  {
+    "item_id": "267",
+    "type": "dislike",
+    "reason": "链接打不开！",
+    "report_date": "2026-06-24",
+    "section": "bidding",
+    "ip": "127.0.0.1",
+    "time": "2026-06-24T15:50:57.782235"
+  },
+  {
+    "item_id": "121",
+    "type": "dislike",
+    "reason": "资格预审申请文件递交的截止时间为2025-12-22 09:00:00（北京时间），申请人应在递交截止时间前通过“国能e招投标人业务系统”递交电子申请文件。已经过了报名时间了，你推过来干什么？！",
+    "report_date": "2026-06-24",
+    "section": "bidding",
+    "ip": "127.0.0.1",
+    "time": "2026-06-24T16:01:24.108085"
+  },
+  {
+    "item_id": "361",
+    "type": "dislike",
+    "reason": "有写限价55.79万元，你没抓出来\n有写地点是广州，你也没抓出来\n招标人为南方电网科学研究院有限责任公司，不要写国网/南网这样模糊的称呼，你也没抓出来！",
+    "report_date": "2026-06-24",
+    "section": "bidding",
+    "ip": "127.0.0.1",
+    "time": "2026-06-24T20:37:31.591305"
+  },
+  {
+    "item_id": "358",
+    "type": "dislike",
+    "reason": "2.3招标项目所在地区：广东省广州市，写了地点啊",
+    "report_date": "2026-06-24",
+    "section": "bidding",
+    "ip": "127.0.0.1",
+    "time": "2026-06-24T20:53:49.540995"
+  },
+  {
+    "item_id": "general",
+    "type": "general",
+    "reason": "测试反馈按钮功能",
+    "report_date": "2026-06-26",
+    "section": "bidding",
+    "ip": "127.0.0.1",
+    "time": "2026-06-26T00:24:29.022808"
+  },
+  {
+    "item_id": "general",
+    "type": "general",
+    "reason": "nginx代理路径验证",
+    "report_date": "2026-06-26",
+    "section": "bidding",
+    "ip": "127.0.0.1",
+    "time": "2026-06-26T00:24:32.795793"
+  },
+  {
+    "item_id": "general",
+    "type": "general",
+    "reason": "清理测试数据",
+    "report_date": "2026-06-26",
+    "section": "bidding",
+    "ip": "127.0.0.1",
+    "time": "2026-06-26T00:24:40.752983"
+  }
+]

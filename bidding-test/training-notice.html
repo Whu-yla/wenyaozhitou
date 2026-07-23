@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>培训通知 · 文鳐智投投标监控系统</title>
+<style>
+:root{--bg:#f0f4ff;--card:#fff;--text:#1e293b;--muted:#64748b;--accent:#3b82f6;--accent2:#8b5cf6;--border:#e2e8f0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.notice{background:var(--card);border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.1);max-width:680px;width:100%;overflow:hidden}
+.header{background:linear-gradient(135deg,#1e40af,#3b82f6,#8b5cf6);color:#fff;padding:40px 36px;text-align:center}
+.header .icon{font-size:48px;margin-bottom:8px}
+.header h1{font-size:32px;font-weight:800;letter-spacing:1px}
+.header .sub{font-size:15px;opacity:.85;margin-top:6px}
+.body{padding:36px}
+.section{margin-bottom:24px}
+.section h3{font-size:16px;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.section h3 .emoji{font-size:20px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.info-item{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.info-item .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.info-item .value{font-size:16px;font-weight:600;color:var(--text)}
+.agenda{list-style:none}
+.agenda li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);align-items:center}
+.agenda li:last-child{border-bottom:none}
+.agenda .time{font-size:13px;font-weight:700;color:var(--accent);background:#eff6ff;padding:4px 10px;border-radius:6px;min-width:56px;text-align:center;flex-shrink:0}
+.agenda .item{font-size:15px;color:var(--text);line-height:1.5}
+.highlight{background:linear-gradient(135deg,#eff6ff,#ede9fe);border:1px solid #c7d2fe;border-radius:12px;padding:16px 20px;margin:20px 0;font-size:14px;line-height:1.8}
+.highlight strong{color:var(--accent2)}
+.btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.btn{flex:1;min-width:140px;padding:12px 20px;border-radius:10px;font-size:15px;font-weight:600;text-align:center;text-decoration:none;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-primary{background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;border:none}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 25px rgba(59,130,246,.3)}
+.btn-outline{border:2px solid var(--accent);color:var(--accent);background:transparent}
+.btn-outline:hover{background:#eff6ff}
+.footer{text-align:center;padding:20px 36px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+.footer a{color:var(--accent);text-decoration:none}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.tag{font-size:12px;padding:4px 10px;border-radius:20px;background:#eff6ff;color:#3b82f6;font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="notice">
+  <div class="header">
+    <div class="icon">🐟</div>
+    <h1>文鳐智投 · 产品培训</h1>
+    <div class="sub">投标智能监控系统 · 开发全纪实 &amp; 操作指南</div>
+  </div>
+
+  <div class="body">
+    <div class="section">
+      <h3><span class="emoji">📋</span> 基本信息</h3>
+      <div class="info-grid">
+        <div class="info-item"><div class="label">📅 日期</div><div class="value">2026 年 7 月 1 日（周二）</div></div>
+        <div class="info-item"><div class="label">⏰ 时间</div><div class="value">14:30 — 16:00</div></div>
+        <div class="info-item"><div class="label">📍 地点</div><div class="value">A602 会议室</div></div>
+        <div class="info-item"><div class="label">👥 对象</div><div class="value">数智科技全员</div></div>
+      </div>
+      <div class="tags" style="margin-top:12px">
+        <span class="tag">产品培训</span><span class="tag">技术分享</span><span class="tag">内部</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3><span class="emoji">📝</span> 议程</h3>
+      <ul class="agenda">
+        <li><span class="time">14:30</span><span class="item"><strong>产品背景与定位</strong> —— 为什么做投标监控？解决什么问题？</span></li>
+        <li><span class="time">14:45</span><span class="item"><strong>系统架构 &amp; 核心数据</strong> —— 344 站点 → SQLite → API → 看板 → 企微</span></li>
+        <li><span class="time">15:00</span><span class="item"><strong>开发故事</strong> —— 2 周从零到一，关键决策与难点攻克</span></li>
+        <li><span class="time">15:20</span><span class="item"><strong>操作演示</strong> —— 筛选、今日新增、收藏、导出、企微推送</span></li>
+        <li><span class="time">15:40</span><span class="item"><strong>Q&A + 反馈收集</strong> —— 你的需求，系统来搞定</span></li>
+      </ul>
+    </div>
+
+    <div class="highlight">
+      <strong>📌 会前预习（可选）：</strong><br>
+      • 浏览系统看板：<a href="https://www.yfzx.online/bidding/" style="color:#3b82f6">yfzx.online/bidding</a><br>
+      • 阅读开发故事 PPT：<a href="https://www.yfzx.online/bidding/wenyao-story.html" style="color:#3b82f6">yfzx.online/bidding/wenyao-story.html</a><br>
+      • 查看更新日志：<a href="https://www.yfzx.online/bidding/changelog.html" style="color:#3b82f6">yfzx.online/bidding/changelog.html</a>
+    </div>
+
+    <div class="btn-row">
+      <a href="https://www.yfzx.online/bidding/wenyao-story.html" class="btn btn-primary">📖 查看开发故事 PPT</a>
+      <a href="https://www.yfzx.online/bidding/" class="btn btn-outline">🔗 打开投标看板</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    © 中南电力设计院数智科技 · 量子纪元 · 2026 · <a href="https://www.yfzx.online/bidding/manual.html">操作手册</a>
+  </div>
+</div>
+
+</body>
+</html>

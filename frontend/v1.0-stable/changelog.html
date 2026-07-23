@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/bidding/favicon-32x32.png">
+<link rel="icon" type="image/x-icon" href="/bidding/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/bidding/apple-touch-icon.png">
+<meta property="og:title" content="文鳐智投 · 更新日志">
+<meta property="og:description" content="中南电力设计院数智科技公司投标监控系统版本更新记录">
+<meta property="og:image" content="https://www.yfzx.online/bidding/img_gen/og-share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www.yfzx.online/bidding/changelog.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="文鳐智投">
+<title>文鳐智投 · 更新日志 — 数智科技投标监控</title>
+<style>
+:root{--bg:#f8fafc;--text:#1e293b;--card-bg:#fff;--card-border:#e2e8f0;--card-text:#334155;--muted:#64748b;--footer-text:#94a3b8;--footer-border:#e2e8f0;--accent:#3b82f6;--accent-light:#eff6ff;--header-bg:linear-gradient(135deg,#eff6ff,#dbeafe);--header-text:#1d4ed8;--timeline-grad:linear-gradient(to bottom,#3b82f6,#64748b,#3b82f6);--dot-border:#e2e8f0}
+.dark{--bg:#0f172a;--text:#e2e8f0;--card-bg:#1e293b;--card-border:#334155;--card-text:#cbd5e1;--muted:#94a3b8;--footer-text:#475569;--footer-border:#1e293b;--accent:#60a5fa;--accent-light:#1e293b;--header-bg:linear-gradient(135deg,#1e293b,#0f172a);--header-text:#60a5fa;--timeline-grad:linear-gradient(to bottom,#3b82f6,#1e293b,#3b82f6);--dot-border:#1e293b}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.7;transition:background .3s,color .3s}
+header{background:var(--header-bg);border-bottom:2px solid var(--accent);padding:20px 24px;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:12px}
+header img{height:36px;border-radius:6px}
+h1{font-size:22px;color:var(--header-text)}
+.sub{color:var(--muted);font-size:13px;margin-top:4px}
+.theme-btn{width:36px;height:36px;border-radius:50%;border:1px solid #334155;background:var(--card-bg);color:#fbbf24;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.theme-btn:hover{border-color:var(--accent)}
+.dark .theme-btn{color:#fbbf24}
+.container{max-width:900px;margin:0 auto;padding:24px 20px}
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:'';position:absolute;left:12px;top:0;bottom:0;width:2px;background:var(--timeline-grad)}
+.version{margin-bottom:32px;position:relative}
+.version::before{content:'';position:absolute;left:-24px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:2px solid var(--dot-border);z-index:1}
+.version.major::before{background:#f59e0b;width:18px;height:18px;left:-26px;top:4px}
+.ver-header{display:flex;align-items:baseline;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.ver-num{font-size:20px;font-weight:700;color:var(--accent)}
+.ver-date{font-size:12px;color:var(--muted)}
+.ver-title{font-size:14px;color:var(--muted);font-style:italic}
+.changes{background:var(--card-bg);border-radius:8px;padding:14px 18px;border:1px solid var(--card-border);color:var(--card-text);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.changes ul{list-style:none;padding:0}
+.changes li{padding:4px 0;font-size:13px;display:flex;align-items:flex-start;gap:8px}
+.changes li::before{content:'▸';color:var(--accent);flex-shrink:0;margin-top:2px}
+.tag{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:600;margin-right:4px;vertical-align:middle;flex-shrink:0}
+.tag-new{background:#10b981;color:#fff}
+.tag-fix{background:#f59e0b;color:#000}
+.tag-imp{background:#3b82f6;color:#fff}
+.tag-ux{background:#8b5cf6;color:#fff}
+.tag-core{background:#ef4444;color:#fff}
+.tag-feat{background:#10b981;color:#fff}
+.tag-refactor{background:#6366f1;color:#fff}
+footer{text-align:center;padding:24px;color:var(--footer-text);font-size:11px;border-top:1px solid var(--footer-border);margin-top:40px}
+.back-link{display:inline-block;margin-bottom:16px;color:var(--accent);text-decoration:none;font-size:13px}
+.back-link:hover{text-decoration:underline}
+code{background:var(--accent-light);padding:1px 5px;border-radius:3px;font-size:11px}
+@media(max-width:768px){
+  body{overflow-x:hidden;max-width:100vw}
+  header{padding:12px 14px;gap:8px}
+  header h1{font-size:17px}
+  header img{height:28px}
+  .container{padding:16px 12px}
+  .timeline{padding-left:24px}
+  .timeline::before{left:8px}
+  .version::before{left:-20px;width:12px;height:12px}
+  .version.major::before{left:-22px;width:15px;height:15px}
+  .ver-num{font-size:17px}
+  .changes{padding:12px 14px}
+  .changes li{font-size:12px;word-break:break-word}
+  code{word-break:break-all;font-size:10px}
+  .header-left{gap:8px;min-width:0}
+  .header-left div{min-width:0}
+  .sub{font-size:11px}
+  .back-link{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <img src="/bidding/img/logo.png" alt="logo">
+    <div>
+      <h1>文鳐智投 · 更新日志</h1>
+      <div class="sub">中南电力设计院数智科技 · 投标信息智能监控系统</div>
+    </div>
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()" title="切换主题">🌙</button>
+</header>
+
+<div class="container">
+  <a href="/bidding/" class="back-link">← 返回投标看板</a>
+
+  <div class="timeline">
+
+    <!-- V1.34 — 代码审计 & 系统稳健性修复 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.34</span>
+        <span class="ver-date">2026-06-26 15:30</span>
+        <span class="ver-title">🛡️ 代码BUG审计 · 系统稳健性三重修复</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-fix">修复</span> <b>polish 脚本重复注入</b>：守卫条件从依赖易变的 CSS 规则改为版本标记 <code>/* ENHANCE_V5 */</code>，连续运行两次不再重复注入 CSS/JS</li>
+          <li><span class="tag tag-fix">修复</span> <b>bookmark_server sys.path 污染</b>：每个 API 请求都会 <code>sys.path.insert</code> 追加路径 → 将 <code>chat_engine</code> 导入移至模块顶层，移除请求中的重复插入</li>
+          <li><span class="tag tag-fix">修复</span> <b>report_generator 静默吞错</b>：竞品数据解析 <code>except: pass</code> → <code>except Exception as e: logging.warning(...)</code>，异常可追溯</li>
+          <li><span class="tag tag-imp">优化</span> <b>权限自动修复</b>：polish 脚本末尾执行 <code>find ... -type d -exec chmod 755 {} + && find ... -type f -exec chmod 644 {} +</code>，防止 Nginx 403</li>
+          <li><span class="tag tag-tech">技术</span> <b>幂等性验证</b>：polish 脚本灰度测试通过，连续两次运行输出「跳过」</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.33 — PM级交互全面升级 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.33</span>
+        <span class="ver-date">2026-06-26 14:00</span>
+        <span class="ver-title">🚀 PM级交互全面升级：空状态/URL同步/IME/折叠/密度/图例/快捷键/预览</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>空状态友好提示</b>：搜索无结果时显示引导文案 +「清除所有筛选」按钮，不再空白</li>
+          <li><span class="tag tag-core">核心</span> <b>URL 状态同步</b>：筛选参数写入 URL（<code>?q=&cat=&score=</code>），可复制链接分享筛选视图给同事</li>
+          <li><span class="tag tag-core">核心</span> <b>中文输入法适配</b>：搜索框监听 <code>compositionstart/end</code>，中文输入法下回车不触发搜索，统一按钮确认</li>
+          <li><span class="tag tag-ui">UI</span> <b>筛选栏折叠</b>：日期、预设、预算折叠到「更多筛选 ▸」按钮，降低 12→7 个常驻控件，认知负荷减半</li>
+          <li><span class="tag tag-ui">UI</span> <b>行密度切换</b>：头部新增「≡」按钮切换紧凑/舒适模式，localStorage 持久偏好</li>
+          <li><span class="tag tag-ui">UI</span> <b>评分图例</b>：表头「相关度 ⓘ」点击弹出颜色说明（🟢85+ 高相关 🟡60-84 中相关 ⚪<60 低相关）</li>
+          <li><span class="tag tag-feat">功能</span> <b>键盘快捷键</b>：<kbd>/</kbd> 聚焦搜索 <kbd>Esc</kbd> 清除筛选 <kbd>Ctrl+Enter</kbd> 导出 <kbd>Ctrl+←→</kbd> 切换Tab <kbd>Ctrl+S</kbd> 收藏</li>
+          <li><span class="tag tag-feat">功能</span> <b>行标题hover预览</b>：桌面端长标题hover 600ms 弹出全文气泡，不打断浏览</li>
+          <li><span class="tag tag-tech">技术</span> polish_report.py 升级 v5，持久化所有 V1.33 新 HTML 结构</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.32 — Logo + 桌面端修复 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.32</span>
+        <span class="ver-date">2026-06-26 08:30</span>
+        <span class="ver-title">🎨 自研Logo替换 + 桌面筛选栏修复 + ⋯ 菜单隐藏</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>全站Logo替换</b>：favicon / apple-touch-icon / 分享封面全部改用中南电力数智科技自研Logo（从旧版logo.png重制），操作手册+更新日志同步</li>
+          <li><span class="tag tag-fix">修复</span> <b>桌面端筛选栏截断</b>：日期后面的按钮不再被 overflow:hidden 裁切，filter-row 允许换行</li>
+          <li><span class="tag tag-fix">修复</span> <b>桌面端 ⋯ 菜单隐藏</b>：省略号仅在手机卡片视图显示，桌面端表格中不出现</li>
+          <li><span class="tag tag-imp">优化</span> <b>操作手册分享封面</b>：OG 元标签注入，分享到微信/飞书显示文鳐智投封面图</li>
+          <li><span class="tag tag-imp">优化</span> 操作手册FAQ精简，移除冗余联系信息</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.31 — 统计卡片独立视图 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.31</span>
+        <span class="ver-date">2026-06-26 03:30</span>
+        <span class="ver-title">🧭 统计卡片独立视图 · 不再污染搜索框 · tooltip 手机适配</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>统计卡片独立筛选模式</b>：点击「高相关/今日新增/累计招标/累计中标」不再污染搜索框（之前会把 "70" 填入相关度输入），而是弹出专属蓝色 banner「📊 高相关招标 · 12 条」，点击 ✕ 回到全量视图</li>
+          <li><span class="tag tag-fix">修复</span> <b>统计卡保持全局计数</b>：进入卡片筛选后，4张统计卡片保持原始总数不变，banner 负责告知当前子集信息</li>
+          <li><span class="tag tag-fix">修复</span> <b>点击同一卡片取消筛选</b>：再次点击已激活的卡片即取消，回到全量</li>
+          <li><span class="tag tag-fix">修复</span> <b>tooltip 手机端气泡居中+边界保护</b>：点高相关 ? 弹出气泡自动居中、左右12px留边不超出屏幕，点击空白消失</li>
+          <li><span class="tag tag-imp">优化</span> 卡片激活态蓝色边框高亮，筛选 banner 支持暗/亮双主题</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.30 — 企微推送重启 · 精简版 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.30</span>
+        <span class="ver-date">2026-06-26 02:30</span>
+        <span class="ver-title">📨 企微推送重启 · 精简为单一招标TOP8卡片</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>KILL_SWITCH 关闭</b>：企微推送恢复，KILL_SWITCH=False</li>
+          <li><span class="tag tag-refactor">重构</span> <b>推送精简为一条消息</b>：删除摘要Markdown、中标卡片、大标预警、早晚间分段，仅保留「此为今日的招标相关度TOP1~TOP8」引导语 + 8张招标卡片</li>
+          <li><span class="tag tag-fix">修复</span> <b>评分阈值适配100分制</b>：SQL过滤从 >=7 改为 >=50；emoji 从 ≥7→🟢 改为 ≥70→🟢、≥50→🟡</li>
+          <li><span class="tag tag-imp">优化</span> 卡片描述精简：招标单位替换来源站点，相关性显示整数分</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.29 — 筛选栏 H5 交互重构 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.29</span>
+        <span class="ver-date">2026-06-25 18:30</span>
+        <span class="ver-title">📱 筛选栏 H5 交互重构 · 横向滑动 · 自动引导</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-new">新增</span> <b>手机端筛选栏横向滚动</b>：客户/地域/相关度/日期/预算等胶囊不再换行，改为单行横向滑动（Twitter/Instagram 同款）</li>
+          <li><span class="tag tag-new">新增</span> <b>右侧渐变淡出提示</b>：滚动容器右侧 40px 渐变遮罩（透明→背景色），暗示"还有更多可滑"；滑到末尾自动消失</li>
+          <li><span class="tag tag-new">新增</span> <b>首次进入自动演示滑动</b>：页面加载 1.5 秒后筛选栏自动右滑 100px 再弹回，仅演示一次（sessionStorage 记忆），解决可发现性问题</li>
+          <li><span class="tag tag-fix">修复</span> <b>搜索框与筛选胶囊重叠</b>：搜索框从 filter-row 中分离为独立 search-row，手机端独占第一行（全宽胶囊 44px），筛选行在下方独立滑动</li>
+          <li><span class="tag tag-fix">修复</span> <b>桌面端搜索框与胶囊高度不对齐</b>：全部统一 height:36px + box-sizing:border-box，视觉归整</li>
+          <li><span class="tag tag-imp">优化</span> 筛选栏布局结构：桌面端搜索+筛选并排一行；手机端搜索独占一行、筛选行下方独立滑动</li>
+          <li><span class="tag tag-ux">交互</span> 滚动检测用 ResizeObserver 实时感知，动态增删 scrolled-end 类控制渐变显隐</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.28 — 移动端+数据信任度 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.28</span>
+        <span class="ver-date">2026-06-26 01:15</span>
+        <span class="ver-title">📱 移动端卡片化 + 数据更新时间 + 统计口径修正</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-feat">新增</span> <b>头部数据更新时间</b>：「系统运行中」→「数据更新: 06-25 20:13」，一眼判断新鲜度</li>
+          <li><span class="tag tag-feat">新增</span> <b>手机端表格卡片化</b>：≤768px 时表格转为竖排卡片（data-label 驱动），表头隐藏，每行独立卡片，触摸友好</li>
+          <li><span class="tag tag-fix">修复</span> <b>「高相关项目」统计口径</b>：从「今日新增中≥70分」改为「全部≥70分项目」，标签与数值语义一致</li>
+          <li><span class="tag tag-fix">修复</span> 「高相关」卡片点击不再限定今日，展示全部高分项目</li>
+          <li><span class="tag tag-refactor">重构</span> 手机 CSS 全面重写：隐藏表头，行→卡片，td→flex 行，过滤栏自动换行</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.27 — 专业体验升级 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.27</span>
+        <span class="ver-date">2026-06-26 01:00</span>
+        <span class="ver-title">✨ 专业体验五连升 — 骨架屏/快捷键/展开详情/趋势/提示</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-feat">新增</span> <b>表格骨架屏</b>：数据加载时显示脉冲动画占位行，替换「显示 0 条」生硬闪现</li>
+          <li><span class="tag tag-feat">新增</span> <b>键盘快捷键</b>：<code>/</code> 聚焦搜索框，<code>Esc</code> 优先关闭聊天面板→清除搜索</li>
+          <li><span class="tag tag-feat">新增</span> <b>行点击展开详情</b>：点击任意行展开内嵌详情卡（招标单位/公告类型/预算/来源平台/内容摘要），再次点击收起</li>
+          <li><span class="tag tag-feat">新增</span> <b>统计卡片环比趋势</b>：「今日新增」「高相关」旁显示 ↑N / ↓N 与昨日对比，一眼看涨跌</li>
+          <li><span class="tag tag-feat">新增</span> <b>高相关 tooltip</b>：「高相关项目」旁 ? 图标，hover 解释 ≥70 分标准</li>
+          <li><span class="tag tag-fix">修复</span> 聊天欢迎语删除已废弃的「竞品动向追踪」，改为「智能评分排序」</li>
+          <li><span class="tag tag-refactor">重构</span> 评分条阈值同步：score-hi ≥70、score-mid ≥40（与筛选默认 70 一致）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.26 — 反馈合并入聊天面板 + 拖动 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.26</span>
+        <span class="ver-date">2026-06-26 00:30</span>
+        <span class="ver-title">🔀 反馈合并入聊天面板 + 鼠标拖动</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-feat">新增</span> <b>反馈合并入聊天面板</b>：删除独立悬浮按钮，反馈入口整合进聊天组件（预设栏「📝 反馈问题」+ 头部 📝 按钮），点击切换反馈模式</li>
+          <li><span class="tag tag-feat">新增</span> <b>鼠标拖动</b>：聊天面板头部可拖拽移动，避免遮挡页面内容，松开后停留在新位置</li>
+          <li><span class="tag tag-feat">新增</span> <b>反馈提示文案</b>：欢迎消息中新增「💡 发现数据有误？点击右上角 📝 直接反馈！」</li>
+          <li><span class="tag tag-refactor">重构</span> 聊天组件 v3→v4：新增加 feedback mode、submitChatFeedback()、drag 系统，chat-widget.css 同步升级</li>
+          <li><span class="tag tag-refactor">重构</span> polish_report.py v2→v3：移除独立反馈注入，精简为纯 chat-widget 注入</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.25 — 反馈系统 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.25</span>
+        <span class="ver-date">2026-06-26 00:25</span>
+        <span class="ver-title">💬 用户反馈系统 — 悬浮按钮+侧滑面板</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-feat">新增</span> <b>右下角悬浮反馈按钮</b>：蓝色圆形 💬，固定在视口右下角，暗/亮双主题适配</li>
+          <li><span class="tag tag-feat">新增</span> <b>侧滑反馈面板</b>：400px 宽，含文本域+提示+提交/取消按钮，带遮罩层，移动端自适应全宽</li>
+          <li><span class="tag tag-feat">新增</span> <b>通用反馈 API</b>：bookmark_server 新增 type=general 支持，不限频提交，自动写入 HOT 记忆供凌晨自检</li>
+          <li><span class="tag tag-feat">新增</span> <b>polish 持久化</b>：反馈组件 CSS/HTML/JS 全部注入 polish_report.py，报告重新生成不会丢失</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.24 — 浙能适配器数据修复 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.24</span>
+        <span class="ver-date">2026-06-26 00:30</span>
+        <span class="ver-title">🐛 浙能适配器 — 标题截断+日期错误双修复</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-fix">修复</span> <b>标题截断</b>：正则在"浙江<b>浙能</b>中煤…"处因\s*浙能停止条件误截断，重写为"XX公司XXX招标公告"完整匹配模式</li>
+          <li><span class="tag tag-fix">修复</span> <b>日期提取</b>：从全文扫\d{4}年\d月\d日 → 优先在"招标人/招标代理机构"附近匹配公告落款日期，兜底用URL日期</li>
+          <li><span class="tag tag-fix">修复</span> <b>已有脏数据</b>：id=389 标题从"招标公告浙江浙能浙江"→完整标题，日期从2026-06-26→2026-06-24</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.23
+    <!-- V1.23 — 时区BUG修复 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.23</span>
+        <span class="ver-date">2026-06-26 00:20</span>
+        <span class="ver-title">🐛 时区BUG — 今日新增卡片与数据不一致</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-fix">修复</span> <b>todayStr() 时区错误</b>：toISOString() 取 UTC 时间，比北京时间慢 8h，导致前端"今天"判断错位一天</li>
+          <li><span class="tag tag-fix">修复</span> <b>改为 getFullYear/getMonth/getDate</b>：使用浏览器本地时间，与后端 datetime.now()（CST）对齐</li>
+          <li><span class="tag tag-core">根因</span> 服务端 Python datetime.now() 用系统时区(UTC+8)，前端 Date.toISOString() 用 UTC(0)，两端时差 8 小时</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.22
+    <!-- V1.22 — 筛选维度补全 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.22</span>
+        <span class="ver-date">2026-06-26 00:15</span>
+        <span class="ver-title">🔍 筛选维度补全 — 任意相关度 + 预算下限</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>相关度自由输入</b>：从固定下拉（≥4/≥7）→ number输入框 0-100，可任意设阈值</li>
+          <li><span class="tag tag-core">核心</span> <b>预算金额筛选</b>：新增"预算≥万元"输入框，输入50即筛≥50万项目</li>
+          <li><span class="tag tag-fix">修复</span> <b>高相关阈值 7→70</b>：统计卡"高相关项目"从≥7（全部57条）→ ≥70（真正高分12条）</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.21
+    <!-- V1.21 — 招标金额列 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.21</span>
+        <span class="ver-date">2026-06-26 00:05</span>
+        <span class="ver-title">💰 招标预算金额列 — 招标/中标双金额体系</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>招标表新增预算金额</b>：位于招标单位与地域之间，支持排序和CSV导出</li>
+          <li><span class="tag tag-imp">优化</span> <b>金额格式化</b>：≥1万显示"X万"，否则原值；无数据显示"—"</li>
+          <li><span class="tag tag-fix">修复</span> <b>排序三角JS驱动</b>：doFilter()中补充sort-asc/sort-desc class管理，此前CSS写了但JS从未触发</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.20
+    <!-- V1.20 — 排序三角指示器 -->
+    <div class="version minor">
+      <div class="ver-header">
+        <span class="ver-num">V1.20</span>
+        <span class="ver-date">2026-06-25 23:42</span>
+        <span class="ver-title">🎨 排序三角指示器 — 可排序列始终显示 ▴▾</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-imp">优化</span> <b>双三角排序指示器</b>：所有可排序列表头右侧显示上下叠放的 ▴▾，未排序时半透明，排序时高亮为蓝色</li>
+          <li><span class="tag tag-imp">优化</span> <b>position:absolute 定位</b>：三角固定在列头右侧，不干扰字段名文本流</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.19 --
+    <!-- V1.19 — 精简UI + 中标金额 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.19</span>
+        <span class="ver-date">2026-06-25 23:35</span>
+        <span class="ver-title">🧹 UI精简 — 删趋势/竞品Tab + 中标金额列</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>删除趋势/竞品Tab</b>：暂不需要，精简导航为招标+中标+收藏三Tab</li>
+          <li><span class="tag tag-core">核心</span> <b>中标金额列</b>：中标表新增中标金额列（winning_amount），支持排序和CSV导出</li>
+          <li><span class="tag tag-fix">修复</span> <b>app.js?v=10缓存</b>：去掉版本参数，Nginx no-cache确保最新JS生效</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.18 — NEW 语义修正 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.18</span>
+        <span class="ver-date">2026-06-25 23:27</span>
+        <span class="ver-title">🐛 NEW 标签语义修正 — 发布日替代抓取日</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>NEW = 发布日期当天</b>：isNew() 从 fetch_date → publish_date，用户心智"今天发布=新"而非"今天抓取=新"</li>
+          <li><span class="tag tag-fix">修复</span> <b>今日新增统计卡同口径</b>：report_generator.py 的 today_total/todayH 从 date(fetch_date) → substr(publish_date,1,10)</li>
+          <li><span class="tag tag-fix">修复</span> <b>日期筛选 11 条仅 9 条带 NEW</b>：id=316/312（6.24抓取但6.25发布）此前 fetch_date 口径丢 NEW，现 publish_date 口径全部正确</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.17 — is_new 根因修复 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.17</span>
+        <span class="ver-date">2026-06-25</span>
+        <span class="ver-title">🐛 is_new 数据源根治 — fetch_date 替代静态 DB 字段</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>isNew() 改为实时计算</b>：不再读静态 is_new DB 字段（昨日抓取但今日发布的项目 is_new=0，NEW标签缺失），改为基于 fetch_date 与今天日期比较</li>
+          <li><span class="tag tag-fix">修复</span> <b>todayOnly 过滤同步修复</b>：getFilt() 中 todayOnly 模式也从 is_new===1 → isNew(i)，确保统计卡片与筛选结果一致</li>
+          <li><span class="tag tag-fix">修复</span> <b>日期筛选 vs 今日新增卡片 口径劈叉</b>：前者按 publish_date 过滤、后者按 fetch_date 过滤，同一项目 NEW 标签不一致 → 现在各自独立且合理</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.16 — 细节打磨 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.16</span>
+        <span class="ver-date">2026-06-26 00:05</span>
+        <span class="ver-title">🔍 PM细节审查 — NEW图标精准化 + 交互缺口修补</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>NEW图标精准化</b>：is_new 从 DB DEFAULT 1（全部57条假NEW）→ 基于 fetch_date 实时判断（今日11条真NEW）</li>
+          <li><span class="tag tag-fix">修复</span> <b>累计中标卡片不可点击</b>：补 onclick="sw('win')" + cursor:pointer，4张统计卡片均一致可交互</li>
+          <li><span class="tag tag-fix">修复</span> <b>Header "站点 0/0" 假数据</b>：crawl_log 为空时隐藏站点信息，不再误导用户</li>
+          <li><span class="tag tag-imp">优化</span> <b>data.json 新增 fetch_date 字段</b>：前端可用于日期判断，不再依赖不可靠的 is_new DB 列</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.15 — 启动态修复 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.15</span>
+        <span class="ver-date">2026-06-25 23:59</span>
+        <span class="ver-title">🐛 启动态BUG修复 — 假数据闪烁 + 日期残留</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-fix">修复</span> <b>统计卡片假数据闪烁</b>：模板硬编码默认值 120/7 → 改为 0 + CSS loading动画（opacity过渡）</li>
+          <li><span class="tag tag-fix">修复</span> <b>日期筛选跨会话残留</b>：saveFilters/restoreFilters 之前保存 dateFrom/dateTo 到 localStorage，导致下次打开只显示当天数据（11条）</li>
+          <li><span class="tag tag-imp">优化</span> <b>统计卡片 loading 态</b>：init() 前所有卡片半透明(opacity:.3)，数据加载完成后淡入</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.14 — 交互精简 + PM审查 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.14</span>
+        <span class="ver-date">2026-06-25 23:55</span>
+        <span class="ver-title">🧹 交互冗余清理 + 产品经理级审查</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-fix">修复</span> <b>删除冗余"⭐ 收藏"按钮</b>：有独立收藏Tab后，筛选栏里的收藏开关按钮成为多余交互入口，造成认知负担</li>
+          <li><span class="tag tag-fix">修复</span> <b>删除 swStar() 函数 + btnStar 引用</b>：连带清理3处残留代码</li>
+          <li><span class="tag tag-imp">优化</span> <b>Tab切换自动清空勾选</b>：selectedIds.clear() 避免跨Tab勾选污染</li>
+          <li><span class="tag tag-imp">优化</span> <b>离开收藏Tab自动关闭starOnly</b>：切到招标/中标Tab不再遗留starOnly=true</li>
+          <li><span class="tag tag-imp">优化</span> <b>收藏Tab空状态友好提示</b>："⭐ 暂无收藏，在招标列表中点击 ☆ 即可收藏"</li>
+          <li><span class="tag tag-imp">优化</span> <b>统计卡片点击保持当前Tab</b>：在收藏Tab点"今日新增"不强制跳回招标</li>
+          <li><span class="tag tag-imp">优化</span> <b>招标Tab无结果空状态</b>："🔍 没有匹配的结果，请调整筛选条件"</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.13 — 交互系统升级 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.13</span>
+        <span class="ver-date">2026-06-25 23:50</span>
+        <span class="ver-title">🖱️ 交互系统全面激活 — 收藏联动 + 批量操作 + Toast反馈</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>收藏Tab实时联动</b>：点击⭐ → Badge数字+1 → Toast提示"已收藏" → 切到收藏Tab立即显示；取消收藏同理（此前Badge永远显示0）</li>
+          <li><span class="tag tag-core">核心</span> <b>Toast即时反馈</b>：收藏/取消收藏/导出等操作均有2秒浮动提示（绿色=成功、橙色=取消、蓝色=信息）</li>
+          <li><span class="tag tag-new">新增</span> <b>批量选择 + 导出已选</b>：每行checkbox + 表头全选 → "导出已选"按钮一键导出勾选项CSV</li>
+          <li><span class="tag tag-fix">修复</span> <b>收藏Badge永远为0</b>：新增 <code>updateStarBadge()</code>，toggleStar()/init()/loadBookmarks 三处调用</li>
+          <li><span class="tag tag-fix">修复</span> <b>收藏Tab无独立视图</b>：sw('star') 正确切换 starOnly=true + 复用招标表格 + Badge实时反映</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.12 — 布局修复 + 注入守护 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.12</span>
+        <span class="ver-date">2026-06-25 23:30</span>
+        <span class="ver-title">🔧 布局崩溃修复 + 🛡️ 注入幂等守护</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-fix">修复</span> <b>页面布局完全崩溃</b>：report_generator.py 模板中 tab-bar 的 <code>&lt;/div&gt;</code> 缺失，导致表格被嵌套进 flex 容器（display:flex; gap:4px），整页扭曲</li>
+          <li><span class="tag tag-fix">修复</span> <b>polish_report.py 重复注入</b>：LIGHT_THEME_CSS 和 toggleTheme() 每次抛光都追加一份，导致 CSS 块和 JS 函数膨胀（2份→1份）</li>
+          <li><span class="tag tag-imp">优化</span> <b>polish 幂等检查</b>：注入前先检测 'Light Theme' / 'function toggleTheme' / 'chat-widget' 是否已存在</li>
+          <li><span class="tag tag-imp">优化</span> <b>page_size 选择器兼容</b>：app.js 中 init() 自动恢复用户偏好的每页条数</li>
+        </ul>
+      </div>
+    </div>
+    <!-- V1.11 — PM全量优化 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.11</span>
+        <span class="ver-date">2026-06-25 23:00</span>
+        <span class="ver-title">🎨 专业布局重设计 + 📊 评分粒度优化 + ⭐ 收藏Tab</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>评分引擎 v12 精细化</b>：步长从+35/+18/+8 降为 +12/+6/+3，新增多样性奖励(+4/类型)和新鲜度奖励(+1~5)，100分从8条→4条，评分分布从4档展开到20+档</li>
+          <li><span class="tag tag-core">核心</span> <b>全页面布局重设计</b>：对标专业投标平台——4卡片统计行、两行筛选栏、色条相关度、彩色客户标签、专业暗蓝基调</li>
+          <li><span class="tag tag-new">新增</span> <b>收藏独立Tab</b>：点⭐后一键切到收藏视图，无需再点筛选按钮</li>
+          <li><span class="tag tag-new">新增</span> <b>统计卡片可点击</b>：点"今日新增"→自动设置今日日期筛选；点"高相关"→自动切换高相关度</li>
+          <li><span class="tag tag-new">新增</span> <b>分页条数选择器</b>：25/50/100条可选</li>
+          <li><span class="tag tag-fix">修复</span> <b>客户分类去emoji</b>："🔵 电力/央企/工业"→"电力/央企/工业"，全库批量清洗</li>
+          <li><span class="tag tag-fix">修复</span> <b>id=359地域脏数据</b>："标包1：广东蓄能大厦"→"广东"</li>
+          <li><span class="tag tag-fix">修复</span> <b>明亮模式文字不可读</b>：CSS变量覆盖 + 40+条light规则，表格文字从#64748b→#1e293b</li>
+          <li><span class="tag tag-fix">修复</span> <b>日报重新生成</b>：清理过期垃圾数据，去标题前缀</li>
+          <li><span class="tag tag-imp">优化</span> <b>三层拦截架构完善</b>：L1页面判别器(crawl_pipeline) + L2排除层(scoring) + L3中标独立评分</li>
+        </ul>
+      </div>
+    </div>
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.10</span>
+        <span class="ver-date">2026-06-25 22:30</span>
+        <span class="ver-title">🧹 中标数据大清洗 + 🛡️ 三层拦截架构（根治，非擦地）</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">根因</span> <b>管道1 batch_crawler(70%垃圾)</b>：87站泛爬虫无页面类型判别→平台首页/导航页畅通入库。修复：L1拦截器加14个平台信号词</li>
+          <li><span class="tag tag-core">根因</span> <b>管道2 nanwang_adapter(20%)</b>：南网适配器不验证抓到的HTML是公告详情还是列表页/面包屑。修复：L1拦截"您现在正在浏览""首页 >"</li>
+          <li><span class="tag tag-core">根因</span> <b>管道3 DIGITAL_GATE泛化(10%)</b>："系统""服务"太宽，锅炉正文含"系统"→100分。修复：NON_DIGITAL_EXCLUDE + STRONG_DIGITAL组合命中</li>
+          <li><span class="tag tag-new">新增</span> <b>L1 页面类型判别器</b>：insert_notice() 入口处检查14个平台信号词（您现在正在浏览/首页 >/APP下载/欢迎来到/公告信息 公告信息...），命中直接丢弃</li>
+          <li><span class="tag tag-new">新增</span> <b>L3 中标独立评分</b>：中标不再和招标共用评分。竞品中标→正常分；非竞品中标→须有明确数字化关键词（管理平台/监控系统/APP/BIM）否则丢弃</li>
+          <li><span class="tag tag-fix">清理</span> 中标表33→7：删14条平台首页+2条列表页+10条非数字项目+2条漏网炉类</li>
+          <li><span class="tag tag-imp">文档</span> 根因分析写入 <code>data-quality-guard</code> skill，三层拦截架构文档化</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.9 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.9</span>
+        <span class="ver-date">2026-06-25 21:40</span>
+        <span class="ver-title">🧹 数据质量大扫除 + 🔧 regex 字符截断修复 + 🐛 双重组件去重</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-fix">修复</span> <b>地域字段混入正文垃圾</b>：REGION_PATTERNS 排除集漏了中文句号「。」，导致正则跨句子吞并（如"广州2.4资格审查方式：资格后审2.5招"→修复后"广东"），影响5条</li>
+          <li><span class="tag tag-fix">修复</span> <b>86条南网标题前缀</b>："采购公告 > 招标公告 > xxx" → 在 score_item() 中循环剥离「采购公告/招标公告/公示公告/非招标公告 >」前缀</li>
+          <li><span class="tag tag-fix">修复</span> <b>招标单位字段混入联系人/电话</b>：BIDDER_PATTERNS 排除集加「。」，且去掉 <code>re.sub(r'\s+',' ')</code> 换行压缩，让 regex [^\\n] 正确截断</li>
+          <li><span class="tag tag-fix">修复</span> <b>聊天组件双重注入</b>：polish_report.py 改为幂等检查（if 'chat-widget' not in html），避免每次抛光叠加重复的 &lt;script&gt; 和 &lt;link&gt;</li>
+          <li><span class="tag tag-fix">修复</span> <b>封面/Logo 403</b>：img_gen/covers/cover_1~8.png + img/logo.png Permission denied → chmod -R 755 /var/www/html/bidding/</li>
+          <li><span class="tag tag-fix">修复</span> <b>13条平台首页/导航页误抓</b>：删除"南方电网电子采购交易平台 您好！欢迎使用...""中国招标投标协会 年会""易招标-首页""深圳能源电子招标投标平台-首页""详情页 首页 主体信息..."等非项目页面</li>
+          <li><span class="tag tag-fix">修复</span> <b>6条浙能智慧供应链平台首页误抓</b>："浙江能源集团智慧供应链一体化平台V1.0 欢迎来到..."</li>
+          <li><span class="tag tag-fix">修复</span> <b>武昌造船标题面包屑</b>："中国船舶电子招标投标平台-武昌造船...您当前的位置：首页 >..."→"武昌造船双柳厂区视频监控系统招标公告"</li>
+          <li><span class="tag tag-imp">优化</span> <b>数据库清理</b>：删除20条垃圾数据，净数据从153条精简为133条（净增前曾达177→203→166→153）</li>
+          <li><span class="tag tag-imp">优化</span> REGION_PATTERNS 增加 {1,20} 长度截断，防止未来同类溢出</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.8 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.8</span>
+        <span class="ver-date">2026-06-25</span>
+        <span class="ver-title">📡 评分v11扩容 + 🐍 Python依赖断裂修复 + 📊 数据策略</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>评分引擎v11</b>：DIGITAL_GATE新增30+IT信息化关键词（信息技术、软件开发、数据治理、网络设备、服务器、虚拟化、SCADA、容灾等），87站batch通过率从1.5%提升</li>
+          <li><span class="tag tag-core">核心</span> <b>评分最低分55→50</b>：让IT服务类项目（运维/网络/服务器采购）也能入库</li>
+          <li><span class="tag tag-imp">优化</span> STRONG_KEYWORDS同步v11：+18分区新增通信系统、集控系统、协同办公、OA系统、接口开发等</li>
+          <li><span class="tag tag-fix">修复</span> <b>🐍 bs4依赖断裂</b>：systemd用系统python3（无bs4），三路采集全崩→pipeline_master.sh改为venv Python路径</li>
+          <li><span class="tag tag-fix">修复</span> push_daily_report.sh + wenyao-selfheal + wenyao-memory 全部切换venv Python</li>
+          <li><span class="tag tag-fix">修复</span> <b>数据膨胀策略</b>：data.json 6MB→87KB，精简字段(移除raw_text/raw_html/content_summary)，解析失败/title/score保持原生类型</li>
+          <li><span class="tag tag-fix">修复</span> 监控页聊天组件缺失：index.html补充&lt;script src="chat-widget.js"&gt;引用</li>
+          <li><span class="tag tag-fix">修复</span> doFilter()崩溃：relevance_score保持number类型，不再toString后调toFixed</li>
+          <li><span class="tag tag-new">新增</span> data_light.json：4字段极简版API（id/title/score/source），加载速度提升10x</li>
+          <li><span class="tag tag-imp">优化</span> Nginx配置持久化：wiki.conf备份到sites-available，守护脚本增加配置完整性校验</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.7 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.7</span>
+        <span class="ver-date">2026-06-24 20:41</span>
+        <span class="ver-title">💬 对话链接化 + ⏱️ Systemd定时 + 🔧 反馈修复×3</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>对话引擎v3链接化</b>：DeepSeek回答强制带 [项目](URL) 可点击链接，前端Markdown→&lt;a target="_blank"&gt;渲染</li>
+          <li><span class="tag tag-core">核心</span> <b>定时迁移至systemd</b>：Hermes Cron 3分钟硬中断→systemd timer(7200秒超时)，管线不会再被砍死</li>
+          <li><span class="tag tag-fix">修复</span> item 361：补抓预算 55.79万元 + 地点广州 + 招标人南方电网科学研究院有限责任公司</li>
+          <li><span class="tag tag-fix">修复</span> item 267：2024年旧公告降权至50分</li>
+          <li><span class="tag tag-fix">修复</span> item 121：2025年过期资格预审降权至50分</li>
+          <li><span class="tag tag-new">新增</span> systemd服务：wenyao-pipeline.timer(9:00+18:00) + wenyao-dailyreport.timer(20:00)</li>
+          <li><span class="tag tag-imp">优化</span> 长记忆引擎：对话v3、定时迁移、链接规则全量入库 COLD/WARM/HOT 三层</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.6 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.6</span>
+        <span class="ver-date">2026-06-24</span>
+        <span class="ver-title">🤖 AI自然语言对话 + 反馈自动修复机制</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>自然语言对话引擎</b>：chat_engine.py — 模式匹配→SQL查询→格式化结果，零外部API依赖</li>
+          <li><span class="tag tag-core">核心</span> <b>浮动聊天组件</b>：监控页+日报页右下角💬按钮，打开对话框即可对话</li>
+          <li><span class="tag tag-new">新增</span> 6个预设问题：智慧工地/集控中心/华润/南网AI/高相关/中标排行，一键查询</li>
+          <li><span class="tag tag-new">新增</span> 时间解析：自动识别"最近一周/一个月/三个月/今天"等自然语言时间</li>
+          <li><span class="tag tag-new">新增</span> 关键词匹配：20+行业关键词（AI/BIM/数字孪生/物联网等）自动匹配过滤</li>
+          <li><span class="tag tag-new">新增</span> 金额统计：中标查询自动汇总总金额</li>
+          <li><span class="tag tag-core">核心</span> <b>反馈自动修复机制</b>：auto-feedback-fix skill — 收到点踩→自动诊断→修复→回填→重生成日报</li>
+          <li><span class="tag tag-fix">修复</span> 国家能源适配器 v2：新增跨行表格解析 _extract_from_table()，提取中标人/中标金额</li>
+          <li><span class="tag tag-fix">修复</span> 南网预算提取：加 budget_amount 列 + extract_budget_from_content() + 管线自动填充</li>
+          <li><span class="tag tag-fix">修复</span> 日报默认明亮模式 + 🌓主题切换按钮 + localStorage持久化</li>
+          <li><span class="tag tag-fix">修复</span> 更新日志 logo 404 → img/ 目录权限 754→755</li>
+          <li><span class="tag tag-imp">优化</span> API 服务升级：新增 /chat 端点，支持 GET 预设问题 + POST 自然语言查询</li>
+          <li><span class="tag tag-imp">优化</span> 反馈修复5步闭环铁律：诊断→修代码→回填数据→重生成日报→主动报告</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.5 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.5</span>
+        <span class="ver-date">2026-06-24</span>
+        <span class="ver-title">🎯 日报系统 + 反馈闭环 + 书签联动</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> <b>每日分析日报</b>：每晚20:00自动生成HTML报告（招标+中标双Tab），含AI逐条分析</li>
+          <li><span class="tag tag-core">核心</span> <b>反馈闭环系统</b>：每条日报分析卡带 👍点赞 / 👎点踩 按钮，点踩弹出评论框记录理由</li>
+          <li><span class="tag tag-core">核心</span> <b>书签服务端同步</b>：前端收藏 ⭐ 自动同步到服务器，日报读取书签做深度解读</li>
+          <li><span class="tag tag-new">新增</span> 书签同步 API（Python 微服务 :8090 + Nginx 反向代理），跨设备恢复</li>
+          <li><span class="tag tag-new">新增</span> 反馈收集 API：点踩理由自动写入 HOT 记忆，供 AI 下次会话感知并迭代评分关键词</li>
+          <li><span class="tag tag-new">新增</span> 招标分析维度：招标人/内容/金额/相关度/建议（重点关注→暂不考虑）</li>
+          <li><span class="tag tag-new">新增</span> 中标分析维度：中标人/招标单位/金额/竞品分析/收藏提醒/非中南院预警</li>
+          <li><span class="tag tag-new">新增</span> 中标卡片判定：本公司中标 ✅ / 竞品中标 ⚠️ / 大标≥500万 💰 自动标记</li>
+          <li><span class="tag tag-imp">优化</span> 企微推送 v7：取消竞品卡片，招标/中标卡片前加引导语「请群里的各位领导同事过目」</li>
+          <li><span class="tag tag-fix">修复</span> app.js 升级：收藏同步+服务端恢复书签，版本号 → v8</li>
+          <li><span class="tag tag-imp">优化</span> Nginx 守护扩展：新增 API 微服务健康检查和自动恢复</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.4 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.4</span>
+        <span class="ver-date">2026-06-24</span>
+        <span class="ver-title">四连推 + 封面固化 + 标题超链接</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> 企微推送 v6 四连推：摘要 → 招标TOP8 → 中标TOP8 → 竞品分析</li>
+          <li><span class="tag tag-new">新增</span> 中标卡片推送：TOP8 中标项目独立图文卡片</li>
+          <li><span class="tag tag-new">新增</span> 竞品分析卡片推送：核心竞品排名+中标次数+金额</li>
+          <li><span class="tag tag-new">新增</span> 大标预警：≥500万中标项目在摘要顶部红色预警</li>
+          <li><span class="tag tag-core">核心</span> 封面固化：8 张纯数字封面（1~8），深色底+大数字，永不乱码</li>
+          <li><span class="tag tag-fix">修复</span> AI 封面废弃：通义万相不稳定 → 固定封面，零 API 依赖</li>
+          <li><span class="tag tag-fix">修复</span> 封面图 404：img_gen 目录权限 754→755，nginx 可读</li>
+          <li><span class="tag tag-imp">优化</span> 报告标题可点击：点击标题直接跳转原始招标页面</li>
+          <li><span class="tag tag-fix">修复</span> ai_cover.py + pipeline_master.sh 目录权限自动修正</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.3 -->
+    <div class="version">
+      <div class="ver-header">
+        <span class="ver-num">V1.3</span>
+        <span class="ver-date">2026-06-24</span>
+        <span class="ver-title">no_agent 管线 + 缓存修复 + 中标分流</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-fix">修复</span> Cron DeepSeek API 断连（Broken pipe）→ 改 no_agent 主控脚本</li>
+          <li><span class="tag tag-core">核心</span> pipeline_master.sh：纯 shell 直跑 6 阶段，零 LLM 依赖，永不超时</li>
+          <li><span class="tag tag-fix">修复</span> Nginx 缓存导致更新日志不可见 → 全局禁用缓存（no-cache, no-store）</li>
+          <li><span class="tag tag-fix">修复</span> batch_crawler.py 中标检测缺失 → detect_notice_type() 19 个关键词自动分流</li>
+          <li><span class="tag tag-fix">修复</span> 早 9:00 扫描因 API 断连全部 error，已补跑完成（118 条库存）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.2 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.2</span>
+        <span class="ver-date">2026-06-24</span>
+        <span class="ver-title">Nginx 防护 + 87 站全覆盖 + 自动更新日志</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> Nginx 三级防护：频率限制（8r/s + burst 12）防爬防刷</li>
+          <li><span class="tag tag-core">核心</span> 安全响应头：HSTS / X-Frame / CSP / Referrer / XSS 六层防护</li>
+          <li><span class="tag tag-core">核心</span> Nginx 健康守护脚本：每分钟检查，挂了自动重启（start→reload→restart）</li>
+          <li><span class="tag tag-core">核心</span> 采集管线 v3：从 5 专属平台 → 87 站 listing_found 全覆盖</li>
+          <li><span class="tag tag-core">核心</span> 四连跑采集：pipeline + dedicated + batch_crawler(87站) + chromium(JS增强)</li>
+          <li><span class="tag tag-new">新增</span> 三峡集团适配器（crawl_sanxia）接入管线</li>
+          <li><span class="tag tag-new">新增</span> 国家电投适配器（crawl_guodianta）接入管线</li>
+          <li><span class="tag tag-new">新增</span> 中广核 JS-SPA 双保险（Chromium + API）接入管线</li>
+          <li><span class="tag tag-imp">优化</span> 修复 http2 弃用警告（listen http2 → http2 on）</li>
+          <li><span class="tag tag-new">新增</span> 更新日志自动维护机制：每次重大变动自动写入 changelog.html</li>
+          <li><span class="tag tag-imp">优化</span> 定时任务 v2→v3：早 9:00 / 晚 18:00 各跑一次全量四连跑</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.1 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.1</span>
+        <span class="ver-date">2026-06-24</span>
+        <span class="ver-title">多平台适配器矩阵</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> 浙能集团适配器：iframe 列表抓取 → 41 条入库（含智能大坝/智能调控 100 分项目）</li>
+          <li><span class="tag tag-core">核心</span> 国家能源集团适配器：国能e招 Chromium 渲染 → 17 条入库（数智科技技术服务商 100 分）</li>
+          <li><span class="tag tag-new">新增</span> 中广核平台 API 发现（/portalApi/content/queryPage），待浏览器方案攻克</li>
+          <li><span class="tag tag-new">新增</span> 六大六小+国网+南网+浙能全平台扫描评估：华电/三峡/国投电力有信号</li>
+          <li><span class="tag tag-imp">优化</span> 采集管线升级：集成南网/浙能/国家能源三路适配器</li>
+          <li><span class="tag tag-imp">优化</span> 国家能源数据清洗：过滤终止公告/招标计划/UI 噪声</li>
+          <li><span class="tag tag-new">新增</span> 适配器编写 Skill（power-platform-adapters）保存经验</li>
+          <li><span class="tag tag-fix">确认</span> 大唐全站 SSO 锁死、国网不可达、华能不可达</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V1.0 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V1.0</span>
+        <span class="ver-date">2026-06-23</span>
+        <span class="ver-title">交互完整版</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-new">新增</span> 行勾选 checkbox + 表头全选，导出 CSV 优先导出勾选项</li>
+          <li><span class="tag tag-new">新增</span> ⭐ 收藏筛选按钮，只看已收藏招标</li>
+          <li><span class="tag tag-new">新增</span> 简报标签点击高亮（蓝色背景），选中/取消视觉反馈</li>
+          <li><span class="tag tag-new">新增</span> 数据行序号列 #</li>
+          <li><span class="tag tag-new">新增</span> 自定义 Logo 替换 emoji 图标</li>
+          <li><span class="tag tag-imp">优化</span> 搜索栏缩窄至 240px，工具栏布局紧凑</li>
+          <li><span class="tag tag-fix">修复</span> 导出 CSV 类型安全 + try-catch 错误提示</li>
+          <li><span class="tag tag-fix">修复</span> 收藏 ID 比较类型不一致导致过滤失效</li>
+          <li><span class="tag tag-new">新增</span> 明暗主题切换按钮（更新日志页面）</li>
+          <li><span class="tag tag-imp">优化</span> 默认明亮风格</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.9 -->
+    <div class="version">
+      <div class="ver-header">
+        <span class="ver-num">V0.9</span>
+        <span class="ver-date">2026-06-23</span>
+        <span class="ver-title">趋势 & 多选增强</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-new">新增</span> SVG 趋势图表引擎：柱状图 + 曲线图（网格线+Y轴刻度+面积填充）</li>
+          <li><span class="tag tag-new">新增</span> 每张趋势卡片独立 📊/📈 切换按钮，不联动</li>
+          <li><span class="tag tag-new">新增</span> 客户/地域多选筛选器，点标签追加并集，再点取消</li>
+          <li><span class="tag tag-fix">修复</span> chartModes 用 Map 替代 {} 完全隔离</li>
+          <li><span class="tag tag-fix">修复</span> select 选项排序——「其他」永远排最后</li>
+          <li><span class="tag tag-fix">修复</span> 多选列表盒去除 size=1 + dispatchEvent change 刷新</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.8 -->
+    <div class="version">
+      <div class="ver-header">
+        <span class="ver-num">V0.8</span>
+        <span class="ver-date">2026-06-23</span>
+        <span class="ver-title">UX 全面增强</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-new">新增</span> ⭐ 星标收藏功能（localStorage 持久化）</li>
+          <li><span class="tag tag-new">新增</span> 🆕 NEW 今日数据标记徽章</li>
+          <li><span class="tag tag-new">新增</span> 键盘快捷键：<code>/</code> 聚焦搜索 · <code>Esc</code> 清空退出</li>
+          <li><span class="tag tag-new">新增</span> 筛选条件 localStorage 记忆</li>
+          <li><span class="tag tag-imp">优化</span> Tab 格式、标题、加载骨架、死链接兜底</li>
+          <li><span class="tag tag-fix">修复</span> 竞品标签空白、趋势缺当月、FAQ 噪声入库</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.7 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V0.7</span>
+        <span class="ver-date">2026-06-22</span>
+        <span class="ver-title">主题 · 版权 · 长记忆</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-new">新增</span> 🌓 明亮/暗黑风格一键切换（localStorage 持久化）</li>
+          <li><span class="tag tag-new">新增</span> 长记忆系统：通义千问 Text-Embedding-V3 向量化 + 语义搜索 + 三层热温冷</li>
+          <li><span class="tag tag-imp">优化</span> 版权统一格式：<code>© 中南电力设计院数智科技 · 文鳐智投 2026</code></li>
+          <li><span class="tag tag-fix">修复</span> 报告空白（JS 引号断裂 → 拆分独立 app.js）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.6 -->
+    <div class="version">
+      <div class="ver-header">
+        <span class="ver-num">V0.6</span>
+        <span class="ver-date">2026-06-22</span>
+        <span class="ver-title">企微卡片 & AI 封面</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-new">新增</span> 企微推送 v3 精美卡片风格（摘要 Markdown + 图文卡片）</li>
+          <li><span class="tag tag-new">新增</span> 通义万相 AI 封面：TOP2 招标自动生成，缓存永久复用</li>
+          <li><span class="tag tag-new">新增</span> 客户分类引擎（6 大客户类别标签）</li>
+          <li><span class="tag tag-imp">优化</span> 全部招标改用 AI 封面，移除 Pillow 兜底</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.5 -->
+    <div class="version">
+      <div class="ver-header">
+        <span class="ver-num">V0.5</span>
+        <span class="ver-date">2026-06-21</span>
+        <span class="ver-title">评分引擎 v4-v6</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> 评分引擎 v4：基于 48 个真实项目清单重写关键词权重</li>
+          <li><span class="tag tag-core">核心</span> 评分引擎 v5：EPC 施工噪音清零</li>
+          <li><span class="tag tag-core">核心</span> 评分引擎 v6：增强「数智」核心词 + FAQ 过滤 + 最低分阈值≥1.5</li>
+          <li><span class="tag tag-new">新增</span> 企微机器人推送（早 9:00 / 晚 18:00 自动）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.4 -->
+    <div class="version">
+      <div class="ver-header">
+        <span class="ver-num">V0.4</span>
+        <span class="ver-date">2026-06-21</span>
+        <span class="ver-title">JS 站点 & 详情提取</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-new">新增</span> Chromium 无头渲染回退方案（JS 动态站点抓取）</li>
+          <li><span class="tag tag-new">新增</span> 详情页提取引擎（结构化字段抽取）</li>
+          <li><span class="tag tag-new">新增</span> 站点适配器框架</li>
+          <li><span class="tag tag-new">新增</span> 自动扫描定时任务 cron（9:00 / 18:00）</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.3 -->
+    <div class="version">
+      <div class="ver-header">
+        <span class="ver-num">V0.3</span>
+        <span class="ver-date">2026-06-20</span>
+        <span class="ver-title">交互报告 & 推送</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-new">新增</span> HTML 交互报告：搜索 / 筛选 / 排序 / 分页 / 导出</li>
+          <li><span class="tag tag-new">新增</span> Nginx 静态报告服务</li>
+          <li><span class="tag tag-new">新增</span> 移动端响应式适配</li>
+          <li><span class="tag tag-new">新增</span> 企微 webhook 集成</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.2 -->
+    <div class="version">
+      <div class="ver-header">
+        <span class="ver-num">V0.2</span>
+        <span class="ver-date">2026-06-20</span>
+        <span class="ver-title">评分引擎 & 站点管理</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> 业务相关性评分引擎 v1：三级关键词 + 地理权重 + 排除词</li>
+          <li><span class="tag tag-new">新增</span> 344 个招标网站导入入库（site_list 表）</li>
+          <li><span class="tag tag-new">新增</span> crawl_log 抓取日志表</li>
+          <li><span class="tag tag-new">新增</span> 评分过滤管道：全品类抓取 → 评分 → 入库</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- V0.1 -->
+    <div class="version major">
+      <div class="ver-header">
+        <span class="ver-num">V0.1</span>
+        <span class="ver-date">2026-06-19</span>
+        <span class="ver-title">项目启动 · 基石</span>
+      </div>
+      <div class="changes">
+        <ul>
+          <li><span class="tag tag-core">核心</span> 爬虫引擎 <code>bidding_engine.py</code> 搭建</li>
+          <li><span class="tag tag-core">核心</span> SQLite 数据库建表（bidding_notices / winning_notices）</li>
+          <li><span class="tag tag-new">新增</span> 解析《投标网站注册信息汇总表 2026.6 月.xlsx》</li>
+          <li><span class="tag tag-new">新增</span> 基础报告生成器</li>
+          <li><span class="tag tag-new">新增</span> 产品定位：数智科技≠EPC，只关注数字化/软件/AI 类招标</li>
+          <li><span class="tag tag-new">新增</span> 项目命名「文鳐智投」— 程浩团队 · 量子纪元</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>© 中南电力设计院数智科技 · 文鳐智投 2026</footer>
+
+<script>
+function toggleTheme(){
+    document.body.classList.toggle('dark');
+    var isDark = document.body.classList.contains('dark');
+    localStorage.setItem('changelog_theme', isDark ? 'dark' : 'light');
+    document.querySelector('.theme-btn').textContent = isDark ? '☀️' : '🌙';
+}
+(function(){
+    if(localStorage.getItem('changelog_theme') === 'dark'){
+        document.body.classList.add('dark');
+        document.querySelector('.theme-btn').textContent = '☀️';
+    }
+})();
+</script>
+
+<script src="/bidding/chat-widget.js?v=6"></script>
+</body>
+</html>

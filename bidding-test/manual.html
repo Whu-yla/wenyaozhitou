@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="32x32" href="/bidding/favicon-32x32.png">
+<link rel="icon" type="image/x-icon" href="/bidding/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/bidding/apple-touch-icon.png">
+<meta property="og:title" content="文鳐智投 · 操作手册">
+<meta property="og:description" content="中南电力设计院数智科技公司投标监控系统操作指南——智能采集、AI评分、可视化报告">
+<meta property="og:image" content="https://www.yfzx.online/bidding/img_gen/og-share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://www.yfzx.online/bidding/manual.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="文鳐智投">
+<title>文鳐智投 · 操作手册 — 数智科技投标监控</title>
+<style>
+:root{--bg:#f8fafc;--text:#1e293b;--card-bg:#fff;--card-border:#e2e8f0;--card-text:#334155;--muted:#64748b;--accent:#3b82f6;--accent-light:#eff6ff;--header-bg:linear-gradient(135deg,#eff6ff,#dbeafe);--header-text:#1d4ed8;--code-bg:#f1f5f9;--divider:#e2e8f0}
+.dark{--bg:#0f172a;--text:#e2e8f0;--card-bg:#1e293b;--card-border:#334155;--card-text:#cbd5e1;--muted:#94a3b8;--accent:#60a5fa;--accent-light:#1e293b;--header-bg:linear-gradient(135deg,#1e293b,#0f172a);--header-text:#60a5fa;--code-bg:#1e293b;--divider:#334155}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.8;transition:background .3s,color .3s}
+header{background:var(--header-bg);border-bottom:2px solid var(--accent);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.header-left{display:flex;align-items:center;gap:12px}
+header img{height:36px;border-radius:6px}
+h1{font-size:22px;color:var(--header-text)}
+.sub{color:var(--muted);font-size:13px;margin-top:2px}
+.theme-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--card-border);background:var(--card-bg);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;color:var(--text)}
+.theme-btn:hover{border-color:var(--accent)}
+.back-link{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500}
+.back-link:hover{text-decoration:underline}
+.container{max-width:900px;margin:0 auto;padding:24px 20px}
+.toc{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:20px 24px;margin-bottom:32px}
+.toc h2{font-size:15px;font-weight:700;margin-bottom:12px;color:var(--accent)}
+.toc ol{padding-left:20px;font-size:14px;line-height:2.2}
+.toc a{color:var(--accent);text-decoration:none}
+.toc a:hover{text-decoration:underline}
+section{margin-bottom:40px;scroll-margin-top:24px}
+section h2{font-size:20px;font-weight:700;margin-bottom:12px;color:var(--text);border-bottom:2px solid var(--accent);padding-bottom:6px;display:flex;align-items:center;gap:8px}
+section h2 .icon{font-size:22px}
+section h3{font-size:16px;font-weight:600;margin:20px 0 8px;color:var(--text)}
+section p{font-size:14px;color:var(--card-text);margin-bottom:10px}
+section ul,section ol{padding-left:20px;margin-bottom:12px}
+section li{font-size:14px;color:var(--card-text);margin-bottom:6px;line-height:1.8}
+.highlight{background:var(--accent-light);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 16px;margin:12px 0;font-size:14px}
+.highlight strong{color:var(--accent)}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-right:4px}
+.tag-tip{background:#dbeafe;color:#1d4ed8}
+.tag-warn{background:#fef3c7;color:#92400e}
+.tag-info{background:#d1fae5;color:#065f46}
+.dark .tag-tip{background:#1e3a5f;color:#93c5fd}
+.dark .tag-warn{background:#422006;color:#fcd34d}
+.dark .tag-info{background:#064e3b;color:#6ee7b7}
+.card-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+.mini-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;padding:14px 16px}
+.mini-card .mc-title{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:4px}
+.mini-card .mc-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.score-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.score-table th,.score-table td{border:1px solid var(--card-border);padding:8px 12px;text-align:left}
+.score-table th{background:var(--card-bg);font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase}
+.score-table td{color:var(--card-text)}
+kbd{background:var(--code-bg);border:1px solid var(--card-border);border-radius:4px;padding:2px 6px;font-size:12px;font-family:inherit}
+footer{text-align:center;padding:24px;color:var(--muted);font-size:11px;border-top:1px solid var(--divider);margin-top:32px}
+@media(max-width:768px){
+  header{padding:14px 16px}
+  h1{font-size:18px}
+  .container{padding:16px 12px}
+  section h2{font-size:17px}
+  .card-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <img src="/bidding/img/logo.png" alt="文鳐智投">
+    <div>
+      <h1>文鳐智投 · 操作手册</h1>
+      <div class="sub">中南电力设计院数智科技公司 · 投标监控系统 v1.36</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="https://www.yfzx.online/bidding/" class="back-link">← 返回看板</a>
+    <button class="theme-btn" onclick="toggleTheme()" title="切换主题">🌓</button>
+  </div>
+</header>
+
+<div class="container">
+
+<!-- ═══ 目录 ═══ -->
+<div class="toc">
+  <h2>📑 目录</h2>
+  <ol>
+    <li><a href="#overview">系统概览</a></li>
+    <li><a href="#layout">页面布局</a></li>
+    <li><a href="#stats">统计卡片</a></li>
+    <li><a href="#filter">筛选与搜索</a></li>
+    <li><a href="#table">浏览招标/中标</a></li>
+    <li><a href="#score">评分体系</a></li>
+    <li><a href="#star">收藏与导出</a></li>
+    <li><a href="#theme">主题切换</a></li>
+    <li><a href="#mobile">手机端使用</a></li>
+    <li><a href="#wecom">企业微信推送</a></li>
+    <li><a href="#chat">智能问答</a></li>
+    <li><a href="#faq">常见问题</a></li>
+  </ol>
+</div>
+
+<!-- ═══ 1. 系统概览 ═══ -->
+<section id="overview">
+  <h2><span class="icon">📡</span> 1. 系统概览</h2>
+  <p>文鳐智投是中南电力设计院数智科技公司自研的<strong>智能投标监控系统</strong>，每日自动采集全国电力/能源行业招标与中标信息，通过 AI 评分引擎筛选与公司业务高度相关的项目，生成可视化报告并推送企业微信。</p>
+  
+  <div class="highlight">
+    <strong>核心能力：</strong> 覆盖六大六小发电集团 + 国网南网 + 地方能源平台（344 站），每日 9:00 / 18:00 自动采集，AI 评分精选高相关项目。
+  </div>
+
+  <div class="card-row">
+    <div class="mini-card">
+      <div class="mc-title">🔍 自动采集</div>
+      <div class="mc-desc">344 个招标网站，每日早晚两次全量抓取</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-title">🧠 AI 评分</div>
+      <div class="mc-desc">智能识别智慧工地、数字平台、安防、电力AI 等业务方向</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-title">📊 可视化报告</div>
+      <div class="mc-desc">网页版实时看板 + 企业微信卡片推送</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-title">💬 智能问答</div>
+      <div class="mc-desc">接入 DeepSeek 大模型，自然语言查询项目信息</div>
+    </div>
+  </div>
+
+  <p><strong>访问地址：</strong> <a href="https://www.yfzx.online/bidding/" style="color:var(--accent)">https://www.yfzx.online/bidding/</a></p>
+</section>
+
+<!-- ═══ 2. 页面布局 ═══ -->
+<section id="layout">
+  <h2><span class="icon">🗺️</span> 2. 页面布局</h2>
+  <p>打开看板后，从上到下分为以下区域：</p>
+  <ol>
+    <li><strong>顶部导航栏</strong> — 文鳐智投 Logo、数据更新时间、主题切换按钮 🌓</li>
+    <li><strong>统计卡片（4 张）</strong> — 累计招标、今日新增、高相关项目、累计中标</li>
+    <li><strong>筛选栏</strong> — 搜索框 + 客户/地域下拉 + 相关度阈值 + 日期 + 预算筛选</li>
+    <li><strong>Tab 标签页</strong> — 招标 / 中标 / 收藏，带实时数量徽标</li>
+    <li><strong>数据表格</strong> — 按相关度降序排列的项目列表，支持排序、展开详情</li>
+    <li><strong>底栏</strong> — 更新日志链接、版权信息</li>
+    <li><strong>右下角浮动面板</strong> — 智能问答 + 反馈入口</li>
+  </ol>
+</section>
+
+<!-- ═══ 3. 统计卡片 ═══ -->
+<section id="stats">
+  <h2><span class="icon">📊</span> 3. 统计卡片</h2>
+  <p>页面顶部 4 张卡片提供关键数据概览：</p>
+
+  <div class="card-row">
+    <div class="mini-card">
+      <div class="mc-title">累计招标</div>
+      <div class="mc-desc">数据库中全部招标项目总数。<strong>点击 →</strong> 显示全部招标列表。</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-title">今日新增 <span class="tag tag-tip">趋势</span></div>
+      <div class="mc-desc">当天新抓取的项目数，含 ↑↓ 对比昨日。<strong>点击 →</strong> 只看今日新增。</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-title">高相关项目 <span class="tag tag-warn">⭐</span></div>
+      <div class="mc-desc">相关度 ≥ 70 分的项目数。旁边的 <kbd>?</kbd> 可查看定义。<strong>点击 →</strong> 只看高相关项目。</div>
+    </div>
+    <div class="mini-card">
+      <div class="mc-title">累计中标</div>
+      <div class="mc-desc">全部中标公告数。<strong>点击 →</strong> 切换到中标视图。</div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>💡 技巧：</strong> 点击卡片进入独立筛选视图，顶部出现蓝色提示条告知当前筛选条件。点击 <strong>✕ 显示全部</strong> 或再次点击同一卡片即可回到全量视图。<br>
+    <strong>📊 数字验证：</strong> 点「今日新增」后，招标 Tab 徽标 + 中标 Tab 徽标 = 卡片数字（例：8 + 3 = 11），切 Tab 不会清除筛选条件，两个 Tab 都可独立浏览今日数据。
+  </div>
+</section>
+
+<!-- ═══ 4. 筛选与搜索 ═══ -->
+<section id="filter">
+  <h2><span class="icon">🔎</span> 4. 筛选与搜索</h2>
+  <p>筛选栏支持组合过滤，所有条件即时生效：</p>
+  
+  <h3>4.1 搜索框</h3>
+  <ul>
+    <li>支持搜索 <strong>项目标题、招标单位、省份、来源站点、地域</strong></li>
+    <li>输入关键词后点击 <kbd>搜索</kbd> 按钮或按 <kbd>Enter</kbd> 键触发</li>
+    <li>手机端点击搜索按钮确认（避免中文输入法误触发），桌面端支持回车</li>
+    <li>快捷键：按 <kbd>/</kbd> 键快速聚焦搜索框</li>
+  </ul>
+
+  <h3>4.2 客户筛选</h3>
+  <p>按客户类型快速过滤：地方能源集团、电力/央企/工业、国网/南网、政府/公共事业、其他。</p>
+
+  <h3>4.3 地域筛选</h3>
+  <p>按省份过滤项目，当前覆盖：广东、浙江、湖北、内蒙古、贵州、云南、广西、海南等。</p>
+
+  <h3>4.4 相关度阈值</h3>
+  <p>输入数值（0-100），只显示评分 ≥ 该值的项目。例：输入 <kbd>70</kbd> 只看高相关项目。</p>
+
+  <h3>4.5 日期范围</h3>
+  <p>按发布日期筛选，支持快速预设：<kbd>今天</kbd> <kbd>本周</kbd> <kbd>本月</kbd>。</p>
+
+  <h3>4.6 预算金额</h3>
+  <p>输入最小预算（万元），过滤预算 ≥ 该值的项目。</p>
+
+  <h3>4.7 重置</h3>
+  <p>点击 <kbd>重置</kbd> 按钮清空所有筛选条件，回到默认视图。</p>
+
+  <div class="highlight">
+    <strong>📱 手机端提示：</strong> 筛选栏支持横向滑动（类似微博热搜），右侧有渐变淡出效果提示可滑动。首次进入页面自动演示滑动。
+  </div>
+
+  <h3>4.8 键盘快捷键</h3>
+  <table>
+    <tr><th>快捷键</th><th>操作</th></tr>
+    <tr><td><kbd>/</kbd></td><td>聚焦搜索框（任意位置按下即可开始输入）</td></tr>
+    <tr><td><kbd>Esc</kbd></td><td>清除所有筛选条件 + 关闭弹窗</td></tr>
+    <tr><td><kbd>Ctrl+Enter</kbd></td><td>导出当前筛选结果为 CSV</td></tr>
+    <tr><td><kbd>Ctrl+←</kbd> / <kbd>Ctrl+→</kbd></td><td>切换「招标」/「中标」Tab</td></tr>
+    <tr><td><kbd>Ctrl+S</kbd></td><td>切换到「收藏」视图</td></tr>
+  </table>
+
+  <h3>4.9 行密度切换</h3>
+  <p>头部 <kbd>≡</kbd> 按钮切换紧凑/舒适模式。紧凑模式下表格行高减半、字号缩小，适合大屏快速浏览大量数据。偏好自动保存在浏览器中。</p>
+
+  <h3>4.10 评分图例</h3>
+  <p>表头「相关度 ⓘ」点击弹出评分说明气泡：</p>
+  <ul>
+    <li>🟢 <b>85+</b> 高度相关 — 数字/AI/平台/安全等核心业务</li>
+    <li>🟡 <b>60-84</b> 中度相关 — 技术服务/智能化等</li>
+    <li>⚪ <b>&lt;60</b> 低度相关 — 通用/边缘匹配</li>
+  </ul>
+
+  <h3>4.11 URL 分享筛选视图</h3>
+  <p>筛选条件自动同步到浏览器地址栏（如 <code>?q=数字化&amp;score=70</code>）。复制地址栏链接发给同事，对方打开后自动恢复相同的筛选视图——无需截图说明筛选条件。</p>
+</section>
+
+<!-- ═══ 5. 浏览招标/中标 ═══ -->
+<section id="table">
+  <h2><span class="icon">📋</span> 5. 浏览招标 / 中标</h2>
+  
+  <h3>5.1 Tab 切换 <span class="tag tag-tip">v1.41 秒开</span></h3>
+  <p>点击 <strong>招标</strong> / <strong>中标</strong> / <strong>收藏</strong> 三个标签切换数据视图。标签旁的数字徽标会随筛选条件实时联动——筛选后显示的是匹配条数。</p>
+  <div class="highlight">
+    <strong>⚡ 性能优化（v1.41）：</strong> API 响应启用 <code>Cache-Control: max-age=30</code> 浏览器缓存 + 页面加载时预拉中标数据。首次切 Tab 从缓存即显，30 秒内重复切换零网络请求。
+  </div>
+
+  <h3>5.2 表格列说明</h3>
+  <table class="score-table">
+    <tr><th>列名</th><th>说明</th></tr>
+    <tr><td>☐ 全选</td><td>勾选后可用于批量导出</td></tr>
+    <tr><td>序号</td><td>当前页排序编号</td></tr>
+    <tr><td>相关度</td><td>AI 评分（0-100），点击列头可排序</td></tr>
+    <tr><td>项目标题</td><td>点击可展开详情；标题本身可点击跳转原始招标页面</td></tr>
+    <tr><td>客户</td><td>客户分类标签（桌面端可见）</td></tr>
+    <tr><td>招标单位</td><td>发布招标的单位名称（桌面端可见）</td></tr>
+    <tr><td>预算金额</td><td>招标预算，中标则为中标金额</td></tr>
+    <tr><td>地域</td><td>省份 / 城市</td></tr>
+    <tr><td>来源</td><td>招标网站名称</td></tr>
+    <tr><td>发布日期</td><td>公告发布日期</td></tr>
+    <tr><td>操作</td><td>查看原始链接</td></tr>
+  </table>
+
+  <h3>5.3 排序</h3>
+  <p>点击任意列头（相关度、标题、客户、招标单位、预算、地域、来源、日期）可排序。再点一次切换升/降序。当前排序列有 ▲▼ 高亮指示。</p>
+
+  <h3>5.4 展开详情</h3>
+  <p>点击项目标题行可展开/收起详细信息：包括项目摘要、预算金额格式化、招标单位、来源部门、公告类型等。</p>
+
+  <h3>5.5 分页</h3>
+  <p>默认每页 20 条，可在筛选栏切换为 50 或 100 条/页。使用底部分页器翻页。</p>
+
+  <div class="highlight">
+    <strong>📱 手机端：</strong> 表格转为卡片式布局，信息扁平化排列。每张卡片右上角 <strong>⋯</strong> 菜单可：分享、复制链接、复制标题、收藏。
+  </div>
+</section>
+
+<!-- ═══ 6. 评分体系 ═══ -->
+<section id="score">
+  <h2><span class="icon">🎯</span> 6. 评分体系</h2>
+  <p>每个招标项目由 AI 评分引擎自动打分（0-100 分），帮助识别与公司业务最匹配的项目。</p>
+
+  <h3>6.1 评分维度</h3>
+  <table class="score-table">
+    <tr><th>维度</th><th>加分项（示例）</th><th>最高加分</th></tr>
+    <tr><td>核心业务匹配</td><td>智慧工地、数字孪生、BIM 平台、智能巡检、AI 中台、物联网、信创</td><td>+35</td></tr>
+    <tr><td>数字化/软件类</td><td>数字化、智能化、信号采集、技术服务、软件开发、平台建设</td><td>+30</td></tr>
+    <tr><td>信息安全闸门</td><td>信息安全、网络安全、等保测评、态势感知、工控安全</td><td>+25（基础分）</td></tr>
+    <tr><td>公司产品匹配</td><td>玄武 SSK、执法记录仪、文鳐智巡、可信数据空间</td><td>+35</td></tr>
+    <tr><td>行业领域</td><td>电力、能源、电网、新能源、智慧电厂</td><td>+15</td></tr>
+  </table>
+
+  <h3>6.2 分数含义</h3>
+  <table class="score-table">
+    <tr><th>分数段</th><th>含义</th><th>建议</th></tr>
+    <tr><td>90-100</td><td>🟢 极高匹配</td><td>公司核心业务，应重点关注、优先投标</td></tr>
+    <tr><td>70-89</td><td>🟡 高度相关</td><td>与公司业务方向高度吻合，值得跟进</td></tr>
+    <tr><td>50-69</td><td>🟠 部分相关</td><td>涉及数字化/软件/安全等通用领域，可评估</td></tr>
+    <tr><td>&lt;50</td><td>⚪ 低相关</td><td>如 EPC 施工总承包、非数字化项目，已被过滤</td></tr>
+  </table>
+
+  <div class="highlight">
+    <strong>📌 注意：</strong> 系统自动过滤 EPC 总承包、纯施工类项目。数智科技≠EPC 施工公司，只关注数字化/软件/平台类招标。
+  </div>
+</section>
+
+<!-- ═══ 7. 收藏与导出 ═══ -->
+<section id="star">
+  <h2><span class="icon">⭐</span> 7. 收藏与导出</h2>
+
+  <h3>7.1 收藏项目</h3>
+  <ul>
+    <li>点击标题旁的 <strong>☆</strong> 即可收藏，变为 <strong>★</strong> 实心星</li>
+    <li>收藏数据保存在浏览器本地，跨会话持久化</li>
+    <li>点击 <strong>收藏</strong> Tab 查看所有已收藏项目</li>
+    <li>再次点击 ★ 取消收藏</li>
+  </ul>
+
+  <h3>7.2 批量导出</h3>
+  <ul>
+    <li>勾选表格左侧复选框选择项目，或点 <strong>全选</strong> 复选框选中当前页全部</li>
+    <li>点击筛选栏 <kbd>导出</kbd> 按钮</li>
+    <li>导出为 CSV 格式，可直接用 Excel 打开</li>
+    <li>导出内容包含标题、招标单位、预算、地域、评分、发布日期等全部字段</li>
+  </ul>
+</section>
+
+<!-- ═══ 8. 主题切换 ═══ -->
+<section id="theme">
+  <h2><span class="icon">🌓</span> 8. 主题切换</h2>
+  <p>看板支持明亮/暗黑两种主题：</p>
+  <ul>
+    <li>点击右上角 <strong>🌓</strong> 按钮切换</li>
+    <li>系统记住你的偏好，下次打开自动还原</li>
+    <li>暗色主题：深蓝背景，护眼适合长时间查看</li>
+    <li>明亮主题：白底蓝调，适合白天办公</li>
+  </ul>
+</section>
+
+<!-- ═══ 9. 手机端使用 ═══ -->
+<section id="mobile">
+  <h2><span class="icon">📱</span> 9. 手机端使用</h2>
+  <p>看板已针对手机屏幕做了深度适配：</p>
+  <ul>
+    <li><strong>头部固定：</strong> 导航栏始终在顶部，不随滚动消失</li>
+    <li><strong>卡片式列表：</strong> 表格自动转为卡片布局，信息垂直排列</li>
+    <li><strong>横向滑动筛选：</strong> 筛选胶囊支持左右滑动（类似微博热搜），右侧有渐变淡出提示</li>
+    <li><strong>搜索按钮确认：</strong> 手机端点击搜索按钮触发，避免中文输入法问题</li>
+    <li><strong>⋯ 菜单：</strong> 每张卡片右上角三点菜单，提供分享、复制链接、复制标题、收藏功能</li>
+    <li><strong>触屏友好：</strong> 按钮和可点击元素至少 44px 高度，符合 Apple HIG 标准</li>
+  </ul>
+
+  <div class="highlight">
+    <strong>💡 提示：</strong> 首次打开页面，筛选栏会自动向右滑动一小段再弹回，提醒你可以横向滑动查看更多筛选选项。
+  </div>
+</section>
+
+<!-- ═══ 10. 企业微信推送 ═══ -->
+<section id="wecom">
+  <h2><span class="icon">📨</span> 10. 企业微信推送</h2>
+  <p>系统每日自动向企业微信群推送一次（通常在上午采集完成后）：</p>
+  <ul>
+    <li><strong>推送内容：</strong> 当日相关度最高的 TOP 1~8 招标项目</li>
+    <li><strong>卡片信息：</strong> 项目标题、相关度评分、招标单位、发布日期、封面数字图（1-8）</li>
+    <li><strong>封面图：</strong> 每张卡片带有数字标识（1~8），方便快速定位</li>
+    <li><strong>点击卡片：</strong> 跳转原始招标页面查看详情</li>
+    <li><strong>无新增不空推：</strong> 即使无新增数据，也会发送状态简报</li>
+  </ul>
+
+  <div class="highlight">
+    <strong>📱 手机端查看：</strong> 企业微信手机端可点击卡片直接打开招标链接。封面数字图如显示异常，请联系管理员。
+  </div>
+</section>
+
+<!-- ═══ 11. 智能问答 ═══ -->
+<section id="chat">
+  <h2><span class="icon">💬</span> 11. 智能问答</h2>
+  <p>右下角浮动面板提供基于 DeepSeek 大模型的智能问答：</p>
+  <ul>
+    <li><strong>拖拽移动：</strong> 拖住面板顶部标题栏可移动位置（手机端拖动时防止页面滚动）</li>
+    <li><strong>自然语言查询：</strong> 例如「最近一周有哪些智慧工地相关项目」「广东电网今天发了什么标」</li>
+    <li><strong>可点击链接：</strong> AI 回复中的项目链接可直接点击打开</li>
+    <li><strong>多轮对话：</strong> 支持上下文连续对话，AI 记住前面的问题</li>
+    <li><strong>反馈入口：</strong> 面板内嵌反馈按钮，可提交问题或建议</li>
+    <li><strong>手机端：</strong> 不自动弹出，需手动点击打开，避免遮挡内容</li>
+  </ul>
+</section>
+
+<!-- ═══ 12. 常见问题 ═══ -->
+<section id="faq">
+  <h2><span class="icon">❓</span> 12. 常见问题</h2>
+
+  <h3>Q: 为什么有些项目没有预算金额？</h3>
+  <p>部分招标公告原文未公布预算，系统无法提取。这是数据源的问题，不影响项目相关性判断。</p>
+
+  <h3>Q: 相关度评分准吗？</h3>
+  <p>评分基于关键词匹配 + 行业分类，是辅助参考。最终投标决策建议结合人工判断。如发现评分明显偏差，可通过右下角反馈入口提交。</p>
+
+  <h3>Q: 为什么收藏的项目丢了？</h3>
+  <p>收藏数据存储在浏览器本地。清除浏览器数据、更换浏览器或设备会导致收藏丢失。建议重要项目及时导出 CSV。</p>
+
+  <h3>Q: 手机上看不到封面图？</h3>
+  <p>企业微信推送的封面数字图需要网络加载。如显示异常请检查网络，或等待系统修复（已知问题已记录）。</p>
+
+  <h3>Q: 数据多久更新一次？</h3>
+  <p>每日 9:00 和 18:00 自动采集。页面顶部显示「数据更新: MM-DD HH:MM」可确认最新数据时间。</p>
+
+  <h3>Q: 切 Tab 或点今日新增卡片响应慢怎么办？</h3>
+  <p>v1.40 起已优化：今日新增请求体积从 306KB 缩减至 24KB（服务端过滤），v1.41 起启用浏览器缓存（30s）+ 后台预加载。如果仍然慢，请检查网络环境（系统部署在阿里云，非中国内地访问会有延迟）。</p>
+
+  <h3>Q: 今日新增卡片显示 11，为什么点进去招标 8 + 中标 3？</h3>
+  <p>这是正确的：今日新增 11 条 = 8 条招标 + 3 条中标。点击今日新增后，两个 Tab 的徽标会自动切换为今日过滤后的计数，可以分别查看招标和中标维度的今日新增内容。</p>
+
+  <h3>Q: 如何反馈问题？</h3>
+  <p>通过右下角浮动面板中的反馈入口提交，我们会及时处理。</p>
+
+  <h3>Q: 可以订制关注的网站吗？</h3>
+  <p>目前覆盖 344 个站点。如需新增特定平台，请联系管理员添加适配器。</p>
+</section>
+
+</div>
+
+<footer>
+  © 中南电力设计院数智科技 · 文鳐智投 2026 · <a href="https://www.yfzx.online/bidding/changelog.html" style="color:var(--muted)">更新日志</a>
+</footer>
+
+<script>
+const saved = localStorage.getItem('wenyao-theme-manual');
+if (saved === 'light') document.body.classList.remove('dark');
+if (saved === 'dark') document.body.classList.add('dark');
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('wenyao-theme-manual', document.body.classList.contains('dark') ? 'dark' : 'light');
+}
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>

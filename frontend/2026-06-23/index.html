@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>文鳐智投 · 数智科技投标监控</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+header{background:linear-gradient(135deg,#1e293b,#0f172a);border-bottom:2px solid #3b82f6;padding:14px 20px}
+h1{font-size:22px;color:#60a5fa} .ci{display:flex;gap:12px;margin-top:6px;font-size:11px;color:#94a3b8;flex-wrap:wrap}
+.brief{margin:10px 20px;padding:10px 14px;background:#1e293b;border-radius:8px;font-size:13px;border:1px solid #334155}
+.brief .hi{color:#10b981;font-weight:600} .brief .tag{display:inline-block;padding:2px 8px;margin:2px;border-radius:10px;background:#1e293b;border:1px solid #475569;font-size:11px;cursor:pointer;color:#60a5fa;transition:all .2s}
+.brief .tag:hover{border-color:#60a5fa;background:#1e3a5f}
+.top-bar{display:flex;gap:8px;padding:10px 20px;background:#1e293b;flex-wrap:wrap;align-items:center;border-bottom:1px solid #334155}
+.search-box{flex:1;min-width:160px;position:relative}
+.search-box input{width:100%;padding:7px 10px 7px 28px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;font-size:13px}
+.search-box .ic{position:absolute;left:8px;top:8px;color:#64748b;font-size:13px}
+select,input[type=date]{padding:6px 8px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;font-size:12px}
+.btn{padding:6px 12px;border-radius:6px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;cursor:pointer;font-size:12px;white-space:nowrap}
+.btn.ac{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.btn.export{background:#059669;border-color:#059669;color:#fff}
+.btn:hover{border-color:#60a5fa}
+.container{max-width:1600px;margin:0 auto;padding:10px 20px}
+.qa{padding:8px 14px;margin:0 0 8px;background:#1e293b;border-radius:6px;font-size:12px;border:1px solid #334155;display:none}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#1e293b;padding:8px 6px;text-align:left;font-weight:600;color:#94a3b8;border-bottom:2px solid #334155;cursor:pointer;white-space:nowrap;user-select:none}
+th:hover{color:#60a5fa}
+td{padding:7px 6px;border-bottom:1px solid #1e293b;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+tr:hover{background:#1e293b} a{color:#60a5fa;text-decoration:none} a:hover{text-decoration:underline}
+.score-hi{color:#10b981;font-weight:700} .score-mid{color:#f59e0b;font-weight:600} .score-lo{color:#6b7280}
+.pg{display:flex;gap:6px;justify-content:center;margin:16px 0;align-items:center}
+.pg button{padding:5px 10px;border-radius:4px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;cursor:pointer;font-size:11px}
+.pg button:disabled{opacity:.3}
+.pg .pn{padding:5px 8px;border-radius:4px;border:1px solid #334155;background:#1e293b;cursor:pointer;font-size:11px}
+.pg .pn.ac{background:#3b82f6;border-color:#3b82f6}
+footer{text-align:center;padding:16px;color:#475569;font-size:10px}
+.tag.ac{background:#3b82f6!important;border-color:#3b82f6!important;color:#fff!important}
+body.light .tag.ac{background:#2563eb!important;border-color:#2563eb!important;color:#fff!important}
+.top-bar{padding:10px 16px;gap:6px}
+.cnt{font-size:11px;color:#64748b;margin-bottom:6px}
+.trend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:16px}
+.trend-card{background:#1e293b;border-radius:8px;padding:16px;border:1px solid #334155}
+.trend-card h3{font-size:14px;color:#94a3b8;margin-bottom:10px}
+.bar{display:flex;align-items:center;margin:4px 0;font-size:11px}
+.bar-label{width:60px;color:#94a3b8;text-align:right;margin-right:8px;flex-shrink:0}
+.bar-fill{height:18px;border-radius:3px;min-width:2px;display:flex;align-items:center;padding-left:6px;font-size:10px;color:#fff}
+.comp-item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b;font-size:12px}
+.comp-item .cat{color:#64748b;font-size:10px}
+
+@media(min-width:768px){.hide-mobile{display:table-cell}}
+</style></head><body class="light">
+<header><img src="/bidding/img/logo.png" style="height:36px;margin-right:10px;vertical-align:middle;border-radius:6px" alt="logo"><h1>文鳐智投 · 中南电力·数智科技</h1><div class="ci"></div></header>
+<div class="brief" id="briefing">📊 今日发现 <b>64 条</b> · 上次扫描 2026-06-23 23:30</div>
+<div class="top-bar">
+<div class="search-box"><span class="ic">🔍</span><input id="search" placeholder="搜索 标题/业主/省份..." oninput="doFilter()"></div>
+<button class="btn star-filter" id="btnStar" onclick="swStar()" title="只看收藏">⭐ 收藏</button>
+<select id="fScore" onchange="doFilter()"><option value="">全部相关</option><option value="7">🟢高≥7</option><option value="4">🟡中≥4</option><option value="0">⚪低</option></select>
+<select id="fCat" onchange="doFilter()"><option value="">全部客户</option></select>
+<select id="fProv" onchange="doFilter()"><option value="">全部地域</option></select>
+<input type="date" id="dateFrom" onchange="doFilter()" style="width:105px" title="开始日期">
+<input type="date" id="dateTo" onchange="doFilter()" style="width:105px" title="结束日期">
+<button class="btn export" onclick="exportExcel()">📥 导出</button>
+<button class="btn" onclick="resetF()">🔄 重置</button>
+</div>
+<div class="container">
+<div class="qa" id="qaResult"></div>
+<div style="display:flex;gap:6px;margin-bottom:8px">
+<button class="btn ac" id="tabBid" onclick="sw('bid')">📋 招标<span style="font-size:10px;color:#94a3b8" id="cntBid">0)</span></button>
+<button class="btn" id="tabWin" onclick="sw('win')">🏆 中标<span style="font-size:10px;color:#94a3b8" id="cntWin">0)</span></button>
+<button class="btn" id="tabTrend" onclick="sw('trend')">📈 趋势</button>
+<button class="btn" id="tabComp" onclick="sw('comp')">🔍 竞品</button>
+</div>
+<div class="cnt" id="cnt"></div>
+
+<div id="tableBid"><table style="overflow-x:auto"><thead><tr><th style="width:28px;text-align:center"><input type="checkbox" id="checkAllBid" onchange="toggleAll(this)" title="全选"></th><th style="width:30px;text-align:center">#</th><th onclick="srt('relevance_score')">相关</th><th onclick="srt('title')">标题</th><th class="hide-mobile" onclick="srt('category')">客户</th><th class="hide-mobile" onclick="srt('province')">地域</th><th onclick="srt('source_site')">来源</th><th onclick="srt('publish_date')">日期</th><th>链接</th></tr></thead><tbody id="tBidTb"></tbody></table><div class="pg" id="pgBid"></div></div>
+
+<div id="tableWin" style="display:none"><table style="overflow-x:auto"><thead><tr><th style="width:28px;text-align:center"><input type="checkbox" id="checkAllWin" onchange="toggleAll(this)" title="全选"></th><th style="width:30px;text-align:center">#</th><th onclick="srt('relevance_score')">相关</th><th onclick="srt('title')">标题</th><th onclick="srt('winner_company')">中标单位</th><th class="hide-mobile" onclick="srt('category')">客户</th><th class="hide-mobile" onclick="srt('province')">地域</th><th onclick="srt('publish_date')">日期</th><th>链接</th></tr></thead><tbody id="tWinTb"></tbody></table><div class="pg" id="pgWin"></div></div>
+
+<div id="tableTrend" style="display:none"><div class="section-title">📈 趋势看板（近6个月）</div>
+<div class="trend-grid">
+<div class="trend-card"><h3>📋 月度招标数</h3><div id="trendBid"></div></div>
+<div class="trend-card"><h3>🏆 月度中标数</h3><div id="trendWin"></div></div>
+<div class="trend-card"><h3>🟢 高相关项目数</h3><div id="trendHigh"></div></div>
+</div></div>
+
+<div id="tableComp" style="display:none"><div class="section-title">🔍 竞品追踪（90天）</div>
+<div class="trend-grid">
+<div class="trend-card"><h3>📊 竞品分类</h3><div id="compCat"></div></div>
+<div class="trend-card"><h3>🏆 中标排行 TOP 10</h3><div id="compTop"></div></div>
+<div class="trend-card"><h3>💰 大项目预警（≥500万）</h3><div id="bigProj"></div></div>
+</div></div>
+
+</div><footer>© 中南电力设计院数智科技 · 文鳐智投 2026 · <a href="/bidding/changelog.html" style="color:#475569">更新日志</a></footer>
+<script src="app.js?v=7"></script></body></html>
