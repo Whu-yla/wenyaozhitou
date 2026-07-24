@@ -170,13 +170,18 @@ td:nth-child(11) .star{font-size:18px;margin-right:2px}
 @keyframes kebabIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 tr.empty-msg{display:flex!important;justify-content:center;padding:48px 20px!important;background:var(--surface)!important;border-radius:14px!important}
 tr.detail-row{display:block!important}
-/* ── Search box: pill with icon + integrated button ── */
-.search-row{display:flex;align-items:center;gap:8px;width:100%}
-.search-box{display:flex;align-items:center;flex:1;position:relative;border-radius:22px;border:1px solid var(--border);background:var(--surface);overflow:hidden}
-.search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px rgba(59,130,246,.2)}
-.search-box input{flex:1;height:44px;padding:0 8px 0 40px;font-size:16px;border:none;background:transparent;color:var(--text);outline:none;min-width:0}
-.search-box .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;z-index:1;pointer-events:none}
-.search-btn{flex-shrink:0;height:44px;padding:0 18px;font-size:14px;border:none;background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap}
+/* ── Search box: modern pill design ── */
+.search-row{display:flex;align-items:center;gap:12px;width:100%}
+.search-box{display:flex;align-items:center;flex:1;position:relative;border-radius:12px;border:1.5px solid var(--border);background:var(--surface);overflow:hidden;transition:all .3s ease}
+.search-box:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(59,130,246,.15)}
+.search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.15),0 4px 16px rgba(59,130,246,.1)}
+.search-box input{flex:1;height:48px;padding:0 12px 0 44px;font-size:15px;border:none;background:transparent;color:var(--text);outline:none;min-width:0;transition:color .2s}
+.search-box input::placeholder{color:var(--dim);font-weight:400}
+.search-box .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--dim);z-index:1;pointer-events:none;transition:color .2s}
+.search-box:focus-within .search-icon{color:var(--accent)}
+.search-btn{flex-shrink:0;height:48px;padding:0 24px;font-size:15px;font-weight:500;border:none;border-radius:12px;background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap;transition:all .3s ease}
+.search-btn:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.35)}
+.search-btn:active{transform:translateY(0);box-shadow:0 2px 6px rgba(37,99,235,.25)}
 /* ── Filter toggle button ── */
 .filter-toggle-btn{display:flex;align-items:center;gap:4px;height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:14px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s}
 .filter-toggle-btn:active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -293,28 +298,33 @@ tr.empty-msg{display:flex!important;justify-content:center;padding:48px 20px!imp
 .filter-scroll-wrapper::-webkit-scrollbar{display:none}
 .filter-row{flex-wrap:nowrap;gap:8px}
 /* Search row full width */
-.search-row{width:100%}
-.search-box{width:100%}
-.search-box input{height:44px;font-size:16px}
-.search-btn{height:44px;padding:0 20px;font-size:14px}
+.search-row{width:100%;gap:12px}
+.search-box{width:100%;border-radius:12px;border:1.5px solid var(--border);overflow:hidden}
+.search-box input{height:48px;font-size:15px;padding:0 12px 0 44px}
+.search-btn{height:48px;padding:0 24px;font-size:15px;font-weight:500;border-radius:12px}
 /* Filter pill style */
 .filter-row select,.filter-row input[type=date],.filter-row input[type=number]{height:34px;border-radius:17px;background:var(--surface);border:1px solid var(--border);font-size:13px;padding:0 12px;flex-shrink:0}
 body.light .filter-row select,body.light .filter-row input[type=date],body.light .filter-row input[type=number]{background:#e8e8ed;border:none}
 }/* V1.35-mobile-card */
 /* ── Desktop: single-row compact filter bar (all inline) ── */
 @media(min-width:769px){
-  .filter-bar{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;overflow-x:auto}
-  .search-row{flex-shrink:0}
-  .search-box{display:flex;align-items:center;flex:1.2;min-width:240px;max-width:400px;position:relative}
-  .search-box input{flex:1;height:36px;box-sizing:border-box;border-radius:6px 0 0 6px;padding:8px 12px 8px 34px;font-size:13px}
-  .search-btn{height:36px;flex-shrink:0;padding:0 16px;border-radius:0 6px 6px 0;border:1px solid var(--border);border-left:none;background:var(--accent);color:#fff;cursor:pointer;font-size:13px;white-space:nowrap}
-  .search-btn:hover{background:#2563eb}
-  .search-box .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:14px;z-index:1;pointer-events:none}
-  .filter-scroll-wrapper{display:flex!important;flex-wrap:nowrap;align-items:center;gap:6px;overflow:visible!important;flex-shrink:0}
+  .filter-bar{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;overflow-x:auto}
+  .search-row{flex-shrink:0;gap:12px}
+  .search-box{display:flex;align-items:center;flex:1.2;min-width:280px;max-width:420px;position:relative;border-radius:12px;border:1.5px solid var(--border);background:var(--surface);overflow:hidden}
+  .search-box:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(59,130,246,.15)}
+  .search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.15),0 4px 16px rgba(59,130,246,.1)}
+  .search-box input{flex:1;height:42px;box-sizing:border-box;padding:0 12px 0 44px;font-size:14px;border:none;background:transparent;color:var(--text);outline:none}
+  .search-box input::placeholder{color:var(--dim)}
+  .search-btn{height:42px;flex-shrink:0;padding:0 20px;font-size:14px;font-weight:500;border:none;border-radius:12px;background:var(--accent);color:#fff;cursor:pointer;white-space:nowrap;transition:all .3s ease}
+  .search-btn:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,.35)}
+  .search-btn:active{transform:translateY(0)}
+  .search-box .search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:16px;z-index:1;pointer-events:none}
+  .search-box:focus-within .search-icon{color:var(--accent)}
+  .filter-scroll-wrapper{display:flex!important;flex-wrap:nowrap;align-items:center;gap:8px;overflow:visible!important;flex-shrink:0}
   .filter-scroll-wrapper .filter-row{display:contents}
   .filter-scroll-wrapper .filter-row > *{flex-shrink:0}
   .filter-scroll-wrapper .filter-row span[style*="flex:1"]{display:none}
-  select,input[type=date],input[type=number]{height:36px;box-sizing:border-box}
+  select,input[type=date],input[type=number]{height:38px;box-sizing:border-box}
 }/* V1.35-filter-row */
 </style><link rel="stylesheet" href="/bidding/chat-widget.css?v=5">
 </head><body class="light">
