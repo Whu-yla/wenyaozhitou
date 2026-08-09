@@ -1,0 +1,19 @@
+[Unit]
+Description=文鳐智投 GitHub Trending 每周同步 + 技术匹配
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/workspace/scripts
+# 先跑技术匹配（新招标→技术），再拉 GitHub Trending→能源匹配
+ExecStart=/bin/bash -lc "cd /workspace/scripts && python3 tech_matcher.py match 200 --all && python3 github_trending_sync.py sync --limit 80 --no-trending"
+StandardOutput=journal
+StandardError=journal
+TimeoutStopSec=3600
+User=root
+# Environment=GITHUB_TOKEN=xxxxxxxxxxxxxx （可选，提升API限流到5000次/小时）
+
+Restart=on-failure
+RestartSec=120
+RestartMax=1

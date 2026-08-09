@@ -466,10 +466,23 @@ def ensure_db():
             confidence REAL,
             why_it_matters TEXT,
             url TEXT,
+            heat_score REAL DEFAULT 0,
+            fetch_source TEXT,
+            fetch_date TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
+    # ── 迁移：老表新增列 ──
+    for col, dtype in [
+        ("heat_score", "REAL DEFAULT 0"),
+        ("fetch_source", "TEXT"),
+        ("fetch_date", "TEXT"),
+    ]:
+        try:
+            conn.execute(f"ALTER TABLE github_energy ADD COLUMN {col} {dtype}")
+        except sqlite3.OperationalError:
+            pass  # 列已存在，忽略
     conn.commit()
     return conn
 
@@ -646,8 +659,9 @@ def add_demo_github_data():
                 INSERT OR REPLACE INTO github_energy
                 (repo_name, description, language, stars, week_growth,
                  topics_json, matched_scenes_json, top_scene,
-                 confidence, why_it_matters, url, updated_at)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?, CURRENT_TIMESTAMP)
+                 confidence, why_it_matters, url, heat_score,
+                 fetch_source, fetch_date, updated_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?, CURRENT_TIMESTAMP)
             """, (
                 rp["repo_name"], rp["description"][:500], rp["language"],
                 rp["stars"], rp["week_growth"],
@@ -656,7 +670,8 @@ def add_demo_github_data():
                 result["top_scene"],
                 result["confidence"],
                 result["why_it_matters"],
-                f"https://github.com/{rp['repo_name']}"
+                f"https://github.com/{rp['repo_name']}",
+                0, "demo_data", datetime.now().strftime("%Y-%m-%d")
             ))
             inserted += 1
         except Exception as e:

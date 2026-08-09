@@ -461,7 +461,10 @@ function renderTable(data, total) {
             <td class="hide-mobile">${i.region||i.province||'—'}</td>
             <td class="hide-mobile">${source}</td>
             <td class="hide-mobile">${pubDate}</td>
-            <td><a href="${url}" target="_blank" class="link-btn" onclick="event.stopPropagation()">查看</a></td>
+            <td>
+              <button class="tech-btn" onclick="event.stopPropagation();showTechModal(${i.id},'${tab==='win'?'winning':'bidding'}','${esc(title).replace(/'/g,"\\'")}')">🔬 推荐</button>
+              <a href="${url}" target="_blank" class="link-btn" onclick="event.stopPropagation()">查看</a>
+            </td>
         </tr>`;
     });
     
@@ -726,27 +729,38 @@ function renderPg(id, pg, tp) {
 
 // ═══ Tab Switch ═══
 function sw(t) {
-    // DROP stale guard: empty data after star filter was blocking tab switch
-    selectedIds.clear(); expandedId = null; useApi = true;  // always retry API on tab switch
+    selectedIds.clear(); expandedId = null; useApi = true;
     tab = t; pg = 1;
     if (t === "star") { 
         starOnly = true; tab = "bid";
-        // Stat filters don't apply to starred view — deactivate
         activeStatFilter = null;
         renderStatBanner();
         document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
-    }
-    else { 
+    } else if (t === "github") {
+        starOnly = false;
+        activeStatFilter = null;
+    } else { 
         starOnly = false;
     }
-    ["Bid","Win","Star"].forEach(x => {
+    // 切换各Tab面板显示
+    ["Bid","Win","Star","Github"].forEach(x => {
         const btn = document.getElementById("tab"+x);
         const panel = document.getElementById("table"+x);
-        if (btn) btn.classList.toggle("active", (x==="Star"?t==="star":t===x.toLowerCase()));
-        if (panel) panel.style.display = (x==="Star"?t==="star":t===x.toLowerCase())?"":"none";
+        let active;
+        if (x === "Star") active = (t === "star");
+        else if (x === "Github") active = (t === "github");
+        else active = (t === x.toLowerCase()) && (t !== "star") && (t !== "github");
+        if (btn) btn.classList.toggle("active", active);
+        if (panel) panel.style.display = (t==="bid" || t==="star") ? (x==="Bid"?"":"none")
+                                        : (t === x.toLowerCase()) ? "" : "none";
     });
+    // star 也用 bid 表
     document.getElementById("tableBid").style.display = (t==="bid"||t==="star")?"":"none";
-    doFilter();
+    if (t === "github") {
+        loadGithubTrending();
+    } else {
+        doFilter();
+    }
 }
 
 // ═══ Stat card click ═══
@@ -1191,3 +1205,218 @@ function smartEmptyMsg(query, dataCount) {
     if (!query || query.length <= 2) return `🔍 未找到匹配结果 · 尝试更具体的关键词` + clearBtn;
     return `🔍 未找到「${query}」相关结果 · 尝试缩短关键词或扩大日期范围` + clearBtn;
 }
+
+// ═══════════════════════════════════════════════════════════
+// 🔬 技术匹配推荐 Modal + GitHub 热门 Tab
+// ═══════════════════════════════════════════════════════════
+
+/* ── 点击项目「推荐」按钮：调用 API 渲染 Modal ── */
+async function showTechModal(noticeId, ntype, titleFallback) {
+    const root = document.getElementById('techModalRoot');
+    if (!root) return;
+    root.innerHTML = `
+        <div class="modal-mask" onclick="if(event.target===this)closeTechModal()">
+          <div class="modal-box">
+            <div class="modal-head">
+              <div>
+                <h2>🔬 正在分析技术匹配...</h2>
+              </div>
+              <button class="modal-close" onclick="closeTechModal()">×</button>
+            </div>
+            <div class="modal-body">
+              <div style="text-align:center;padding:30px;color:var(--dim)">
+                <div style="font-size:40px;opacity:.4;margin-bottom:10px">⚙️</div>
+                <div>识别业务场景中，请稍候...</div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    try {
+        const r = await fetch(`/bidding/api/tech/notice?id=${noticeId}&type=${ntype}`);
+        const d = await r.json();
+        if (!d.ok) throw new Error(d.error || '加载失败');
+        renderTechModal(d.data, titleFallback);
+    } catch(e) {
+        console.error('tech modal err:', e);
+        const head = document.querySelector('#techModalRoot .modal-head h2');
+        const body = document.querySelector('#techModalRoot .modal-body');
+        if (head) head.textContent = '⚠️ 技术匹配暂不可用';
+        if (body) body.innerHTML = `
+            <div class="empty-tech">
+                <div class="icon">💤</div>
+                <div>${e.message || '服务端暂未返回匹配结果'}</div>
+                <div style="margin-top:12px">
+                    <button class="btn primary" onclick="closeTechModal()" style="font-size:12px">关闭</button>
+                </div>
+            </div>`;
+    }
+}
+
+function closeTechModal() {
+    const root = document.getElementById('techModalRoot');
+    if (root) root.innerHTML = '';
+}
+
+/* ── 渲染技术推荐 Modal 内容 ── */
+function renderTechModal(data, titleFallback) {
+    const root = document.getElementById('techModalRoot');
+    if (!root) return;
+    const confidence = data.confidence || 0;
+    const scenarios = data.scenario_detail || [];
+    const primary = data.primary_tech || [];
+    const secondary = data.secondary_tech || [];
+    const reason = data.recommend_reason || '未识别出明确的技术场景';
+
+    const scenesHtml = scenarios.length
+        ? `<div class="tech-scene-row">${scenarios.map(s =>
+            `<span class="tech-scene-tag">${esc(s.scenario)} ×${s.hits}</span>`).join('')}</div>`
+        : '';
+
+    const renderTechCards = list => list.length
+        ? `<div class="tech-grid">${list.map(t => `
+            <div class="tech-card">
+              <div class="tname">${esc(t.name)}</div>
+              <div class="tcat">${esc(t.category||'')}</div>
+              <div class="twhy">${esc(t.why||'')}</div>
+              ${t.github_stars?`<div class="tstars">★ ${(t.github_stars/1000).toFixed(1)}k Stars</div>`:''}
+            </div>`).join('')}</div>`
+        : `<div class="empty-tech" style="padding:14px"><div>暂无匹配技术</div></div>`;
+
+    const emptyState = confidence <= 0
+        ? `<div class="empty-tech">
+            <div class="icon">🤷</div>
+            <div style="font-weight:600;color:var(--muted);margin-bottom:4px">暂未识别出明确的技术场景</div>
+            <div style="font-size:12px;color:var(--dim)">建议关注标题中是否包含：AI、平台、物联网、安防、可视化等关键词</div>
+           </div>`
+        : '';
+
+    root.innerHTML = `
+        <div class="modal-mask" onclick="if(event.target===this)closeTechModal()">
+          <div class="modal-box">
+            <div class="modal-head">
+              <div style="flex:1;min-width:0">
+                <h2>${esc(titleFallback||'技术栈推荐')}</h2>
+                <div class="reason">💡 ${esc(reason)}</div>
+              </div>
+              <button class="modal-close" onclick="closeTechModal()">×</button>
+            </div>
+            <div class="modal-body">
+              ${scenesHtml}
+              ${confidence>0?`<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px">
+                 <span style="color:var(--muted)">匹配置信度</span>
+                 <b style="color:var(--accent)">${confidence.toFixed(0)} / 100</b>
+               </div>
+               <div class="confidence-bar"><div class="confidence-fill" style="width:${confidence}%"></div></div>`:''}
+              ${emptyState}
+              ${!emptyState && primary.length?`
+                <div class="tech-section">
+                  <h3>🎯 核心推荐技术 (${primary.length})</h3>
+                  ${renderTechCards(primary)}
+                </div>`:''}
+              ${!emptyState && secondary.length?`
+                <div class="tech-section">
+                  <h3>🔧 补充技术方案 (${secondary.length})</h3>
+                  ${renderTechCards(secondary)}
+                </div>`:''}
+            </div>
+          </div>
+        </div>`;
+    // ESC 关闭
+    const escHandler = e => { if (e.key === 'Escape') { closeTechModal(); document.removeEventListener('keydown', escHandler); } };
+    document.addEventListener('keydown', escHandler);
+}
+
+/* ── GitHub 热门能源化 Tab ── */
+let ghAllData = [], ghScene = '', ghPage = 1, ghPs = 20;
+
+async function loadGithubTrending() {
+    const list = document.getElementById('githubList');
+    const badge = document.getElementById('cntGh');
+    if (list) list.innerHTML = `<div style="padding:40px;text-align:center;color:var(--dim)">
+        <div style="font-size:40px;opacity:.4;margin-bottom:8px">🔥</div>
+        <div>正在加载 GitHub 本周热门能源化榜单...</div></div>`;
+    try {
+        const r = await fetch('/bidding/api/tech/github?size=100');
+        const d = await r.json();
+        if (!d.ok) throw new Error(d.error || '加载失败');
+        ghAllData = d.data || [];
+        if (badge) badge.textContent = ghAllData.length;
+        ghScene = ''; ghPage = 1;
+        renderGhSceneFilter();
+        renderGithubList();
+    } catch(e) {
+        console.error('github load err:', e);
+        if (badge) badge.textContent = 0;
+        if (list) list.innerHTML = `<div class="empty-tech"><div class="icon">📭</div>
+            <div>GitHub 数据暂不可用：${esc(e.message||'请稍后重试')}</div>
+            <div style="font-size:11px;color:var(--dim);margin-top:6px">每周一 04:00 自动同步最新热门榜</div></div>`;
+    }
+}
+
+function renderGhSceneFilter() {
+    const scenes = [...new Set(ghAllData.map(d => d.top_scene).filter(Boolean))];
+    const el = document.getElementById('ghSceneFilter');
+    if (!el) return;
+    const total = ghAllData.length;
+    const curScene = ghScene;
+    el.innerHTML = `<button class="tech-tab-btn ${!curScene?'on':''}" onclick="ghScene='';ghPage=1;renderGhSceneFilter();renderGithubList()">全部 ${total}</button>`
+        + scenes.map(s => {
+            const cnt = ghAllData.filter(x => x.top_scene === s).length;
+            return `<button class="tech-tab-btn ${curScene===s?'on':''}" onclick="ghScene=${JSON.stringify(s)};ghPage=1;renderGhSceneFilter();renderGithubList()">${esc(s)} ${cnt}</button>`;
+        }).join('');
+}
+
+function renderGithubList() {
+    const list = document.getElementById('githubList');
+    const infoEl = document.getElementById('pgInfoGh');
+    const pgEl = document.getElementById('pgNumsGh');
+    if (!list) return;
+    let data = ghAllData;
+    if (ghScene) data = data.filter(d => d.top_scene === ghScene);
+    const total = data.length;
+    const totalPages = Math.max(1, Math.ceil(total / ghPs));
+    ghPage = Math.min(ghPage, totalPages);
+    const start = (ghPage - 1) * ghPs;
+    const page = data.slice(start, start + ghPs);
+
+    if (!page.length) {
+        list.innerHTML = `<div class="empty-tech"><div class="icon">📭</div><div>该场景暂无热门项目</div></div>`;
+        if (infoEl) infoEl.textContent = `0/0 共0条`;
+        if (pgEl) pgEl.innerHTML = '';
+        return;
+    }
+    list.innerHTML = page.map(g => {
+        const topics = (g.topics || []).slice(0, 4).map(t =>
+            `<span style="font-size:10px;padding:1px 7px;border-radius:8px;background:rgba(100,116,139,.12);color:var(--muted);margin-right:4px">${esc(t)}</span>`).join('');
+        return `<div class="github-card">
+            ${g.top_scene?`<span class="gh-scene-badge">${esc(g.top_scene)}</span>`:''}
+            <div class="gh-top">
+              <div class="gh-repo"><a href="${esc(g.url||'#')}" target="_blank" rel="noreferrer">${esc(g.repo_name)}</a></div>
+              ${g.language?`<span class="gh-lang">${esc(g.language)}</span>`:''}
+            </div>
+            <div class="gh-desc">${esc(g.description||'暂无描述')}</div>
+            ${topics?`<div style="margin-bottom:8px">${topics}</div>`:''}
+            <div class="gh-meta">
+              <span class="item stars">★ ${g.stars?.toLocaleString()||0}</span>
+              ${g.week_growth?`<span class="item grow">↑${g.week_growth}/周</span>`:''}
+              ${g.confidence?`<span class="item" style="color:var(--green)">匹配 ${g.confidence?.toFixed(0)}%</span>`:''}
+              ${g.why_it_matters?`<span class="item" title="${esc(g.why_it_matters)}">💡 ${esc(g.why_it_matters).substring(0,40)}</span>`:''}
+            </div>
+        </div>`;
+    }).join('');
+    if (infoEl) infoEl.textContent = `${ghPage}/${totalPages} 共${total}条`;
+    if (pgEl) {
+        let h = `<button class="pg-btn" onclick="ghPage=1;renderGithubList()" ${ghPage===1?'disabled':''}>«</button>`;
+        h += `<button class="pg-btn" onclick="ghPage=Math.max(1,ghPage-1);renderGithubList()" ${ghPage===1?'disabled':''}>‹</button>`;
+        const startP = Math.max(1, ghPage - 2), endP = Math.min(totalPages, ghPage + 2);
+        for (let i = startP; i <= endP; i++) h += `<button class="pg-btn${ghPage===i?' active':''}" onclick="ghPage=${i};renderGithubList()">${i}</button>`;
+        h += `<button class="pg-btn" onclick="ghPage=Math.min(${totalPages},ghPage+1);renderGithubList()" ${ghPage===totalPages?'disabled':''}>›</button>`;
+        h += `<button class="pg-btn" onclick="ghPage=${totalPages};renderGithubList()" ${ghPage===totalPages?'disabled':''}>»</button>`;
+        pgEl.innerHTML = h;
+    }
+}
+
+// ESC 全局关闭 Modal
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeTechModal();
+});

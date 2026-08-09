@@ -1,0 +1,10 @@
+[Unit]
+Description=文鳐智投 GitHub Trending 每周同步（每周一 04:00）
+
+[Timer]
+OnCalendar=Mon *-*-* 04:00:00
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
