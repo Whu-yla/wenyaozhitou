@@ -1,0 +1,23 @@
+[Unit]
+Description=文鳐智投 - GitHub Trending 每周数据同步与能源场景匹配
+Documentation=https://github.com/Whu-yla/wenyaozhitou
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/workspace/scripts
+Environment=PYTHONUNBUFFERED=1
+Environment=PATH=/root/.pyenv/versions/3.14.4/bin:/root/.pyenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecStart=/root/.pyenv/versions/3.14.4/bin/python3 /workspace/scripts/github_trending_sync.py
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=wenyao-github-trending
+# 失败时最多重试 2 次，间隔 60 秒
+Restart=on-failure
+RestartSec=60
+RestartMax=2
+
+[Install]
+WantedBy=multi-user.target

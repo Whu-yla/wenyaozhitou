@@ -1,0 +1,15 @@
+[Unit]
+Description=文鳐智投 - GitHub Trending 每周一 03:00(北京时间) 自动同步
+Requires=wenyao-github-trending.service
+
+[Timer]
+Unit=wenyao-github-trending.service
+# 每周一北京时间 03:00:00 触发（系统本地时区为UTC，显式指定 Asia/Shanghai）
+OnCalendar=Mon *-*-* 03:00:00 Asia/Shanghai
+# 开机启动后如果错过一次触发，则立刻补跑一次
+Persistent=true
+# 随机延迟 0~300 秒，避免整点并发
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target

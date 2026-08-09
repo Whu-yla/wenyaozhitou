@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""文鳐智投 书签+反馈微服务 — 端口8090，Nginx反向代理
-V2: 新增 /items (分页查询) + /stats (统计概览)"""
-import json, os, sys, re, urllib.parse, sqlite3
+"""文鳐智投 书签+反馈 + 静态文件托管 — 端口8090
+V2: 新增 /items (分页查询) + /stats (统计概览)
+V3: 内嵌 /bidding/* 静态托管（替代 Flask Proxy），单端口提供所有服务"""
+import json, os, sys, re, urllib.parse, sqlite3, mimetypes
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -154,35 +155,102 @@ class Handler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(200); cors(self); self.end_headers()
 
+    def _resolve_api_path(self):
+        """剥离 /bidding/api 前缀，返回内部逻辑使用的干净 path（带 query）。"""
+        raw = self.path
+        if raw.startswith('/bidding/api/'):
+            return raw[len('/bidding/api'):]  # -> /items?... /stats?...
+        if raw == '/bidding/api':
+            return '/stats'
+        return raw
+
     def do_GET(self):
-        if self.path.startswith('/items'):
+        # 静态文件: /bidding/... / (redirect)
+        path = self.path.split('?', 1)[0]
+        if path == '/' or path == '':
+            self.send_response(302)
+            self.send_header('Location', '/bidding/index.html')
+            self.end_headers()
+            return
+        if path.startswith('/bidding/') or path == '/bidding':
+            ap = self._resolve_api_path()
+            # 若剥离后仍然是 API 路由（表明原 path 就是 /bidding/api/...）
+            if self.path.startswith('/bidding/api/') or self.path.startswith('/bidding/api?'):
+                self.path = ap
+            else:
+                # 纯静态文件
+                return self.handle_static()
+
+        p = self.path
+        if p.startswith('/items'):
             self.handle_items()
-        elif self.path.startswith('/stats'):
+        elif p.startswith('/stats'):
             self.handle_stats()
-        elif self.path.startswith('/feedback'):
+        elif p.startswith('/feedback'):
             self.handle_get_feedback()
-        elif self.path.startswith('/chat'):
+        elif p.startswith('/chat'):
             self.handle_get_chat()
-        elif self.path.startswith('/data'):
+        elif p.startswith('/data'):
             self.handle_get_data()
-        elif self.path.startswith('/tech/summary'):
+        elif p.startswith('/tech/summary'):
             self.handle_tech_summary()
-        elif self.path.startswith('/tech/recommendations'):
+        elif p.startswith('/tech/recommendations'):
             self.handle_tech_recommendations()
-        elif self.path.startswith('/tech/github'):
+        elif p.startswith('/tech/github'):
             self.handle_github_energy()
-        elif self.path.startswith('/tech/notice'):
+        elif p.startswith('/tech/notice'):
             self.handle_tech_for_notice()
         else:
             self.handle_get_bookmarks()
 
     def do_POST(self):
+        if self.path.startswith('/bidding/api/') or self.path == '/bidding/api':
+            self.path = self._resolve_api_path()
         if self.path.startswith('/feedback'):
             self.handle_post_feedback()
         elif self.path.startswith('/chat'):
             self.handle_post_chat()
         else:
             self.handle_post_bookmarks()
+
+    # ═══ 静态文件托管 ═══
+    def handle_static(self):
+        # 去掉 /bidding/ 前缀
+        rel = self.path.split('?', 1)[0]
+        if rel == '/bidding':
+            rel = '/bidding/'
+        if rel.startswith('/bidding/'):
+            rel = rel[len('/bidding/'):]
+        else:
+            rel = rel.lstrip('/')
+        rel = rel.lstrip('/')
+        if rel == '' or rel.endswith('/'):
+            rel += 'index.html'
+        # 防 ../ 穿越
+        candidate = (DATA_DIR / rel).resolve()
+        try:
+            candidate.relative_to(DATA_DIR.resolve())
+        except Exception:
+            self.send_error(403, "Forbidden")
+            return
+        if not candidate.exists() or not candidate.is_file():
+            self.send_error(404, "Not Found")
+            return
+        ctype = (mimetypes.guess_type(str(candidate))[0] or 'application/octet-stream')
+        try:
+            data = candidate.read_bytes()
+        except Exception:
+            self.send_error(500, "Read Error")
+            return
+        self.send_response(200)
+        self.send_header('Content-Type', ctype + '; charset=utf-8' if ctype.startswith(('text/','application/json','application/javascript')) else ctype)
+        self.send_header('Content-Length', str(len(data)))
+        self.send_header('Cache-Control', 'public, max-age=60')
+        self.end_headers()
+        try:
+            self.wfile.write(data)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     # ═══ 分页查询 ═══
     def handle_items(self):
