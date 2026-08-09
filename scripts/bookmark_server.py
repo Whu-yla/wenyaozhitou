@@ -165,6 +165,14 @@ class Handler(BaseHTTPRequestHandler):
             self.handle_get_chat()
         elif self.path.startswith('/data'):
             self.handle_get_data()
+        elif self.path.startswith('/tech/summary'):
+            self.handle_tech_summary()
+        elif self.path.startswith('/tech/recommendations'):
+            self.handle_tech_recommendations()
+        elif self.path.startswith('/tech/github'):
+            self.handle_github_energy()
+        elif self.path.startswith('/tech/notice'):
+            self.handle_tech_for_notice()
         else:
             self.handle_get_bookmarks()
 
@@ -303,6 +311,192 @@ class Handler(BaseHTTPRequestHandler):
             log(f"已写入HOT记忆: {item_id}")
         except Exception as e:
             log(f"写入HOT记忆失败: {e}")
+
+    # ═══ 技术匹配 API ═══
+    def handle_tech_summary(self):
+        try:
+            conn = sqlite3.connect(str(DB_PATH))
+            conn.row_factory = sqlite3.Row
+            total_matched = conn.execute(
+                "SELECT COUNT(*) FROM tech_matches WHERE confidence>0"
+            ).fetchone()[0]
+            scene_rows = conn.execute("""
+                SELECT json_extract(scenarios_json, '$[0].scenario') as scene, COUNT(*) as cnt
+                FROM tech_matches WHERE confidence>0
+                GROUP BY scene ORDER BY cnt DESC LIMIT 15
+            """).fetchall()
+            gh_total = conn.execute("SELECT COUNT(*) FROM github_energy").fetchone()[0]
+            top_scenes = conn.execute("""
+                SELECT top_scene, COUNT(*) as cnt
+                FROM github_energy WHERE top_scene != ''
+                GROUP BY top_scene ORDER BY cnt DESC LIMIT 10
+            """).fetchall()
+            conn.close()
+            self._json(200, {
+                'ok': True,
+                'match_summary': {
+                    'total_matched': total_matched,
+                    'by_scenario': [{'scene': r['scene'] or '未分类', 'count': r['cnt']} for r in scene_rows]
+                },
+                'github_summary': {
+                    'total_repos': gh_total,
+                    'by_scene': [{'scene': r['top_scene'], 'count': r['cnt']} for r in top_scenes]
+                }
+            })
+        except Exception as e:
+            log(f"tech_summary错误: {e}")
+            self._json(500, {'ok': False, 'error': str(e)})
+
+    def handle_tech_recommendations(self):
+        try:
+            qs = urllib.parse.urlparse(self.path).query
+            params = urllib.parse.parse_qs(qs)
+            page = max(1, int(params.get('page', ['1'])[0]))
+            size = min(50, int(params.get('size', ['10'])[0]))
+            offset = (page - 1) * size
+            only_energy = params.get('only_energy', ['0'])[0] == '1'
+            conn = sqlite3.connect(str(DB_PATH))
+            conn.row_factory = sqlite3.Row
+            sql_where = "WHERE t.confidence>=30"
+            sql_params = []
+            if only_energy:
+                sql_where += " AND b.relevance_score>=60"
+            total = conn.execute(f"""
+                SELECT COUNT(*) FROM tech_matches t
+                LEFT JOIN bidding_notices b ON t.notice_id=b.id AND t.notice_type='bidding'
+                {sql_where}
+            """, sql_params).fetchone()[0]
+            rows = conn.execute(f"""
+                SELECT t.*, b.url, b.procurement_owner, b.province,
+                       b.relevance_score as bidding_score, b.publish_date, b.budget_amount
+                FROM tech_matches t
+                LEFT JOIN bidding_notices b ON t.notice_id=b.id AND t.notice_type='bidding'
+                {sql_where}
+                ORDER BY b.relevance_score DESC, t.confidence DESC
+                LIMIT ? OFFSET ?
+            """, sql_params + [size, offset]).fetchall()
+            conn.close()
+            data = []
+            for r in rows:
+                try:
+                    scenarios = json.loads(r["scenarios_json"] or "[]")
+                except Exception:
+                    scenarios = []
+                try:
+                    primary_tech = json.loads(r["primary_tech_json"] or "[]")
+                except Exception:
+                    primary_tech = []
+                try:
+                    secondary_tech = json.loads(r["secondary_tech_json"] or "[]")
+                except Exception:
+                    secondary_tech = []
+                data.append({
+                    "notice_id": r["notice_id"],
+                    "notice_type": r["notice_type"],
+                    "title": r["title"],
+                    "owner": r["procurement_owner"],
+                    "province": r["province"],
+                    "publish_date": r["publish_date"],
+                    "budget": r["budget_amount"],
+                    "bidding_score": r["bidding_score"],
+                    "confidence": r["confidence"],
+                    "reason": r["recommend_reason"],
+                    "scenarios": scenarios,
+                    "primary_tech": primary_tech,
+                    "secondary_tech": secondary_tech,
+                    "url": r["url"],
+                })
+            self._json(200, {
+                'ok': True,
+                'total': total,
+                'page': page,
+                'size': size,
+                'data': data
+            })
+        except Exception as e:
+            log(f"tech_rec错误: {e}")
+            self._json(500, {'ok': False, 'error': str(e)})
+
+    def handle_github_energy(self):
+        try:
+            qs = urllib.parse.urlparse(self.path).query
+            params = urllib.parse.parse_qs(qs)
+            scene = params.get('scene', [None])[0]
+            size = min(50, int(params.get('size', ['30'])[0]))
+            conn = sqlite3.connect(str(DB_PATH))
+            conn.row_factory = sqlite3.Row
+            where = ""
+            sql_params = []
+            if scene:
+                where = "WHERE top_scene=?"
+                sql_params.append(scene)
+            rows = conn.execute(f"""
+                SELECT * FROM github_energy
+                {where} ORDER BY confidence DESC, stars DESC, week_growth DESC
+                LIMIT ?
+            """, sql_params + [size]).fetchall()
+            total = conn.execute(f"SELECT COUNT(*) FROM github_energy {where}").fetchone()[0]
+            conn.close()
+            data = []
+            for r in rows:
+                try:
+                    topics = json.loads(r["topics_json"] or "[]")
+                except Exception:
+                    topics = []
+                try:
+                    matched_scenes = json.loads(r["matched_scenes_json"] or "[]")
+                except Exception:
+                    matched_scenes = []
+                data.append({
+                    "repo_name": r["repo_name"],
+                    "description": r["description"],
+                    "language": r["language"],
+                    "stars": r["stars"],
+                    "week_growth": r["week_growth"],
+                    "topics": topics,
+                    "matched_scenes": matched_scenes,
+                    "top_scene": r["top_scene"],
+                    "confidence": r["confidence"],
+                    "why_it_matters": r["why_it_matters"],
+                    "url": r["url"],
+                })
+            self._json(200, {
+                'ok': True,
+                'total': total,
+                'scene': scene,
+                'data': data
+            })
+        except Exception as e:
+            log(f"github_energy错误: {e}")
+            self._json(500, {'ok': False, 'error': str(e)})
+
+    def handle_tech_for_notice(self):
+        try:
+            qs = urllib.parse.urlparse(self.path).query
+            params = urllib.parse.parse_qs(qs)
+            notice_id = int(params.get('id', ['0'])[0])
+            ntype = params.get('type', ['bidding'])[0]
+            table = 'bidding_notices' if ntype == 'bidding' else 'winning_notices'
+            conn = sqlite3.connect(str(DB_PATH))
+            conn.row_factory = sqlite3.Row
+            row = conn.execute(
+                f"SELECT id, title, content_summary, province, category FROM {table} WHERE id=?",
+                (notice_id,)
+            ).fetchone()
+            conn.close()
+            if not row:
+                self._json(404, {'ok': False, 'error': '未找到该公告'})
+                return
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            from tech_matcher import match_tech_for_notice
+            result = match_tech_for_notice(
+                row["id"], row["title"], row["content_summary"] or "",
+                row["province"] or "", row["category"] or ""
+            )
+            self._json(200, {'ok': True, 'data': result})
+        except Exception as e:
+            log(f"tech_notice错误: {e}")
+            self._json(500, {'ok': False, 'error': str(e)})
 
     # ═══ 旧数据 API (保留兼容) ═══
     def handle_get_data(self):

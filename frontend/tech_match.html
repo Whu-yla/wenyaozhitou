@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>文鳐智投 · 技术匹配引擎</title>
+<link rel="icon" type="image/png" href="/bidding/img/logo.png">
+<style>
+:root{
+  --bg:#0b0f17;--surface:#141a26;--surface-2:#1c2434;
+  --border:#2a3345;--text:#e5eaf3;--muted:#94a3b8;--dim:#64748b;
+  --accent:#3b82f6;--accent-2:#2563eb;
+  --green:#10b981;--amber:#f59e0b;--red:#ef4444;--purple:#8b5cf6;
+  --radius:14px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Header */
+.hero{background:linear-gradient(135deg,#0b1229,#1e293b);border-bottom:1px solid var(--border)}
+.hero-inner{max-width:1280px;margin:0 auto;padding:48px 24px 36px}
+.hero-title{font-size:32px;font-weight:700;background:linear-gradient(135deg,#60a5fa,#8b5cf6);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+.hero-sub{color:var(--muted);font-size:15px;margin-bottom:20px}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;
+  background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.3)}
+.tag.purple{background:rgba(139,92,246,.12);color:#c4b5fd;border-color:rgba(139,92,246,.3)}
+.tag.green{background:rgba(16,185,129,.12);color:#6ee7b7;border-color:rgba(16,185,129,.3)}
+.tag.amber{background:rgba(245,158,11,.12);color:#fcd34d;border-color:rgba(245,158,11,.3)}
+
+/* Tabs */
+.tab-bar{max-width:1280px;margin:0 auto;padding:0 24px;border-bottom:1px solid var(--border)}
+.tab-list{display:flex;gap:0}
+.tab{padding:16px 24px;font-size:15px;font-weight:500;color:var(--muted);
+  cursor:pointer;transition:all .2s;border-bottom:2px solid transparent;user-select:none}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab .num{margin-left:6px;padding:2px 8px;border-radius:10px;font-size:12px;background:var(--surface-2);color:var(--muted)}
+.tab.active .num{background:var(--accent);color:#fff}
+
+/* Container */
+.container{max-width:1280px;margin:0 auto;padding:32px 24px 80px}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Stats grid */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;transition:all .2s}
+.stat-card:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(59,130,246,.1)}
+.stat-label{font-size:13px;color:var(--muted);margin-bottom:8px}
+.stat-value{font-size:32px;font-weight:700;color:var(--text)}
+.stat-card.accent .stat-value{color:var(--accent)}
+.stat-card.green .stat-value{color:var(--green)}
+.stat-card.amber .stat-value{color:var(--amber)}
+.stat-card.purple .stat-value{color:var(--purple)}
+.stat-hint{font-size:12px;color:var(--dim);margin-top:6px}
+
+/* Section title */
+.section-title{font-size:18px;font-weight:600;margin:28px 0 16px;display:flex;align-items:center;gap:8px}
+.section-title::before{content:"";display:block;width:4px;height:20px;background:var(--accent);border-radius:2px}
+
+/* Scenario bars */
+.scenario-bar{display:flex;align-items:center;margin-bottom:10px;gap:12px}
+.scenario-bar .label{font-size:13px;width:140px;flex-shrink:0;color:var(--muted)}
+.scenario-bar .bar-wrap{flex:1;background:var(--surface-2);border-radius:8px;height:24px;overflow:hidden;position:relative}
+.scenario-bar .bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));
+  border-radius:8px;transition:width .6s ease}
+.scenario-bar .count{font-size:12px;color:var(--text);font-weight:600;width:40px;text-align:right}
+
+/* Card grid */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(480px,1fr));gap:16px}
+.rec-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;transition:all .2s;position:relative;overflow:hidden}
+.rec-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,.15)}
+.rec-card .badge{position:absolute;top:12px;right:12px;padding:4px 10px;border-radius:12px;
+  font-size:11px;font-weight:600}
+.badge-high{background:rgba(16,185,129,.15);color:#34d399}
+.badge-mid{background:rgba(245,158,11,.15);color:#fbbf24}
+.badge-low{background:rgba(100,116,139,.15);color:#94a3b8}
+.rec-title{font-size:15px;font-weight:600;line-height:1.5;margin-bottom:8px;padding-right:60px;color:var(--text)}
+.rec-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:12px;color:var(--dim)}
+.rec-meta span{display:flex;align-items:center;gap:4px}
+.rec-reason{font-size:12px;color:var(--muted);padding:8px 12px;background:var(--surface-2);
+  border-radius:8px;margin-bottom:14px;line-height:1.5}
+.tech-label{font-size:12px;font-weight:600;color:var(--accent);margin:12px 0 8px;
+  display:flex;align-items:center;gap:6px}
+.tech-label::before{content:"";width:3px;height:12px;background:var(--accent);border-radius:2px}
+.tech-label.secondary{color:var(--purple)}
+.tech-label.secondary::before{background:var(--purple)}
+.tech-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tech-chip{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--surface-2);
+  border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--text);
+  transition:all .15s;cursor:default}
+.tech-chip:hover{border-color:var(--accent);background:rgba(59,130,246,.1)}
+.tech-chip .cat{font-size:10px;color:var(--dim);padding:1px 6px;background:var(--bg);border-radius:8px}
+.tech-chip .stars{font-size:10px;color:var(--amber)}
+.tech-chip.secondary{border-left:2px solid var(--purple)}
+
+/* GitHub repos */
+.repo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px}
+.repo-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;transition:all .2s;position:relative}
+.repo-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(59,130,246,.12)}
+.repo-score{position:absolute;top:12px;right:12px;width:48px;height:48px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#fff;flex-direction:column;line-height:1.1}
+.repo-score span{font-size:9px;opacity:.85;font-weight:400}
+.repo-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.lang-dot{width:10px;height:10px;border-radius:50%}
+.repo-name{font-size:15px;font-weight:600;color:var(--text)}
+.repo-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px;min-height:42px}
+.repo-meta{display:flex;align-items:center;gap:14px;font-size:12px;color:var(--dim);margin-bottom:12px}
+.repo-meta .stars{color:var(--amber);font-weight:600}
+.repo-meta .growth{color:var(--green);font-weight:600}
+.repo-scenes{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.repo-why{font-size:12px;color:var(--muted);margin-bottom:8px}
+.repo-scene-tags{display:flex;flex-wrap:wrap;gap:6px}
+.scene-tag{padding:4px 10px;border-radius:14px;font-size:11px;font-weight:500;
+  background:rgba(59,130,246,.12);color:#93c5fd;border:1px solid rgba(59,130,246,.25)}
+.scene-tag.primary{background:rgba(16,185,129,.15);color:#6ee7b7;border-color:rgba(16,185,129,.3)}
+.repo-topics{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.repo-topics span{font-size:10px;padding:2px 6px;background:var(--surface-2);
+  color:var(--dim);border-radius:4px}
+
+/* Scene filter */
+.filter-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.pill{padding:8px 14px;border-radius:20px;font-size:13px;background:var(--surface);
+  border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s}
+.pill:hover{border-color:var(--accent);color:var(--text)}
+.pill.active{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:500}
+
+/* Footer */
+footer{max-width:1280px;margin:0 auto;padding:20px 24px 40px;color:var(--dim);font-size:12px;
+  text-align:center;border-top:1px solid var(--border)}
+
+/* Empty */
+.empty{padding:48px;text-align:center;color:var(--dim);font-size:14px}
+
+/* Loading */
+.loading{display:flex;justify-content:center;padding:48px;color:var(--muted);font-size:14px}
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .8s linear infinite;margin-right:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Responsive */
+@media(max-width:768px){
+  .card-grid,.repo-grid{grid-template-columns:1fr}
+  .hero-title{font-size:24px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat-value{font-size:24px}
+  .scenario-bar .label{width:96px;font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-title">🔗 技术匹配引擎 · 双向打通</div>
+    <div class="hero-sub">文鳐智投：业主招标需求 ↔ 开源技术栈 / GitHub 热门榜，自动双向智能匹配</div>
+    <div class="hero-tags">
+      <span class="tag">📋 需求 → 技术推荐</span>
+      <span class="tag purple">🚀 GitHub 热门 → 能源场景</span>
+      <span class="tag green">⚡ 能源行业深度适配</span>
+      <span class="tag amber">🏷️ 15+ 业务场景库</span>
+    </div>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <div class="tab-list">
+    <div class="tab active" data-tab="overview" onclick="sw('overview')">📊 总览 <span class="num" id="cntOver">...</span></div>
+    <div class="tab" data-tab="need2tech" onclick="sw('need2tech')">📋 需求 → 技术 <span class="num" id="cntN2T">...</span></div>
+    <div class="tab" data-tab="github" onclick="sw('github')">🚀 GitHub 热门 <span class="num" id="cntGitHub">...</span></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ═══ 总览 ═══ -->
+  <div class="tab-panel active" id="p-overview">
+    <div class="stats">
+      <div class="stat-card accent"><div class="stat-label">招标需求已匹配</div>
+        <div class="stat-value" id="s-matched">0</div>
+        <div class="stat-hint">命中业务场景的招标/中标项目</div></div>
+      <div class="stat-card green"><div class="stat-label">GitHub 热门仓库</div>
+        <div class="stat-value" id="s-repos">0</div>
+        <div class="stat-hint">已完成能源场景化的热门Repo</div></div>
+      <div class="stat-card amber"><div class="stat-label">覆盖业务场景</div>
+        <div class="stat-value" id="s-scenes">0</div>
+        <div class="stat-hint">智慧工地/AI/IoT/孪生/信创 等</div></div>
+      <div class="stat-card purple"><div class="stat-label">匹配的开源技术</div>
+        <div class="stat-value" id="s-techs">0</div>
+        <div class="stat-hint">推荐过的开源框架/库/工具数量</div></div>
+    </div>
+
+    <div class="section-title">需求侧 — 业务场景分布</div>
+    <div id="sceneBars"></div>
+
+    <div class="section-title">技术侧 — GitHub 能源场景分布</div>
+    <div id="ghSceneBars"></div>
+  </div>
+
+  <!-- ═══ 需求 → 技术 ═══ -->
+  <div class="tab-panel" id="p-need2tech">
+    <div class="filter-pills" id="recFilters">
+      <div class="pill active" data-score="0">全部推荐</div>
+      <div class="pill" data-score="60">高相关（≥60）</div>
+      <div class="pill" data-score="70">强相关（≥70）</div>
+    </div>
+    <div class="card-grid" id="recCards">
+      <div class="loading"><div class="spinner"></div>加载中...</div>
+    </div>
+  </div>
+
+  <!-- ═══ GitHub 热门 ═══ -->
+  <div class="tab-panel" id="p-github">
+    <div class="filter-pills" id="ghFilters">
+      <div class="pill active" data-scene="">全部场景</div>
+    </div>
+    <div class="repo-grid" id="repoCards">
+      <div class="loading"><div class="spinner"></div>加载中...</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © 中南电力设计院数智科技 · 文鳐智投 2026 · 技术匹配引擎 v1.0
+</footer>
+
+<script>
+let summaryData = null, recData = [], repoData = [];
+const API = "/bidding/api";
+
+/* --- Tabs --- */
+function sw(tab){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active', el.dataset.tab===tab));
+  document.querySelectorAll('.tab-panel').forEach(el=>el.classList.toggle('active', el.id==='p-'+tab));
+}
+
+/* --- Helpers --- */
+const fmtStars = v => {
+  if(v>=10000) return (v/10000).toFixed(1)+'w';
+  if(v>=1000) return (v/1000).toFixed(1)+'k';
+  return v;
+};
+const getLangColor = l => ({
+  "Python":"#3572A5","TypeScript":"#3178c6","JavaScript":"#f1e05a","Java":"#b07219",
+  "Go":"#00ADD8","Rust":"#dea584","C++":"#f34b7d","C":"#555555","Erlang":"#B83998",
+  "C#":"#178600"
+})[l]||"#64748b";
+const confColor = c => c>=75?'#10b981':c>=50?'#f59e0b':'#64748b';
+const badgeCls = c => c>=75?'badge-high':c>=50?'badge-mid':'badge-low';
+
+/* --- Load overview --- */
+async function loadOverview(){
+  try{
+    const r = await fetch(API+"/tech/summary");
+    const d = await r.json();
+    if(!d.ok) throw new Error(d.error);
+    summaryData = d;
+    document.getElementById("s-matched").textContent = d.match_summary.total_matched;
+    document.getElementById("s-repos").textContent = d.github_summary.total_repos;
+    document.getElementById("s-scenes").textContent = Math.max(d.match_summary.by_scenario.length, d.github_summary.by_scene.length);
+
+    const r2 = await fetch(API+"/tech/recommendations?size=50");
+    const d2 = await r2.json();
+    let techCount = new Set();
+    d2.data.forEach(x => {
+      x.primary_tech.forEach(t=>techCount.add(t.name));
+      x.secondary_tech.forEach(t=>techCount.add(t.name));
+    });
+    document.getElementById("s-techs").textContent = techCount.size;
+    document.getElementById("cntOver").textContent = d.match_summary.total_matched;
+
+    // scenario bars
+    renderBars("sceneBars", d.match_summary.by_scenario, 'count');
+    renderBars("ghSceneBars", d.github_summary.by_scene, 'count');
+
+    // github scene filter
+    const fh = document.getElementById("ghFilters");
+    d.github_summary.by_scene.forEach(s => {
+      const p = document.createElement("div");
+      p.className="pill"; p.dataset.scene = s.scene;
+      p.innerHTML = `${s.scene} <span style="opacity:.6">(${s.count})</span>`;
+      p.onclick = ()=>{fh.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));p.classList.add('active');loadRepos(s.scene)};
+      fh.appendChild(p);
+    });
+  }catch(e){console.error(e);}
+}
+
+function renderBars(id, arr, valKey){
+  const el = document.getElementById(id);
+  if(!arr||!arr.length){el.innerHTML='<div class="empty">暂无数据</div>';return}
+  const max = Math.max(...arr.map(x=>x[valKey]));
+  el.innerHTML = arr.map(x=>{
+    const pct = (x[valKey]/max*100).toFixed(1);
+    const label = x.scene || x.area || '未分类';
+    return `<div class="scenario-bar">
+      <div class="label">${label}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
+      <div class="count">${x[valKey]}</div></div>`;
+  }).join('');
+}
+
+/* --- Load recommendations --- */
+async function loadRecommendations(minScore=0){
+  const box = document.getElementById("recCards");
+  box.innerHTML = '<div class="loading"><div class="spinner"></div>加载中...</div>';
+  try{
+    const r = await fetch(API+`/tech/recommendations?size=50`);
+    const d = await r.json();
+    recData = d.data.filter(x => (x.bidding_score||0) >= minScore);
+    document.getElementById("cntN2T").textContent = d.total;
+    if(!recData.length){box.innerHTML='<div class="empty">暂无匹配数据</div>';return}
+    box.innerHTML = recData.map(x => recCard(x)).join('');
+  }catch(e){box.innerHTML='<div class="empty">加载失败: '+e.message+'</div>'}
+}
+
+function recCard(x){
+  const score = x.confidence||0;
+  const scenarios = (x.scenarios||[]).map(s=>`<span class="scene-tag primary">${s.scenario||s} ×${s.hits||''}</span>`).join(' ');
+  const ptechs = (x.primary_tech||[]).map(t=>`
+    <div class="tech-chip" title="${t.why||''}">
+      <strong>${t.name}</strong>
+      <span class="cat">${t.category||''}</span>
+      ${t.github_stars?`<span class="stars">★${fmtStars(t.github_stars)}</span>`:''}
+    </div>`).join('');
+  const stechs = (x.secondary_tech||[]).map(t=>`
+    <div class="tech-chip secondary" title="${t.why||''}">
+      <strong>${t.name}</strong>
+      <span class="cat">${t.category||''}</span>
+      ${t.github_stars?`<span class="stars">★${fmtStars(t.github_stars)}</span>`:''}
+    </div>`).join('');
+  return `<div class="rec-card">
+    <div class="badge ${badgeCls(score)}">匹配 ${Math.round(score)}分</div>
+    <div class="rec-title">${x.title||''}</div>
+    <div class="rec-meta">
+      <span>👤 ${x.owner||'—'}</span>
+      <span>📍 ${x.province||'—'}</span>
+      <span>📅 ${x.publish_date||'—'}</span>
+      ${x.budget?`<span>💰 ${x.budget}</span>`:''}
+    </div>
+    <div class="rec-reason">💡 ${x.reason||''}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">${scenarios}</div>
+    ${ptechs?`<div class="tech-label">首选技术栈 <span style="color:var(--dim);font-weight:400;font-size:11px">（直接应用）</span></div>
+      <div class="tech-chips">${ptechs}</div>`:''}
+    ${stechs?`<div class="tech-label secondary">配套组件 <span style="color:var(--dim);font-weight:400;font-size:11px">（基础设施/工具链）</span></div>
+      <div class="tech-chips">${stechs}</div>`:''}
+  </div>`;
+}
+
+/* --- Load GitHub repos --- */
+async function loadRepos(scene){
+  const box = document.getElementById("repoCards");
+  box.innerHTML = '<div class="loading"><div class="spinner"></div>加载中...</div>';
+  try{
+    const url = API + "/tech/github?size=50" + (scene?`&scene=${encodeURIComponent(scene)}`:'');
+    const r = await fetch(url);
+    const d = await r.json();
+    repoData = d.data;
+    document.getElementById("cntGitHub").textContent = d.total;
+    if(!repoData.length){box.innerHTML='<div class="empty">暂无数据</div>';return}
+    box.innerHTML = repoData.map(x => repoCard(x)).join('');
+  }catch(e){box.innerHTML='<div class="empty">加载失败: '+e.message+'</div>'}
+}
+
+function repoCard(x){
+  const conf = x.confidence||0;
+  const confC = confColor(conf);
+  const scenes = (x.matched_scenes||[])
+    .sort((a,b)=>b.score-a.score)
+    .slice(0,3)
+    .map((s,i)=>`<span class="scene-tag ${i===0?'primary':''}">${s.scene} ${i===0?'✓':''}</span>`).join('');
+  const topics = (x.topics||[]).slice(0,5).map(t=>`<span>${t}</span>`).join('');
+  return `<a class="repo-card" href="${x.url||'#'}" target="_blank" style="text-decoration:none;color:inherit">
+    <div class="repo-score" style="background:linear-gradient(135deg,${confC},var(--accent))">
+      ${Math.round(conf)}<span>分</span></div>
+    <div class="repo-header">
+      <span class="lang-dot" style="background:${getLangColor(x.language)}"></span>
+      <span class="repo-name">${x.repo_name||''}</span>
+    </div>
+    <div class="repo-desc">${x.description||'—'}</div>
+    <div class="repo-meta">
+      <span>${x.language||'—'}</span>
+      <span class="stars">★ ${fmtStars(x.stars||0)}</span>
+      <span class="growth">↑ +${fmtStars(x.week_growth||0)}</span>
+    </div>
+    <div class="repo-scenes">
+      <div class="repo-why">🔗 ${x.why_it_matters||''}</div>
+      <div class="repo-scene-tags">${scenes}</div>
+    </div>
+    ${topics?`<div class="repo-topics">${topics}</div>`:''}
+  </a>`;
+}
+
+/* --- Filter bindings --- */
+document.getElementById("recFilters").addEventListener("click", e=>{
+  if(!e.target.classList.contains("pill")) return;
+  document.querySelectorAll("#recFilters .pill").forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+  loadRecommendations(parseInt(e.target.dataset.score));
+});
+
+/* --- Init --- */
+loadOverview();
+loadRecommendations();
+loadRepos('');
+</script>
+</body>
+</html>
