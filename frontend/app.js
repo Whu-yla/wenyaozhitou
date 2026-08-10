@@ -1394,11 +1394,13 @@ function renderGithubList() {
         const surgePct = stars > 0 ? Math.round(growth / stars * 100) : 0;
         const surgeLabel = surgePct >= 30 ? '🔥🔥🔥' : surgePct >= 10 ? '🔥🔥' : surgePct >= 3 ? '🔥' : '';
         return `<div class="github-card">
-            ${g.top_scene?`<span class="gh-scene-badge">${esc(g.top_scene)}</span>`:''}
             <div class="gh-top">
               <div class="gh-repo"><a href="${esc(g.url||'#')}" target="_blank" rel="noreferrer">${esc(g.repo_name)}</a></div>
-              ${surgePct >= 3 ? `<span class="gh-surge">${surgeLabel} 飙升${surgePct}%</span>` : ''}
-              ${g.language?`<span class="gh-lang">${esc(g.language)}</span>`:''}
+              <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+                ${g.top_scene?`<span class="gh-scene-badge">${esc(g.top_scene)}</span>`:''}
+                ${surgePct >= 3 ? `<span class="gh-surge">${surgeLabel} 飙升${surgePct}%</span>` : ''}
+                ${g.language?`<span class="gh-lang">${esc(g.language)}</span>`:''}
+              </div>
             </div>
             <div class="gh-desc">${esc(g.description||'暂无描述')}</div>
             ${topics?`<div style="margin-bottom:8px">${topics}</div>`:''}
