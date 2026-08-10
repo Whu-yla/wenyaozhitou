@@ -1333,8 +1333,8 @@ async function loadGithubTrending() {
     const list = document.getElementById('githubList');
     const badge = document.getElementById('cntGh');
     if (list) list.innerHTML = `<div style="padding:40px;text-align:center;color:var(--dim)">
-        <div style="font-size:40px;opacity:.4;margin-bottom:8px">🔥</div>
-        <div>正在加载 GitHub 本周热门能源化榜单...</div></div>`;
+        <div style="font-size:40px;opacity:.4;margin-bottom:8px">🚀</div>
+        <div>正在加载 GitHub 飙升榜（近 3 个月新星项目）...</div></div>`;
     try {
         const r = await fetch('/bidding/api/tech/github?size=100');
         const d = await r.json();
@@ -1349,7 +1349,7 @@ async function loadGithubTrending() {
         if (badge) badge.textContent = 0;
         if (list) list.innerHTML = `<div class="empty-tech"><div class="icon">📭</div>
             <div>GitHub 数据暂不可用：${esc(e.message||'请稍后重试')}</div>
-            <div style="font-size:11px;color:var(--dim);margin-top:6px">每周一 04:00 自动同步最新热门榜</div></div>`;
+            <div style="font-size:11px;color:var(--dim);margin-top:6px">每周一 03:00 自动同步最新飙升榜</div></div>`;
     }
 }
 
@@ -1388,17 +1388,24 @@ function renderGithubList() {
     list.innerHTML = page.map(g => {
         const topics = (g.topics || []).slice(0, 4).map(t =>
             `<span style="font-size:10px;padding:1px 7px;border-radius:8px;background:rgba(100,116,139,.12);color:var(--muted);margin-right:4px">${esc(t)}</span>`).join('');
+        // 飙升比：周增长 / 总stars，越高越"新"
+        const stars = g.stars || 0;
+        const growth = g.week_growth || 0;
+        const surgePct = stars > 0 ? Math.round(growth / stars * 100) : 0;
+        const surgeLabel = surgePct >= 30 ? '🔥🔥🔥' : surgePct >= 10 ? '🔥🔥' : surgePct >= 3 ? '🔥' : '';
         return `<div class="github-card">
             ${g.top_scene?`<span class="gh-scene-badge">${esc(g.top_scene)}</span>`:''}
             <div class="gh-top">
               <div class="gh-repo"><a href="${esc(g.url||'#')}" target="_blank" rel="noreferrer">${esc(g.repo_name)}</a></div>
+              ${surgePct >= 3 ? `<span class="gh-surge">${surgeLabel} 飙升${surgePct}%</span>` : ''}
               ${g.language?`<span class="gh-lang">${esc(g.language)}</span>`:''}
             </div>
             <div class="gh-desc">${esc(g.description||'暂无描述')}</div>
             ${topics?`<div style="margin-bottom:8px">${topics}</div>`:''}
             <div class="gh-meta">
-              <span class="item stars">★ ${g.stars?.toLocaleString()||0}</span>
-              ${g.week_growth?`<span class="item grow">↑${g.week_growth}/周</span>`:''}
+              <span class="item stars">★ ${stars?.toLocaleString()||0}</span>
+              ${growth?`<span class="item grow">↑${growth}/周</span>`:''}
+              ${surgePct >= 3 ? `<span class="item" style="color:var(--amber)">⚡ 周增${surgePct}%</span>` : ''}
               ${g.confidence?`<span class="item" style="color:var(--green)">匹配 ${g.confidence?.toFixed(0)}%</span>`:''}
               ${g.why_it_matters?`<span class="item" title="${esc(g.why_it_matters)}">💡 ${esc(g.why_it_matters).substring(0,40)}</span>`:''}
             </div>

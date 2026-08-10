@@ -500,7 +500,7 @@ class Handler(BaseHTTPRequestHandler):
                 sql_params.append(scene)
             rows = conn.execute(f"""
                 SELECT * FROM github_energy
-                {where} ORDER BY confidence DESC, stars DESC, week_growth DESC
+                {where} ORDER BY heat_score DESC, week_growth DESC, stars DESC
                 LIMIT ?
             """, sql_params + [size]).fetchall()
             total = conn.execute(f"SELECT COUNT(*) FROM github_energy {where}").fetchone()[0]
@@ -527,6 +527,8 @@ class Handler(BaseHTTPRequestHandler):
                     "confidence": r["confidence"],
                     "why_it_matters": r["why_it_matters"],
                     "url": r["url"],
+                    "heat_score": r["heat_score"] if "heat_score" in r.keys() else 0,
+                    "fetch_date": r["fetch_date"] if "fetch_date" in r.keys() else None,
                 })
             self._json(200, {
                 'ok': True,

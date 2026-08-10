@@ -36,25 +36,31 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
 # gh-trending-api 地址 (第三方)
 GH_TRENDING_API = os.getenv("GH_TRENDING_API", "https://gh-trending-api.herokuapp.com")
 
-# 搜索关键词组合 — 匿名 API 限流 60req/h，每一条本身已经带 stars 条件，不用再 append
+# 搜索关键词组合 — 飙升榜策略：聚焦近 3 个月内创建的新项目 + 低 stars 门槛 + stars 上限
+# 目标：发现"刚冒头"的新技术，而非已成熟的老牌框架（排除 stars>5000 的成熟项目）
+# 匿名 API 限流 60req/h，共 9 条查询，每条 per_page=30
 SEARCH_TOPICS = [
-    # 综合热门：覆盖面广（老牌项目 + 新星）
-    ("stars:>10000", "weekly"),
-    ("stars:>3000 created:>2024-01-01", "weekly"),
-    # AI/大模型/RAG/Agent
-    ("(llm OR rag OR agent OR transformers) stars:>1500", "weekly"),
-    # 视觉识别/AI
-    ("(yolo OR ocr OR \"computer-vision\" OR detection) stars:>800", "weekly"),
-    # IoT/物联网/工业
-    ("(iot OR mqtt OR \"industrial\" OR \"edge-computing\") stars:>500", "weekly"),
-    # 数据库/大数据
-    ("(database OR olap OR \"data-lake\" OR spark OR flink) stars:>800", "weekly"),
-    # 可视化/3D/GIS/前端
-    ("(visualization OR \"3d\" OR gis OR frontend OR threejs) stars:>1500", "weekly"),
-    # 安全/工控安全
-    ("(security OR ids OR vpn OR \"zero-trust\" OR siem) stars:>800", "weekly"),
-    # 时序/预测/能源
-    ("(\"time-series\" OR forecasting OR energy OR solar OR wind) stars:>500", "weekly"),
+    # ── 飙升榜：近 3 个月创建、已有一定 stars 但还没爆火的新项目 ──
+    # 注意：GitHub Search API 不支持 "stars:>N stars:<M" 两个并列限定符（上界会被忽略），
+    # 必须用 range 语法 "stars:N..M" 才能正确限定区间。
+    # AI/大模型/Agent 新星（20~5000 stars，刚冒头的）
+    ("(llm OR rag OR agent OR vllm OR mcp) stars:20..5000 created:>2026-05-01", "weekly"),
+    # AI 视觉/识别 新星
+    ("(yolo OR ocr OR detection OR segmentation OR \"vision-language\") stars:15..5000 created:>2026-05-01", "weekly"),
+    # IoT/边缘计算/工业 新星
+    ("(iot OR mqtt OR \"edge-ai\" OR \"industrial-iot\" OR opcua) stars:10..3000 created:>2026-05-01", "weekly"),
+    # 数据库/时序/大数据 新星
+    ("(database OR olap OR timeseries OR \"data-lake\" OR vector-db) stars:15..5000 created:>2026-05-01", "weekly"),
+    # 3D/可视化/数字孪生/GIS 新星
+    ("(visualization OR \"3d\" OR gis OR \"digital-twin\" OR threejs) stars:15..5000 created:>2026-05-01", "weekly"),
+    # 安全/零信任/工控安全 新星
+    ("(security OR \"zero-trust\" OR siem OR ics OR scada) stars:10..3000 created:>2026-05-01", "weekly"),
+    # 能源/电力/光伏/风电 预测 新星
+    ("(energy OR solar OR wind OR power-grid OR forecasting) stars:8..3000 created:>2026-05-01", "weekly"),
+    # ── 飙升榜补充：近 6 个月创建、stars 50~5000 的成长期项目 ──
+    ("(ai OR llm OR agent) stars:50..5000 created:>2026-02-01", "weekly"),
+    # ── 近期活跃：近 1 周 push、stars 100~5000、created 近 1 年 ──
+    ("(llm OR rag OR agent OR iot OR visualization) stars:100..5000 pushed:>2026-08-03 created:>2025-08-01", "weekly"),
 ]
 
 LANG_WEIGHT = {"Python": 1.2, "TypeScript": 1.1, "JavaScript": 1.0,
@@ -210,8 +216,8 @@ def normalize_repo(item: Dict, source: str, session: requests.Session) -> Option
 
 def compute_tech_heat_score(nrepo: Dict) -> float:
     """
-    综合热度分：加权 stars + 周增长 + 语言偏好 + 主题
-    用来做能源匹配前的粗排序
+    飙升榜热度分：偏重「增长比」(week_growth/stars) 而非绝对 stars
+    → 新项目 100 stars 但周增 30 → 增长比 30%，得分远高于老项目 100k stars 周增 100
     """
     stars = nrepo.get("stars", 0)
     growth = nrepo.get("week_growth", 0)
@@ -221,13 +227,18 @@ def compute_tech_heat_score(nrepo: Dict) -> float:
     topic_bonus = 0
     for hot_t in ["llm", "ai", "rag", "agent", "yolo", "mqtt", "iot",
                   "bim", "digital-twin", "gis", "3d", "database",
-                  "visualization", "security", "timeseries"]:
+                  "visualization", "security", "timeseries",
+                  "vllm", "mcp", "edge-ai", "vector-db", "opcua", "scada"]:
         if any(hot_t in t.lower() for t in topics):
-            topic_bonus += 150
-    # stars 对数缩放，避免老牌巨型项目霸榜
+            topic_bonus += 200
     import math
-    stars_val = math.log1p(max(0, stars)) * 50
-    return (stars_val + growth * 0.8 + topic_bonus) * lang_k
+    # 增长比（核心指标）：周增长占总 stars 的比例，越高说明越"飙升"
+    growth_ratio = (growth / max(stars, 1)) * 100  # 百分比
+    # 增长比权重最高（飙升榜核心），绝对 stars 对数缩放做辅助
+    ratio_val = math.log1p(max(0, growth_ratio)) * 120
+    growth_val = math.log1p(max(0, growth)) * 80
+    stars_val = math.log1p(max(0, stars)) * 15  # 降权：老牌大项目不再霸榜
+    return (ratio_val + growth_val + stars_val + topic_bonus) * lang_k
 
 # ═══════════════════════════════════════════════════════════════
 # 能源匹配 + 入DB
